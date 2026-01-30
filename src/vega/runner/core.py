@@ -8,17 +8,17 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-from browser_env import (
+from vega.browser_env import (
     ActionTypes,
     create_stop_action,
     Trajectory, 
     StateInfo,
     ScriptBrowserEnv
 )
-from browser_env.helper_functions import RenderHelper
-from browser_env.auto_login import get_site_comb_from_filepath
-from evaluation_harness import evaluator_router, llm_fuzzy_match
-from agent import construct_agent
+from vega.browser_env.helper_functions import RenderHelper
+from vega.browser_env.auto_login import get_site_comb_from_filepath
+from vega.evaluation_harness import evaluator_router, llm_fuzzy_match
+from vega.agent import construct_agent
 
 from .utils import (
     save_action_history,

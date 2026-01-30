@@ -11,11 +11,11 @@ from pathlib import Path
 import openai
 import torch
 
-from evaluation_harness import image_utils
-from agent import construct_agent
-from browser_env import ScriptBrowserEnv
-from browser_env.env_config import reload_config # Check if we need to reload here
-from utils.consts import SMY_FILE
+from vega.evaluation_harness import image_utils
+from vega.agent import construct_agent
+from vega.browser_env import ScriptBrowserEnv
+from vega.browser_env.env_config import reload_config # Check if we need to reload here
+from vega.common.consts import SMY_FILE
 
 from .utils import save_task_config, scan_results, get_unfinished_tasks, ConfigContainer
 from .core import evaluate_single_task

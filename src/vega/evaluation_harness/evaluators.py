@@ -8,7 +8,7 @@ import urllib
 from pathlib import Path
 from typing import Any, Optional, Tuple, Union
 from urllib.parse import urljoin
-from utils.consts import *
+from vega.common.consts import *
 import requests
 from beartype import beartype
 from beartype.door import is_bearable
@@ -16,10 +16,10 @@ from nltk.tokenize import word_tokenize  # type: ignore
 from PIL import Image
 from playwright.sync_api import CDPSession, Page
 
-from browser_env.actions import Action
-from browser_env.utils import StateInfo
-from evaluation_harness import image_utils
-from evaluation_harness.helper_functions import (
+from vega.browser_env.actions import Action
+from vega.browser_env.utils import StateInfo
+from vega.evaluation_harness import image_utils
+from vega.evaluation_harness.helper_functions import (
     PseudoPage,
     get_query_text,
     get_query_text_lowercase,

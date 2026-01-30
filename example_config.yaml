@@ -42,7 +42,7 @@ llm:
   model_with_config:
     Example-Multimodal-Model:
       provider: "openai"          # Provider type (api, openai, etc.)
-      instruction_path: "agent/prompts/jsons/multimodal_3shot.json"
+      instruction_path: "src/vega/agent/prompts/jsons/multimodal_3shot.json"
       mode: "chat"
       multimodal_inputs: true
       agent_type: "prompt"        # Options: "prompt", "teacher_forcing"
@@ -73,7 +73,7 @@ llm:
 
     Example-Text-Model:
       provider: "openai"
-      instruction_path: "agent/prompts/jsons/text_3shot.json"
+      instruction_path: "src/vega/agent/prompts/jsons/text_3shot.json"
       
       observation_type: "accessibility_tree"
       action_type: "id_accessibility_tree"

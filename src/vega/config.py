@@ -1,5 +1,5 @@
 """
-Unified configuration loader for VAB WebArena-Lite
+Unified configuration loader for VEGA (Verifiable Enterprise GUI Agents)
 
 This module provides a single entry point for all configuration needs,
 consolidating the long config chain into one YAML file.

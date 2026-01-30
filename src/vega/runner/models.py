@@ -6,14 +6,13 @@ import requests
 import hashlib
 import json
 from pathlib import Path
-from utils.consts import MODEL_ID_KEY, MODEL_BASE_URL_KEY
+from vega.common.consts import MODEL_ID_KEY, MODEL_BASE_URL_KEY
 
 def generate_result_dir(task_config, base_result_dir="results"):
-    gene_llm_cfg = task_config
-    gene_llm_name = gene_llm_cfg["model"]["model"]
+    model_config = task_config["model"]
+    model_name = model_config["model"]
     site_name = task_config["site"]["site"]
     
-    model_config = task_config["model"]
     gen_related_keys = [
         "instruction_path",
         "agent_type",

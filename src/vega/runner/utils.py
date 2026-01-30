@@ -14,7 +14,7 @@ import numpy as np
 from PIL import Image, ImageDraw
 import requests
 
-from browser_env import (
+from vega.browser_env import (
     Trajectory,
     Action,
     ActionTypes,
@@ -22,8 +22,8 @@ from browser_env import (
     StateInfo,
     create_stop_action,
 )
-from browser_env.helper_functions import get_action_description
-from browser_env.actions import is_equivalent
+from vega.browser_env.helper_functions import get_action_description
+from vega.browser_env.actions import is_equivalent
 
 
 class ConfigContainer:
@@ -113,7 +113,7 @@ def execute_action_step(
 ):
     """Process the action: render, screenshot, and update metadata."""
     # Import PromptAgent here to avoid potential circular imports
-    from agent import PromptAgent
+    from vega.agent import PromptAgent
 
     enable_screenshot = task_cfg["browser"]["render_screenshot"]
 

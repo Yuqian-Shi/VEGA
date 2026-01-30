@@ -10,12 +10,12 @@ from beartype import beartype
 from beartype.typing import Dict, List
 from playwright.sync_api import CDPSession, Page
 
-from llms.providers.openai_utils import (
+from vega.llms.providers.openai_utils import (
     generate_from_openai_chat_completion,
 )
 import os
 import time
-from utils.consts import *
+from vega.common.consts import *
 import logging
 logger = logging.getLogger("logger")
 

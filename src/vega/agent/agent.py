@@ -9,9 +9,16 @@ from beartype import beartype
 from PIL import Image
 import time
 import os
-from agent.prompts import *
-from browser_env import Trajectory
-from browser_env.actions import (
+from vega.agent.prompts import (
+    PromptConstructor,
+    CoTPromptConstructor,
+    MultimodalCoTPromptConstructor,
+    DirectPromptConstructor,
+    WebRLPromptConstructor,
+    WebRLChatPromptConstructor,
+)
+from vega.browser_env import Trajectory
+from vega.browser_env.actions import (
     Action,
     ActionParsingError,
     create_id_based_action,
@@ -19,8 +26,8 @@ from browser_env.actions import (
     create_playwright_action,
     create_webrl_id_based_action,
 )
-from browser_env.utils import Observation, StateInfo
-from llms import (
+from vega.browser_env.utils import Observation, StateInfo
+from vega.llms import (
     call_llm,
     generate_from_huggingface_completion,
     lm_config,
@@ -28,7 +35,7 @@ from llms import (
 
 # Optional imports for OpenAI
 try:
-    from llms import (
+    from vega.llms import (
         generate_from_openai_chat_completion,
         generate_from_openai_completion,
     )
@@ -36,7 +43,7 @@ except ImportError:
     generate_from_openai_chat_completion = None
     generate_from_openai_completion = None
 
-from llms.tokenizers import Tokenizer
+from vega.llms.tokenizers import Tokenizer
 
 
 class Agent:
@@ -56,57 +63,6 @@ class Agent:
         test_config_file: str,
     ) -> None:
         raise NotImplementedError
-
-
-class TeacherForcingAgent(Agent):
-    """Agent that follows a pre-defined action sequence"""
-
-    def __init__(self) -> None:
-        super().__init__()
-
-    def set_action_set_tag(self, tag: str) -> None:
-        self.action_set_tag = tag
-
-    def set_actions(self, action_seq: str | list[str]) -> None:
-        if isinstance(action_seq, str):
-            action_strs = action_seq.strip().split("\n")
-        else:
-            action_strs = action_seq
-        action_strs = [a.strip() for a in action_strs]
-
-        actions = []
-        for a_str in action_strs:
-            try:
-                if self.action_set_tag == "playwright":
-                    cur_action = create_playwright_action(a_str)
-                elif self.action_set_tag == "id_accessibility_tree":
-                    cur_action = create_id_based_action(a_str)
-                else:
-                    raise ValueError(f"Unknown action type {self.action_set_tag}")
-            except ActionParsingError as e:
-                cur_action = create_none_action()
-
-            cur_action["raw_prediction"] = a_str
-            actions.append(cur_action)
-
-        self.actions: list[Action] = actions
-
-    def next_action(
-        self, trajectory: Trajectory, intent: str, meta_data: Any
-    ) -> Action:
-        """Predict the next action given the observation"""
-        return self.actions.pop(0)
-
-    def reset(
-        self,
-        test_config_file: str,
-    ) -> None:
-        with open(test_config_file) as f:
-            ref_actions = json.load(f)["reference_action_sequence"]
-            tag = ref_actions["action_set_tag"]
-            action_seq = ref_actions["action_sequence"]
-            self.set_action_set_tag(tag)
-            self.set_actions(action_seq)
 
 
 class PromptAgent(Agent):
@@ -228,22 +184,35 @@ def construct_agent(task_cfg, captioning_fn=None, result_dir=None) -> Agent:
     agent: Agent
     model_cfg = task_cfg["model"]
     agent_type = model_cfg["agent_type"]
-    if agent_type == "teacher_forcing":
-        agent = TeacherForcingAgent()
-        raise NotImplementedError(
-            "TeacherForcingAgent construction not implemented yet"
-        )
-    elif agent_type == "prompt":
+    
+    if agent_type == "prompt":
         instruction_meta = task_cfg["model"].get("instruct_meta", {})
         constructor_type = model_cfg.get("prompt_constructor", instruction_meta.get("prompt_constructor"))
+        
         if not model_cfg.get("multimodal_inputs", False) and constructor_type == "MultimodalCoTPromptConstructor":
             constructor_type = "CoTPromptConstructor"
+        
         lm_cfg = lm_config.construct_llm_config(model_cfg)
-        prompt_constructor = eval(constructor_type)(
+        
+        # Mapping constructors instead of using eval() for better security and clarity
+        constructors = {
+            "CoTPromptConstructor": CoTPromptConstructor,
+            "MultimodalCoTPromptConstructor": MultimodalCoTPromptConstructor,
+            "DirectPromptConstructor": DirectPromptConstructor,
+            "WebRLPromptConstructor": WebRLPromptConstructor,
+            "WebRLChatPromptConstructor": WebRLChatPromptConstructor,
+        }
+        
+        constructor_class = constructors.get(constructor_type)
+        if not constructor_class:
+            raise ValueError(f"Unknown prompt constructor type: {constructor_type}")
+
+        prompt_constructor = constructor_class(
             model_cfg["instruction_path"],
             lm_config=lm_cfg,
             tokenizer=Tokenizer(model_cfg["provider"], model_cfg["model"]),
         )
+        
         agent = PromptAgent(
             action_set_tag=model_cfg.get("action_type", instruction_meta.get("action_type")),
             lm_config=lm_cfg,

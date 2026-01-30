@@ -2,7 +2,7 @@ import argparse
 import logging
 import time
 from pathlib import Path
-from config_manager import ConfigManager
+from vega.config import ConfigManager
 
 def initialize_logger():
     """Initialize logger with console and file handlers."""
@@ -54,3 +54,8 @@ def load_configuration():
     logger, log_file = initialize_logger()
     config_manager.log_path = log_file
     return config_manager, logger
+def run_cli():
+    """Entry point for the 'vega' console script."""
+    from vega.__main__ import main
+    main()
+
