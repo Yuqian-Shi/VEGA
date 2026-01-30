@@ -91,3 +91,7 @@ credentials.json
 local.settings.json
 
 # End of file
+
+local_config.yaml
+C1.yaml
+C2.yaml

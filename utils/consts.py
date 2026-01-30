@@ -1,0 +1,7 @@
+RET_CORRECT = "correct"
+RET_INCORRECT = "incorrect"
+RET_PARTIALLY_CORRECT = "partially_correct"
+RET_ERROR = "error"
+MODEL_BASE_URL_KEY= "base_url"
+MODEL_ID_KEY= "model"
+SMY_FILE = "_0summary.json"
