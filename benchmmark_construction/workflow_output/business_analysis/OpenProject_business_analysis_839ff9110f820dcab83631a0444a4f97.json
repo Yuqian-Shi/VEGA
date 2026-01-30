@@ -1,0 +1,71 @@
+{
+    "core_tables": [
+        "user_preferences",
+        "users"
+    ],
+    "table_analysis": {
+        "user_preferences": {
+            "business_purpose": "The 'user_preferences' table is designed to store customizable settings or preferences for individual users. It allows the application to tailor the user experience based on stored preferences, which can include various settings like theme, notifications, language, and other user-specific configurations.",
+            "key_fields": [
+                "id",
+                "user_id",
+                "settings"
+            ],
+            "potential_relationships": [
+                "One-to-One relationship with a 'users' table, where 'user_id' would be a foreign key referencing the primary key of the 'users' table. This would link each set of preferences to a specific user.",
+                "Potential One-to-Many relationship with a 'settings_templates' table, if there are predefined templates of settings that users can choose from."
+            ],
+            "business_operations": [
+                "Retrieving user preferences to customize the user interface or experience when a user logs in.",
+                "Updating user preferences when a user changes their settings in the application.",
+                "Storing default preferences for new users upon account creation.",
+                "Analyzing user preferences data to understand user behavior and improve application features."
+            ]
+        },
+        "users": {
+            "business_purpose": "The 'users' table represents the user accounts within a system, capturing essential information about each user, including their identity, authentication details, and account status.",
+            "key_fields": [
+                "id",
+                "login",
+                "mail",
+                "admin",
+                "status",
+                "last_login_on",
+                "created_at",
+                "updated_at",
+                "first_login",
+                "failed_login_count"
+            ],
+            "potential_relationships": [
+                "Authentication sources: The 'ldap_auth_source_id' field suggests a potential relationship with a table that manages LDAP authentication sources.",
+                "User roles or permissions: The 'admin' field indicates a possible relationship with a table that defines user roles or permissions.",
+                "User activity logs: Fields like 'last_login_on', 'failed_login_count', and 'last_failed_login_on' suggest a relationship with a table that logs user activities or login attempts.",
+                "Consent management: The 'consented_at' field implies a relationship with a table that tracks user consents for various actions or policies."
+            ],
+            "business_operations": [
+                "User registration: Creating new user accounts and storing their initial details.",
+                "User authentication: Validating user credentials during login processes.",
+                "Account management: Updating user information, managing account status, and handling password changes.",
+                "Security monitoring: Tracking failed login attempts and enforcing security measures like forced password changes.",
+                "Consent tracking: Recording user consent for terms of service or privacy policies."
+            ]
+        }
+    },
+    "relationships": [
+        {
+            "type": "inferred",
+            "from_table": "user_preferences",
+            "from_column": "user_id",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "user_preferences.user_id = users.id",
+            "confidence": "high",
+            "reasoning": "The 'user_id' field in the 'user_preferences' table likely corresponds to the 'id' field in the 'users' table, as it is common practice to link user-specific data to the user account using a foreign key relationship. This allows each user's preferences to be associated with their account, enabling personalized experiences.",
+            "test_sql": "SELECT COUNT(*) FROM user_preferences t1 JOIN users t2 ON t1.user_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 1,
+            "verification_method": "sql_test"
+        }
+    ]
+}

@@ -1,0 +1,2544 @@
+{
+    "core_tables": [
+        "account_meta",
+        "account_piggy_bank",
+        "account_types",
+        "accounts",
+        "attachments",
+        "auto_budgets",
+        "available_budgets",
+        "bills",
+        "budget_limits",
+        "budget_transaction_journal",
+        "budgets",
+        "categories",
+        "category_transaction_journal",
+        "configuration",
+        "currency_exchange_rates",
+        "group_memberships",
+        "journal_links",
+        "journal_meta",
+        "link_types",
+        "migrations",
+        "notes",
+        "oauth_clients",
+        "object_groupables",
+        "object_groups",
+        "piggy_bank_events",
+        "piggy_banks",
+        "preferences",
+        "recurrences",
+        "recurrences_repetitions",
+        "recurrences_transactions",
+        "role_user",
+        "roles",
+        "rt_meta",
+        "rule_actions",
+        "rule_groups",
+        "rule_triggers",
+        "rules",
+        "tag_transaction_journal",
+        "tags",
+        "transaction_currencies",
+        "transaction_currency_user_group",
+        "transaction_groups",
+        "transaction_journals",
+        "transaction_types",
+        "transactions",
+        "user_groups",
+        "user_roles",
+        "users"
+    ],
+    "table_analysis": {
+        "account_meta": {
+            "business_purpose": "The 'account_meta' table is designed to store metadata related to accounts. This metadata can include various attributes or settings associated with an account, which are not part of the main account information. It allows for flexible storage of additional data that can be customized per account.",
+            "key_fields": [
+                "id",
+                "account_id",
+                "name",
+                "data"
+            ],
+            "potential_relationships": [
+                "One-to-Many relationship with the 'accounts' table, where each account can have multiple metadata entries. The 'account_id' field serves as a foreign key linking to the 'accounts' table."
+            ],
+            "business_operations": [
+                "Retrieving metadata for a specific account to customize user experience or settings.",
+                "Updating metadata entries when account settings change.",
+                "Creating new metadata entries when new attributes or settings are added to an account.",
+                "Deleting metadata entries when they are no longer relevant or needed."
+            ]
+        },
+        "account_piggy_bank": {
+            "business_purpose": "The 'account_piggy_bank' table represents a financial entity or process where individual accounts are associated with specific piggy banks, tracking the current amount saved in each piggy bank for an account. This is likely part of a savings or budgeting feature within a financial application.",
+            "key_fields": [
+                "id",
+                "account_id",
+                "piggy_bank_id",
+                "current_amount"
+            ],
+            "potential_relationships": [
+                "One-to-Many relationship with 'accounts' table, where each account can have multiple piggy banks associated with it.",
+                "One-to-Many relationship with 'piggy_banks' table, where each piggy bank can be associated with multiple accounts."
+            ],
+            "business_operations": [
+                "Tracking savings or funds allocated to specific piggy banks for individual accounts.",
+                "Calculating total savings across all piggy banks for a given account.",
+                "Managing transfers or deposits into specific piggy banks associated with an account.",
+                "Generating reports or summaries of savings progress for users."
+            ]
+        },
+        "account_types": {
+            "business_purpose": "The 'account_types' table represents different categories or classifications of accounts within a business system. This could be used to define various types of accounts such as savings, checking, business, or premium accounts, depending on the context of the business.",
+            "key_fields": [
+                "id",
+                "type"
+            ],
+            "potential_relationships": [
+                "One-to-Many: This table might have a one-to-many relationship with an 'accounts' table, where each account type can be associated with multiple accounts.",
+                "Many-to-One: It could be related to a 'transactions' table, where each transaction is linked to a specific account type.",
+                "One-to-One: It might have a one-to-one relationship with a 'fees' table, where each account type has a specific fee structure."
+            ],
+            "business_operations": [
+                "Defining new account types for the business.",
+                "Updating or managing existing account types.",
+                "Retrieving account type information for reporting or analysis.",
+                "Ensuring data integrity by maintaining unique account type names."
+            ]
+        },
+        "accounts": {
+            "business_purpose": "The 'accounts' table represents financial or user account information within a system. It is designed to store details about different accounts associated with users, including their type, balance, and status.",
+            "key_fields": [
+                "id",
+                "user_id",
+                "account_type_id",
+                "name",
+                "active"
+            ],
+            "potential_relationships": [
+                "One-to-Many relationship with 'users' table through 'user_id', indicating that a user can have multiple accounts.",
+                "One-to-Many relationship with 'account_types' table through 'account_type_id', indicating that multiple accounts can be of the same type.",
+                "One-to-Many relationship with 'user_groups' table through 'user_group_id', suggesting that accounts can be associated with different user groups."
+            ],
+            "business_operations": [
+                "Creating new accounts for users, which involves inserting new records into the table.",
+                "Updating account information, such as changing the account name or balance.",
+                "Managing account status, including activating or deactivating accounts.",
+                "Retrieving account details for reporting or user interface display.",
+                "Handling account deletion or soft deletion using the 'deleted_at' field."
+            ]
+        },
+        "attachments": {
+            "business_purpose": "The 'attachments' table is designed to store metadata about files or documents that are associated with various entities within a system. It supports a polymorphic association, allowing different types of entities to have attachments linked to them.",
+            "key_fields": [
+                "id",
+                "user_id",
+                "attachable_id",
+                "attachable_type",
+                "md5",
+                "filename",
+                "mime",
+                "size",
+                "uploaded"
+            ],
+            "potential_relationships": [
+                "Polymorphic relationship with other entities through 'attachable_id' and 'attachable_type'",
+                "Foreign key relationship with 'users' table via 'user_id'",
+                "Foreign key relationship with 'user_groups' table via 'user_group_id'"
+            ],
+            "business_operations": [
+                "Uploading and storing file metadata",
+                "Associating files with different entities in the system",
+                "Tracking file ownership and access through user and user group associations",
+                "Managing file lifecycle with timestamps for creation, update, and deletion"
+            ]
+        },
+        "auto_budgets": {
+            "business_purpose": "The 'auto_budgets' table represents a system for managing automated budget allocations or forecasts. It is likely used to track and manage budget amounts that are automatically set or adjusted over specific periods, possibly for financial planning or expense management purposes.",
+            "key_fields": [
+                "id",
+                "budget_id",
+                "transaction_currency_id",
+                "auto_budget_type",
+                "amount",
+                "period"
+            ],
+            "potential_relationships": [
+                "The 'budget_id' field indicates a relationship with a 'budgets' table, suggesting that each auto budget entry is linked to a specific budget record.",
+                "The 'transaction_currency_id' field indicates a relationship with a 'transaction_currencies' table, suggesting that each auto budget entry is associated with a specific currency for transactions."
+            ],
+            "business_operations": [
+                "Creating and managing automated budget entries for financial planning.",
+                "Linking automated budgets to specific budget records for tracking purposes.",
+                "Handling currency-specific budget allocations, possibly for international operations.",
+                "Updating and maintaining records of automated budgets over time, including handling soft deletions with the 'deleted_at' field."
+            ]
+        },
+        "available_budgets": {
+            "business_purpose": "The 'available_budgets' table represents the allocation and tracking of budget amounts for users or user groups within a specific time frame, potentially in different currencies. It is likely used in financial management or accounting systems to manage and monitor budgetary constraints and allocations.",
+            "key_fields": [
+                "id",
+                "user_id",
+                "user_group_id",
+                "transaction_currency_id",
+                "amount",
+                "start_date",
+                "end_date"
+            ],
+            "potential_relationships": [
+                "The table has a relationship with the 'users' table through the 'user_id' field, indicating that budgets are associated with specific users.",
+                "It relates to the 'user_groups' table via the 'user_group_id' field, suggesting that budgets can be allocated to groups of users.",
+                "The 'transaction_currency_id' field links to the 'transaction_currencies' table, indicating that budgets can be managed in different currencies."
+            ],
+            "business_operations": [
+                "Budget allocation and tracking for individual users or user groups.",
+                "Currency conversion and management for budget amounts.",
+                "Monitoring and reporting on budget usage over specified time periods.",
+                "Adjusting budgets based on changes in user or group requirements."
+            ]
+        },
+        "bills": {
+            "business_purpose": "The 'bills' table represents a system for managing billing information, likely related to financial transactions or invoicing. It includes details about the bill, such as the user associated with it, the currency used, and various date-related fields that suggest scheduling or recurring billing processes.",
+            "key_fields": [
+                "id",
+                "user_id",
+                "user_group_id",
+                "transaction_currency_id",
+                "name",
+                "amount_min",
+                "amount_max",
+                "date",
+                "repeat_freq",
+                "active"
+            ],
+            "potential_relationships": [
+                "The 'bills' table has foreign key relationships with 'users', 'user_groups', and 'transaction_currencies' tables, indicating it is linked to user information, user group categorization, and currency details. These relationships suggest that bills are associated with specific users and groups, and transactions are conducted in various currencies."
+            ],
+            "business_operations": [
+                "Creating and managing bills for users, including setting up recurring billing schedules.",
+                "Tracking and updating billing information, such as amounts and dates.",
+                "Handling billing status, such as activation and encryption settings.",
+                "Integrating billing data with user and currency information for financial reporting and analysis."
+            ]
+        },
+        "budget_limits": {
+            "business_purpose": "The 'budget_limits' table is designed to manage and track financial budget constraints within a system. It likely represents the limits set on budgets for specific periods and in specific currencies, allowing for financial planning and control.",
+            "key_fields": [
+                "id",
+                "budget_id",
+                "transaction_currency_id",
+                "start_date",
+                "end_date",
+                "amount",
+                "generated"
+            ],
+            "potential_relationships": [
+                "The 'budget_limits' table has a foreign key relationship with the 'budgets' table, indicating that each budget limit is associated with a specific budget.",
+                "It also has a foreign key relationship with the 'transaction_currencies' table, suggesting that each budget limit is defined in a specific currency."
+            ],
+            "business_operations": [
+                "Setting and updating budget limits for financial planning.",
+                "Tracking and reporting on budget usage against set limits.",
+                "Converting budget amounts into different currencies for financial analysis.",
+                "Generating reports on budget limits for specific periods."
+            ]
+        },
+        "budget_transaction_journal": {
+            "business_purpose": "The 'budget_transaction_journal' table represents a record of transactions associated with specific budgets and budget limits. It serves as a junction table that links budgetary constraints and transaction records, facilitating the tracking and management of financial activities within defined budgetary limits.",
+            "key_fields": [
+                "id",
+                "budget_id",
+                "budget_limit_id",
+                "transaction_journal_id"
+            ],
+            "potential_relationships": [
+                "One-to-Many relationship with 'budgets' table through 'budget_id', indicating that multiple transactions can be associated with a single budget.",
+                "One-to-Many relationship with 'budget_limits' table through 'budget_limit_id', suggesting that transactions can be linked to specific budgetary limits.",
+                "One-to-One or Many-to-One relationship with 'transaction_journals' table through 'transaction_journal_id', indicating that each transaction record in this table corresponds to a specific entry in the transaction journals."
+            ],
+            "business_operations": [
+                "Recording and tracking financial transactions against specific budgets.",
+                "Enforcing budgetary limits by associating transactions with predefined budget constraints.",
+                "Generating reports on budget utilization and transaction history for financial analysis.",
+                "Auditing and reviewing financial activities to ensure compliance with budgetary policies."
+            ]
+        },
+        "budgets": {
+            "business_purpose": "The 'budgets' table represents a financial planning or allocation entity within a system, likely used to manage and track budget information for users or user groups. It includes details about the budget's creation, status, and association with users or groups.",
+            "key_fields": [
+                "id",
+                "user_id",
+                "user_group_id",
+                "name",
+                "active",
+                "encrypted"
+            ],
+            "potential_relationships": [
+                "One-to-Many relationship with 'users' table via 'user_id', indicating that each budget is associated with a specific user.",
+                "One-to-Many relationship with 'user_groups' table via 'user_group_id', suggesting that budgets can be associated with user groups, allowing for group-based budget management."
+            ],
+            "business_operations": [
+                "Creating new budget entries for users or user groups.",
+                "Updating budget details such as name, status, or encryption settings.",
+                "Tracking the active status of budgets to determine which are currently in use.",
+                "Managing the order or priority of budgets within a system.",
+                "Handling soft deletion of budgets using the 'deleted_at' timestamp."
+            ]
+        },
+        "categories": {
+            "business_purpose": "The 'categories' table represents a classification system for organizing items, content, or entities within a business context. It is likely used to categorize data or resources that are associated with specific users or user groups, allowing for structured organization and potentially access control based on user or group permissions.",
+            "key_fields": [
+                "id",
+                "user_id",
+                "user_group_id",
+                "name",
+                "encrypted"
+            ],
+            "potential_relationships": [
+                "One-to-Many relationship with 'users' table, where each category is associated with a specific user.",
+                "One-to-Many relationship with 'user_groups' table, where each category can be associated with a user group, allowing for group-based categorization or access control."
+            ],
+            "business_operations": [
+                "Creating new categories for organizing data or resources.",
+                "Updating category information, such as changing the name or encryption status.",
+                "Deleting categories, which may involve marking them as deleted using the 'deleted_at' timestamp.",
+                "Managing access control by associating categories with specific users or user groups."
+            ]
+        },
+        "category_transaction_journal": {
+            "business_purpose": "The 'category_transaction_journal' table represents a many-to-many relationship between categories and transaction journals. It is used to associate multiple categories with a single transaction journal and vice versa, allowing for the categorization of financial transactions or journal entries.",
+            "key_fields": [
+                "id",
+                "category_id",
+                "transaction_journal_id"
+            ],
+            "potential_relationships": [
+                "Many-to-One relationship with the 'categories' table through 'category_id'.",
+                "Many-to-One relationship with the 'transaction_journals' table through 'transaction_journal_id'."
+            ],
+            "business_operations": [
+                "Categorizing financial transactions by associating them with one or more categories.",
+                "Retrieving all transaction journals associated with a specific category.",
+                "Retrieving all categories associated with a specific transaction journal.",
+                "Managing and updating the associations between categories and transaction journals, such as adding or removing categories from a transaction."
+            ]
+        },
+        "configuration": {
+            "business_purpose": "The 'configuration' table likely represents a system or application configuration entity, storing various settings or parameters that can be used to control or customize the behavior of a software application or system.",
+            "key_fields": [
+                "id",
+                "name",
+                "data"
+            ],
+            "potential_relationships": [
+                "This table might have a relationship with tables that represent entities requiring configuration settings, such as 'applications', 'modules', or 'features'.",
+                "It could be related to a 'logs' table to track changes in configuration settings.",
+                "It might be associated with a 'permissions' table to manage access to different configurations."
+            ],
+            "business_operations": [
+                "Creating new configuration settings for different parts of an application.",
+                "Updating existing configuration settings to change application behavior.",
+                "Retrieving configuration settings to apply them during application runtime.",
+                "Soft-deleting configuration settings by setting the 'deleted_at' timestamp."
+            ]
+        },
+        "currency_exchange_rates": {
+            "business_purpose": "The 'currency_exchange_rates' table represents the exchange rates between different currencies, potentially customized for specific users or user groups. It is likely used to track and manage currency conversion rates over time, possibly for financial transactions or reporting purposes.",
+            "key_fields": [
+                "id",
+                "user_id",
+                "from_currency_id",
+                "to_currency_id",
+                "date",
+                "rate"
+            ],
+            "potential_relationships": [
+                "One-to-Many relationship with 'users' table via 'user_id', indicating that multiple exchange rates can be associated with a single user.",
+                "One-to-Many relationship with 'user_groups' table via 'user_group_id', suggesting that exchange rates can be customized for different user groups.",
+                "Many-to-One relationship with 'transaction_currencies' table via 'from_currency_id' and 'to_currency_id', indicating that each exchange rate is associated with specific currencies."
+            ],
+            "business_operations": [
+                "Calculating currency conversion for financial transactions.",
+                "Generating reports on currency exchange rates over time.",
+                "Customizing exchange rates for specific users or user groups.",
+                "Tracking historical exchange rates for auditing or analysis purposes."
+            ]
+        },
+        "group_memberships": {
+            "business_purpose": "The 'group_memberships' table represents the association of users with specific groups and roles within an organization or system. It is used to manage and track which users belong to which groups and what roles they have within those groups.",
+            "key_fields": [
+                "id",
+                "user_id",
+                "user_group_id",
+                "user_role_id",
+                "created_at",
+                "updated_at",
+                "deleted_at"
+            ],
+            "potential_relationships": [
+                "One-to-Many relationship with 'users' table through 'user_id', indicating that a user can have multiple group memberships.",
+                "One-to-Many relationship with 'user_groups' table through 'user_group_id', indicating that a group can have multiple users.",
+                "One-to-Many relationship with 'user_roles' table through 'user_role_id', indicating that a role can be assigned to multiple users within different groups."
+            ],
+            "business_operations": [
+                "Assigning users to groups and roles, which involves creating new entries in this table.",
+                "Updating user roles or group memberships, which involves modifying existing records.",
+                "Tracking membership history and changes over time using 'created_at', 'updated_at', and 'deleted_at' timestamps.",
+                "Soft deleting memberships by setting the 'deleted_at' timestamp, allowing for potential recovery or auditing."
+            ]
+        },
+        "journal_links": {
+            "business_purpose": "The 'journal_links' table represents the relationships between different transaction journals, allowing for the categorization and linking of journal entries based on specific types of relationships defined by 'link_types'. This structure is useful for tracking and managing connections between financial transactions or records.",
+            "key_fields": [
+                "id",
+                "link_type_id",
+                "source_id",
+                "destination_id"
+            ],
+            "potential_relationships": [
+                "One-to-Many relationship with 'link_types' table through 'link_type_id', indicating the type of relationship between journals.",
+                "Many-to-One relationship with 'transaction_journals' table through 'source_id', representing the originating journal entry.",
+                "Many-to-One relationship with 'transaction_journals' table through 'destination_id', representing the target journal entry."
+            ],
+            "business_operations": [
+                "Creating links between transaction journals to represent dependencies or relationships.",
+                "Updating links to reflect changes in relationships or transaction status.",
+                "Querying linked journals to analyze financial flows or dependencies.",
+                "Documenting comments or notes on specific journal links for auditing or explanatory purposes."
+            ]
+        },
+        "journal_meta": {
+            "business_purpose": "The 'journal_meta' table appears to represent metadata associated with transaction journals. It likely stores additional information or attributes related to specific transaction entries, which are identified by the 'transaction_journal_id'. This could be used for logging, auditing, or categorizing transactions with specific metadata.",
+            "key_fields": [
+                "id",
+                "transaction_journal_id",
+                "name",
+                "data",
+                "hash"
+            ],
+            "potential_relationships": [
+                "The 'journal_meta' table has a foreign key relationship with the 'transaction_journals' table, indicating that each entry in 'journal_meta' is associated with a specific transaction journal entry.",
+                "The 'name' and 'data' fields suggest that this table might be used to store key-value pairs or attributes related to transaction journals, potentially allowing for flexible metadata storage."
+            ],
+            "business_operations": [
+                "Creating new metadata entries for transaction journals when additional information needs to be logged.",
+                "Updating existing metadata entries to reflect changes in the associated transaction journal or its attributes.",
+                "Retrieving metadata for transaction journals to provide detailed information or context for specific transactions.",
+                "Deleting or archiving metadata entries, possibly in conjunction with the deletion or archiving of the associated transaction journal entries."
+            ]
+        },
+        "link_types": {
+            "business_purpose": "The 'link_types' table likely represents different types of relationships or connections that can exist between entities in a system. Each entry in this table defines a specific type of link, including its name and the directional labels (outward and inward) that describe the nature of the relationship.",
+            "key_fields": [
+                "id",
+                "name",
+                "outward",
+                "inward",
+                "editable"
+            ],
+            "potential_relationships": [
+                "This table might be related to another table that stores the actual links or connections between entities, using the 'id' field as a foreign key.",
+                "It could be associated with a table that manages entities or objects that can be linked, where 'link_types' defines the nature of those links."
+            ],
+            "business_operations": [
+                "Defining and managing the types of links or relationships that can exist within the system.",
+                "Updating the directional labels of existing link types to reflect changes in business logic or terminology.",
+                "Marking link types as deleted using the 'deleted_at' field for soft deletion purposes.",
+                "Determining whether a link type can be edited based on the 'editable' field."
+            ]
+        },
+        "migrations": {
+            "business_purpose": "The 'migrations' table is used to track database schema changes over time. It records each migration that has been applied to the database, allowing for version control and rollback capabilities.",
+            "key_fields": [
+                "id",
+                "migration",
+                "batch"
+            ],
+            "potential_relationships": [
+                "This table might relate to other tables that represent different versions of the database schema or application states. It could also be linked to a logging or audit table to track changes over time."
+            ],
+            "business_operations": [
+                "Applying new database migrations",
+                "Rolling back database migrations",
+                "Tracking the history of database schema changes",
+                "Ensuring consistency and version control of the database schema across different environments"
+            ]
+        },
+        "notes": {
+            "business_purpose": "The 'notes' table is designed to store notes or annotations that can be associated with various entities or objects within a system. It supports a polymorphic association, allowing notes to be linked to different types of entities, as indicated by the 'noteable_id' and 'noteable_type' fields.",
+            "key_fields": [
+                "id",
+                "created_at",
+                "updated_at",
+                "deleted_at",
+                "noteable_id",
+                "noteable_type",
+                "title",
+                "text"
+            ],
+            "potential_relationships": [
+                "Polymorphic relationship: The 'noteable_id' and 'noteable_type' fields suggest a polymorphic relationship, where a note can be associated with multiple types of entities. This allows the table to be flexible and link notes to various other tables or entities within the system."
+            ],
+            "business_operations": [
+                "Creating a new note: Inserting a new record into the table when a user or system process creates a note.",
+                "Updating a note: Modifying the 'title' or 'text' fields, and possibly updating the 'updated_at' timestamp when a note is edited.",
+                "Soft deleting a note: Setting the 'deleted_at' timestamp to mark a note as deleted without physically removing it from the database.",
+                "Retrieving notes: Querying the table to fetch notes associated with a specific entity, using the 'noteable_id' and 'noteable_type' fields to filter results."
+            ]
+        },
+        "oauth_clients": {
+            "business_purpose": "The 'oauth_clients' table represents the configuration and management of OAuth clients within an application. It is used to store information about clients that can authenticate and interact with the application using OAuth protocols.",
+            "key_fields": [
+                "id",
+                "user_id",
+                "name",
+                "secret",
+                "redirect",
+                "personal_access_client",
+                "password_client",
+                "revoked"
+            ],
+            "potential_relationships": [
+                "The 'user_id' field suggests a potential relationship with a table that stores user information, indicating that each OAuth client may be associated with a specific user. The 'provider' field could imply a relationship with a table that manages different authentication providers."
+            ],
+            "business_operations": [
+                "Creating and managing OAuth clients for third-party applications or services",
+                "Authenticating users via OAuth protocols",
+                "Revoking access for specific clients",
+                "Handling redirects for OAuth authentication flows",
+                "Managing client secrets and credentials"
+            ]
+        },
+        "object_groupables": {
+            "business_purpose": "The 'object_groupables' table appears to represent a polymorphic association between various objects and groups. It is likely used to associate different types of entities (objects) with a group, allowing for flexible grouping of diverse items within a system.",
+            "key_fields": [
+                "object_group_id",
+                "object_groupable_id",
+                "object_groupable_type"
+            ],
+            "potential_relationships": [
+                "Polymorphic relationship: The 'object_groupable_id' and 'object_groupable_type' fields suggest a polymorphic relationship where different types of objects can be associated with a group.",
+                "One-to-many relationship: The 'object_group_id' could be linked to a 'groups' table, indicating that multiple objects can belong to a single group."
+            ],
+            "business_operations": [
+                "Grouping objects: This table would be used in operations where various objects need to be grouped together for organizational or categorization purposes.",
+                "Retrieving group members: Operations that require fetching all objects associated with a particular group would involve this table.",
+                "Managing group associations: Adding, updating, or removing objects from groups would involve interactions with this table."
+            ]
+        },
+        "object_groups": {
+            "business_purpose": "The 'object_groups' table likely represents a collection or grouping of objects or entities that are associated with specific users and potentially user groups. This could be used in a system where users organize items, tasks, or resources into groups for management or categorization purposes.",
+            "key_fields": [
+                "id",
+                "user_id",
+                "user_group_id",
+                "title",
+                "order"
+            ],
+            "potential_relationships": [
+                "One-to-Many relationship with a 'users' table, where each object group is associated with a single user.",
+                "One-to-Many relationship with a 'user_groups' table, where each object group can be associated with a user group, allowing for shared access or management by multiple users.",
+                "Potential Many-to-One relationship with another table that contains the objects or items being grouped, although this is not explicitly defined in the schema."
+            ],
+            "business_operations": [
+                "Creating new object groups for users to organize their items or tasks.",
+                "Updating the details of an object group, such as its title or order.",
+                "Deleting or archiving object groups, which might involve setting the 'deleted_at' timestamp.",
+                "Retrieving and displaying object groups for a specific user or user group, possibly ordered by the 'order' field."
+            ]
+        },
+        "piggy_bank_events": {
+            "business_purpose": "The 'piggy_bank_events' table represents transactions or events related to a piggy bank system, where users can track deposits or withdrawals associated with specific piggy banks. It logs the financial activities and changes in the piggy bank's balance over time.",
+            "key_fields": [
+                "id",
+                "created_at",
+                "updated_at",
+                "piggy_bank_id",
+                "transaction_journal_id",
+                "date",
+                "amount"
+            ],
+            "potential_relationships": [
+                "One-to-Many relationship with 'piggy_banks' table, where each piggy bank can have multiple events or transactions.",
+                "One-to-Many relationship with 'transaction_journals' table, where each transaction journal entry can be associated with multiple piggy bank events."
+            ],
+            "business_operations": [
+                "Recording deposits or withdrawals into a piggy bank.",
+                "Tracking changes in the balance of a piggy bank over time.",
+                "Linking financial transactions to specific piggy banks for reporting and analysis.",
+                "Auditing and reviewing financial activities related to piggy banks."
+            ]
+        },
+        "piggy_banks": {
+            "business_purpose": "The 'piggy_banks' table represents a financial savings entity or process where users can set up savings goals, track progress, and manage their savings accounts. It is likely used to facilitate personal finance management by allowing users to create and manage virtual piggy banks with specific target amounts and timelines.",
+            "key_fields": [
+                "id",
+                "account_id",
+                "transaction_currency_id",
+                "name",
+                "target_amount",
+                "start_date",
+                "target_date",
+                "active"
+            ],
+            "potential_relationships": [
+                "The 'piggy_banks' table has a foreign key relationship with the 'accounts' table, indicating that each piggy bank is associated with a specific account.",
+                "It also has a foreign key relationship with the 'transaction_currencies' table, suggesting that each piggy bank can be associated with a specific currency for transactions."
+            ],
+            "business_operations": [
+                "Creating new piggy banks with specific savings goals and target amounts.",
+                "Updating existing piggy banks to modify target amounts, names, or timelines.",
+                "Tracking the progress of savings towards the target amount.",
+                "Activating or deactivating piggy banks based on user preferences or completion of goals.",
+                "Handling currency conversions or transactions related to the savings goals."
+            ]
+        },
+        "preferences": {
+            "business_purpose": "The 'preferences' table is designed to store user-specific or group-specific preferences or settings. This could include configuration settings, personalization options, or other customizable parameters that are associated with individual users or groups of users within a system.",
+            "key_fields": [
+                "id",
+                "user_id",
+                "user_group_id",
+                "name",
+                "data"
+            ],
+            "potential_relationships": [
+                "One-to-Many relationship with the 'users' table, where each user can have multiple preferences.",
+                "One-to-Many relationship with the 'user_groups' table, where each group can have multiple preferences."
+            ],
+            "business_operations": [
+                "Retrieving user or group preferences for application customization or personalization.",
+                "Updating preferences when a user or group changes their settings.",
+                "Creating new preference entries when a new user or group is added to the system.",
+                "Deleting preferences when a user or group is removed from the system."
+            ]
+        },
+        "recurrences": {
+            "business_purpose": "The 'recurrences' table is designed to manage and track recurring events or transactions. It likely represents a system where users or user groups can set up events or transactions that repeat over time, such as subscriptions, scheduled payments, or recurring meetings.",
+            "key_fields": [
+                "id",
+                "user_id",
+                "transaction_type_id",
+                "title",
+                "first_date",
+                "repetitions",
+                "active"
+            ],
+            "potential_relationships": [
+                "The 'recurrences' table has a foreign key relationship with the 'users' table through 'user_id', indicating that each recurrence is associated with a specific user.",
+                "It also relates to the 'user_groups' table via 'user_group_id', suggesting that recurrences can be associated with a group of users.",
+                "The 'transaction_type_id' field links to the 'transaction_types' table, indicating that each recurrence is associated with a specific type of transaction or event."
+            ],
+            "business_operations": [
+                "Creating new recurring events or transactions, where users define the title, description, start date, and repetition rules.",
+                "Updating existing recurrences, such as changing the title, description, or repetition rules.",
+                "Deactivating or deleting recurrences, which might involve setting the 'active' field to 0 or populating the 'deleted_at' timestamp.",
+                "Querying active recurrences for a user or user group to display upcoming events or transactions.",
+                "Managing the lifecycle of recurrences, including applying rules for when they should repeat and when they should end."
+            ]
+        },
+        "recurrences_repetitions": {
+            "business_purpose": "The 'recurrences_repetitions' table is designed to manage and store information about the repetition patterns of recurring events or tasks. It likely supports a system that handles scheduling or task management, where events or tasks need to be repeated at specific intervals or moments.",
+            "key_fields": [
+                "id",
+                "recurrence_id",
+                "repetition_type",
+                "repetition_moment",
+                "repetition_skip",
+                "weekend"
+            ],
+            "potential_relationships": [
+                "The table has a foreign key relationship with the 'recurrences' table, indicating that each repetition pattern is associated with a specific recurrence entity. This suggests a one-to-many relationship where one recurrence can have multiple repetition patterns."
+            ],
+            "business_operations": [
+                "Creating new repetition patterns for recurring events or tasks.",
+                "Updating existing repetition patterns to change how often or when they occur.",
+                "Soft deleting repetition patterns by setting the 'deleted_at' timestamp, allowing for potential recovery or auditing.",
+                "Querying repetition patterns to determine the schedule of recurring events or tasks, including handling of special conditions like skipping certain intervals or managing weekend occurrences."
+            ]
+        },
+        "recurrences_transactions": {
+            "business_purpose": "The 'recurrences_transactions' table represents financial transactions that are part of recurring processes. It is designed to track transactions that occur repeatedly over time, such as subscriptions, regular payments, or scheduled transfers between accounts.",
+            "key_fields": [
+                "id",
+                "recurrence_id",
+                "transaction_currency_id",
+                "source_id",
+                "destination_id",
+                "amount",
+                "description"
+            ],
+            "potential_relationships": [
+                "The table has a relationship with the 'recurrences' table through the 'recurrence_id', indicating that each transaction is part of a recurring process.",
+                "It relates to the 'accounts' table via 'source_id' and 'destination_id', showing the origin and destination of funds.",
+                "The 'transaction_currencies' table is linked through 'transaction_currency_id' and 'foreign_currency_id', specifying the currency used in the transaction.",
+                "The 'transaction_types' table is connected through 'transaction_type_id', categorizing the nature of the transaction."
+            ],
+            "business_operations": [
+                "Processing recurring payments or transfers between accounts.",
+                "Generating reports on recurring financial activities.",
+                "Managing currency conversions for transactions involving foreign currencies.",
+                "Tracking and auditing financial transactions for compliance and record-keeping."
+            ]
+        },
+        "role_user": {
+            "business_purpose": "The 'role_user' table represents the association between users and roles within a system. It is used to manage and define the roles assigned to each user, facilitating role-based access control and permissions management.",
+            "key_fields": [
+                "user_id",
+                "role_id"
+            ],
+            "potential_relationships": [
+                "Many-to-Many relationship between users and roles, where a user can have multiple roles and a role can be assigned to multiple users."
+            ],
+            "business_operations": [
+                "Assigning roles to users during user creation or modification.",
+                "Retrieving roles associated with a user for access control and permissions checking.",
+                "Updating or removing roles from users as part of user management processes.",
+                "Auditing and reporting on user roles for compliance and security purposes."
+            ]
+        },
+        "roles": {
+            "business_purpose": "The 'roles' table represents a system for managing different roles within an organization or application. Each role defines a set of permissions or responsibilities that can be assigned to users or entities within the system.",
+            "key_fields": [
+                "id",
+                "name",
+                "created_at",
+                "updated_at"
+            ],
+            "potential_relationships": [
+                "This table might have relationships with tables that manage users or entities, where roles are assigned to these entities. It could also relate to tables that define permissions or access levels, linking roles to specific actions or resources within the system."
+            ],
+            "business_operations": [
+                "Creating new roles to define different access levels or responsibilities within the system",
+                "Updating roles to change their names, display names, or descriptions",
+                "Tracking when roles are created or modified using the 'created_at' and 'updated_at' timestamps",
+                "Ensuring unique role names for consistency and avoiding conflicts in role assignments"
+            ]
+        },
+        "rt_meta": {
+            "business_purpose": "The 'rt_meta' table appears to represent metadata associated with recurring transactions. It stores additional information or attributes related to a specific recurring transaction identified by 'rt_id'. This can include various types of metadata such as configuration settings, descriptions, or other supplementary data that enhances the understanding or processing of the recurring transaction.",
+            "key_fields": [
+                "id",
+                "rt_id",
+                "name",
+                "value"
+            ],
+            "potential_relationships": [
+                "The 'rt_meta' table has a foreign key relationship with the 'recurrences_transactions' table, indicating that each entry in 'rt_meta' is associated with a specific recurring transaction. This relationship suggests that 'rt_meta' serves as a child table providing additional details for entries in the 'recurrences_transactions' table."
+            ],
+            "business_operations": [
+                "Operations involving this table would typically include creating, updating, or deleting metadata entries for recurring transactions. This could involve setting up new metadata when a recurring transaction is created, modifying metadata as transaction details change, or archiving metadata when a transaction is deleted. Additionally, querying this table to retrieve metadata for reporting or processing purposes would be common."
+            ]
+        },
+        "rule_actions": {
+            "business_purpose": "The 'rule_actions' table represents actions associated with specific rules within a business process or system. It is likely used to define what actions should be taken when certain conditions or rules are met.",
+            "key_fields": [
+                "id",
+                "rule_id",
+                "action_type",
+                "action_value",
+                "order",
+                "active",
+                "stop_processing"
+            ],
+            "potential_relationships": [
+                "One-to-Many relationship with the 'rules' table, where each rule can have multiple associated actions"
+            ],
+            "business_operations": [
+                "Defining actions to be executed when specific rules are triggered",
+                "Managing the sequence and priority of actions through the 'order' field",
+                "Activating or deactivating specific actions using the 'active' field",
+                "Determining whether further actions should be processed after a particular action using the 'stop_processing' field",
+                "Tracking the creation and modification times of actions for auditing or historical purposes"
+            ]
+        },
+        "rule_groups": {
+            "business_purpose": "The 'rule_groups' table likely represents a collection of rules or policies that are grouped together for management purposes. These rules could be related to user permissions, workflow processes, or other business logic that needs to be applied in a structured manner.",
+            "key_fields": [
+                "id",
+                "user_id",
+                "user_group_id",
+                "title",
+                "active",
+                "stop_processing"
+            ],
+            "potential_relationships": [
+                "The 'rule_groups' table has a many-to-one relationship with the 'users' table, as indicated by the 'user_id' foreign key. This suggests that each rule group is associated with a specific user who may have created or is responsible for the rule group.",
+                "The 'rule_groups' table also has a many-to-one relationship with the 'user_groups' table, as indicated by the 'user_group_id' foreign key. This implies that rule groups can be associated with specific user groups, potentially to apply rules to all members of a group."
+            ],
+            "business_operations": [
+                "Creating new rule groups to define sets of rules or policies.",
+                "Updating existing rule groups to modify rules or change their status.",
+                "Deleting or archiving rule groups by setting the 'deleted_at' timestamp.",
+                "Retrieving rule groups for display or processing, potentially filtering by 'active' status or 'order'.",
+                "Managing the processing flow of rules by using the 'stop_processing' field to determine if further rules should be evaluated."
+            ]
+        },
+        "rule_triggers": {
+            "business_purpose": "The 'rule_triggers' table represents a system for managing triggers associated with specific rules. These triggers are conditions or events that activate or influence the execution of rules within a business process or application.",
+            "key_fields": [
+                "id",
+                "rule_id",
+                "trigger_type",
+                "trigger_value",
+                "active",
+                "stop_processing"
+            ],
+            "potential_relationships": [
+                "The table has a foreign key relationship with the 'rules' table, indicating that each trigger is associated with a specific rule. This suggests a one-to-many relationship where one rule can have multiple triggers."
+            ],
+            "business_operations": [
+                "Defining and configuring triggers for rules in a business process management system.",
+                "Activating or deactivating specific triggers based on business needs.",
+                "Ordering triggers to determine the sequence in which they are processed.",
+                "Stopping further processing of triggers once a certain condition is met."
+            ]
+        },
+        "rules": {
+            "business_purpose": "The 'rules' table represents a set of rules or policies that can be applied within a system, potentially for user management, access control, or workflow processing. Each rule is associated with a user, a user group, and a rule group, indicating its applicability and scope.",
+            "key_fields": [
+                "id",
+                "user_id",
+                "user_group_id",
+                "rule_group_id",
+                "title",
+                "active"
+            ],
+            "potential_relationships": [
+                "The 'rules' table has a foreign key relationship with the 'users' table through 'user_id', indicating that rules can be specific to individual users.",
+                "It has a foreign key relationship with the 'user_groups' table through 'user_group_id', suggesting that rules can be applied to groups of users.",
+                "It has a foreign key relationship with the 'rule_groups' table through 'rule_group_id', which may categorize or group rules for organizational purposes."
+            ],
+            "business_operations": [
+                "Creating, updating, and deleting rules for system processes or user management.",
+                "Activating or deactivating rules based on business needs or system changes.",
+                "Ordering rules to determine their priority or sequence in processing.",
+                "Handling rule processing logic, such as stopping further processing when certain conditions are met."
+            ]
+        },
+        "tag_transaction_journal": {
+            "business_purpose": "The 'tag_transaction_journal' table represents a many-to-many relationship between tags and transaction journals. It is used to associate multiple tags with a single transaction journal entry and vice versa, allowing for flexible categorization and organization of transaction data.",
+            "key_fields": [
+                "id",
+                "tag_id",
+                "transaction_journal_id"
+            ],
+            "potential_relationships": [
+                "Many-to-One relationship with the 'tags' table through 'tag_id'.",
+                "Many-to-One relationship with the 'transaction_journals' table through 'transaction_journal_id'."
+            ],
+            "business_operations": [
+                "Tagging transaction journal entries for categorization and searchability.",
+                "Retrieving all transaction journals associated with a specific tag.",
+                "Retrieving all tags associated with a specific transaction journal entry.",
+                "Managing and updating the associations between tags and transaction journals, such as adding or removing tags from a transaction."
+            ]
+        },
+        "tags": {
+            "business_purpose": "The 'tags' table appears to represent a system for categorizing or labeling data entries, possibly for organizational, search, or filtering purposes. It includes metadata about the tags such as creation and update timestamps, user associations, and optional geographical data, suggesting it might be used in a context where tagging is associated with specific users or locations.",
+            "key_fields": [
+                "id",
+                "user_id",
+                "user_group_id",
+                "tag",
+                "tag_mode"
+            ],
+            "potential_relationships": [
+                "The 'tags' table has a many-to-one relationship with the 'users' table, as indicated by the 'user_id' foreign key.",
+                "It also has a many-to-one relationship with the 'user_groups' table, as indicated by the 'user_group_id' foreign key.",
+                "The table might be related to other tables that require tagging functionality, such as content, products, or events, although these are not explicitly mentioned."
+            ],
+            "business_operations": [
+                "Creating and managing tags for categorization or labeling purposes.",
+                "Associating tags with specific users or user groups for personalized or group-based tagging.",
+                "Tracking the creation and modification of tags over time.",
+                "Potentially using geographical data to associate tags with specific locations, which could be useful in location-based services or applications."
+            ]
+        },
+        "transaction_currencies": {
+            "business_purpose": "The 'transaction_currencies' table represents a catalog of currencies that can be used in financial transactions. It stores information about each currency, including its code, name, symbol, and the number of decimal places used in transactions.",
+            "key_fields": [
+                "id",
+                "code",
+                "name",
+                "symbol",
+                "decimal_places"
+            ],
+            "potential_relationships": [
+                "This table might have a relationship with a 'transactions' table, where each transaction references a currency from this table.",
+                "It could be related to a 'currency_exchange_rates' table, where exchange rates are stored for each currency pair.",
+                "A potential relationship with a 'country' table could exist, where each currency is associated with one or more countries."
+            ],
+            "business_operations": [
+                "Adding new currencies to the system when they become available or relevant.",
+                "Updating currency information, such as enabling or disabling a currency for transactions.",
+                "Retrieving currency details for display in transaction interfaces or reports.",
+                "Validating transaction data to ensure the currency used is supported and enabled."
+            ]
+        },
+        "transaction_currency_user_group": {
+            "business_purpose": "The table 'transaction_currency_user_group' represents the association between user groups and transaction currencies, likely to manage or configure which currencies are available or preferred for different user groups within a system. This could be used in a financial or e-commerce platform where different user groups have different currency preferences or restrictions.",
+            "key_fields": [
+                "id",
+                "user_group_id",
+                "transaction_currency_id",
+                "group_default"
+            ],
+            "potential_relationships": [
+                "Many-to-One relationship with 'transaction_currencies' table via 'transaction_currency_id'",
+                "Many-to-One relationship with 'user_groups' table via 'user_group_id'"
+            ],
+            "business_operations": [
+                "Assigning or updating currency preferences for user groups",
+                "Retrieving available currencies for a specific user group",
+                "Setting or changing the default currency for a user group",
+                "Auditing changes in currency assignments over time using 'created_at' and 'updated_at' timestamps"
+            ]
+        },
+        "transaction_groups": {
+            "business_purpose": "The 'transaction_groups' table likely represents a collection or grouping of transactions associated with users and potentially user groups. It serves to organize transactions under specific titles and link them to users and user groups for management and tracking purposes.",
+            "key_fields": [
+                "id",
+                "user_id",
+                "user_group_id",
+                "title"
+            ],
+            "potential_relationships": [
+                "The 'transaction_groups' table has a direct relationship with the 'users' table through the 'user_id' foreign key, indicating that each transaction group is associated with a specific user.",
+                "It also has a relationship with the 'user_groups' table through the 'user_group_id' foreign key, suggesting that transaction groups can be associated with a broader user group, allowing for group-based transaction management."
+            ],
+            "business_operations": [
+                "Creating new transaction groups for users or user groups to organize transactions.",
+                "Updating transaction group details such as title or associated user/user group.",
+                "Tracking and managing transaction groups over time, including handling soft deletes using the 'deleted_at' timestamp.",
+                "Reporting and analysis of transaction groups based on user or user group associations."
+            ]
+        },
+        "transaction_journals": {
+            "business_purpose": "The 'transaction_journals' table represents a record-keeping system for financial transactions. It is designed to log detailed information about each transaction, including its type, associated user, and relevant dates. This table is likely part of a larger financial or accounting system that tracks transactions for auditing, reporting, and analysis purposes.",
+            "key_fields": [
+                "id",
+                "user_id",
+                "transaction_type_id",
+                "date",
+                "description",
+                "transaction_currency_id"
+            ],
+            "potential_relationships": [
+                "One-to-Many relationship with 'users' table through 'user_id', indicating that each user can have multiple transaction records.",
+                "One-to-Many relationship with 'transaction_types' table through 'transaction_type_id', indicating that each transaction type can be associated with multiple transactions.",
+                "One-to-Many relationship with 'bills' table through 'bill_id', suggesting that each bill can be linked to multiple transactions.",
+                "One-to-Many relationship with 'transaction_currencies' table through 'transaction_currency_id', indicating that each currency can be used in multiple transactions.",
+                "One-to-Many relationship with 'transaction_groups' table through 'transaction_group_id', suggesting that each transaction group can encompass multiple transactions.",
+                "One-to-Many relationship with 'user_groups' table through 'user_group_id', indicating that each user group can be associated with multiple transactions."
+            ],
+            "business_operations": [
+                "Recording new financial transactions as they occur.",
+                "Updating transaction details, such as status or description, as needed.",
+                "Auditing and reporting on transactions for financial analysis and compliance.",
+                "Tracking the lifecycle of transactions, including creation, processing, and completion dates.",
+                "Associating transactions with specific users, user groups, and transaction types for detailed categorization and analysis."
+            ]
+        },
+        "transaction_types": {
+            "business_purpose": "The 'transaction_types' table represents different categories or types of transactions that can occur within a business system. It serves as a reference table to define and manage various transaction types, which could be financial, operational, or any other kind of transaction relevant to the business process.",
+            "key_fields": [
+                "id",
+                "type"
+            ],
+            "potential_relationships": [
+                "This table might have a one-to-many relationship with a 'transactions' table, where each transaction is associated with a specific transaction type.",
+                "It could be related to a 'transaction_logs' table, where logs are categorized by transaction type.",
+                "It might be linked to a 'transaction_rules' table, where rules or conditions are defined based on transaction types."
+            ],
+            "business_operations": [
+                "Defining new transaction types as the business evolves.",
+                "Updating existing transaction types to reflect changes in business processes.",
+                "Archiving transaction types that are no longer in use by setting the 'deleted_at' timestamp.",
+                "Retrieving transaction types for categorizing or filtering transactions in reports and analytics."
+            ]
+        },
+        "transactions": {
+            "business_purpose": "The 'transactions' table represents financial transactions within a system, capturing details about each transaction such as amounts, currencies, and related accounts. It is likely used to track and manage financial activities, including reconciliations and currency conversions.",
+            "key_fields": [
+                "id",
+                "created_at",
+                "account_id",
+                "transaction_journal_id",
+                "amount",
+                "transaction_currency_id",
+                "foreign_currency_id"
+            ],
+            "potential_relationships": [
+                "One-to-Many relationship with 'accounts' table via 'account_id', indicating that multiple transactions can be associated with a single account.",
+                "One-to-Many relationship with 'transaction_currencies' table via 'transaction_currency_id' and 'foreign_currency_id', suggesting transactions can involve different currencies.",
+                "One-to-Many relationship with 'transaction_journals' table via 'transaction_journal_id', indicating transactions can be part of a larger journal entry or batch."
+            ],
+            "business_operations": [
+                "Recording and tracking financial transactions.",
+                "Currency conversion and management of foreign currency transactions.",
+                "Reconciliation of transactions to ensure accuracy and completeness.",
+                "Updating account balances before and after transactions.",
+                "Handling transaction lifecycle events such as creation, update, and soft deletion."
+            ]
+        },
+        "user_groups": {
+            "business_purpose": "The 'user_groups' table represents a collection of groups or categories that users can be associated with. Each group has a unique title and can be used to organize or categorize users within a system.",
+            "key_fields": [
+                "id",
+                "title"
+            ],
+            "potential_relationships": [
+                "This table might have a one-to-many relationship with a 'users' table, where each user can belong to one group.",
+                "It could also have a many-to-many relationship with a 'users' table if users can belong to multiple groups, potentially through a junction table.",
+                "The table might relate to a 'permissions' or 'roles' table if groups are used to manage access control or user roles."
+            ],
+            "business_operations": [
+                "Creating new user groups to categorize users.",
+                "Updating the title or other attributes of existing user groups.",
+                "Soft deleting user groups by setting the 'deleted_at' timestamp.",
+                "Retrieving a list of user groups for display or selection in user interfaces.",
+                "Managing group memberships if linked to users, such as adding or removing users from groups."
+            ]
+        },
+        "user_roles": {
+            "business_purpose": "The 'user_roles' table represents a system for managing roles or titles that can be assigned to users within an application. It is likely used to define different levels of access or permissions that users can have, such as 'admin', 'editor', 'viewer', etc.",
+            "key_fields": [
+                "id",
+                "title"
+            ],
+            "potential_relationships": [
+                "This table might have a one-to-many relationship with a 'users' table, where each user can be assigned a role from the 'user_roles' table.",
+                "It could also relate to a 'permissions' table, where each role is associated with specific permissions or access rights."
+            ],
+            "business_operations": [
+                "Creating new roles to define different access levels within the application.",
+                "Updating existing roles to change their titles or associated permissions.",
+                "Soft deleting roles by setting the 'deleted_at' timestamp, which allows for recovery or auditing of role changes.",
+                "Listing all roles to display available options for user assignment."
+            ]
+        },
+        "users": {
+            "business_purpose": "The 'users' table represents a system for managing user accounts within an application. It stores essential information about each user, including authentication details, account status, and group membership.",
+            "key_fields": [
+                "id",
+                "email",
+                "password",
+                "blocked",
+                "user_group_id"
+            ],
+            "potential_relationships": [
+                "One-to-Many relationship with 'user_groups' table through 'user_group_id'",
+                "Potential relationships with tables managing authentication logs, user activity, or permissions based on 'email', 'blocked', and 'mfa_secret'"
+            ],
+            "business_operations": [
+                "User registration and account creation",
+                "User authentication and login processes",
+                "Password reset and account recovery",
+                "Account blocking and unblocking for security purposes",
+                "Managing user group memberships and permissions"
+            ]
+        }
+    },
+    "relationships": [
+        {
+            "type": "foreign_key",
+            "from_table": "account_meta",
+            "from_column": "account_id",
+            "to_table": "accounts",
+            "to_column": "id",
+            "condition": "account_meta.account_id = accounts.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "inferred",
+            "from_table": "account_meta",
+            "from_column": "account_id",
+            "to_table": "account_piggy_bank",
+            "to_column": "account_id",
+            "condition": "account_meta.account_id = account_piggy_bank.account_id",
+            "confidence": "high",
+            "reasoning": "Both tables have an 'account_id' field that serves as a foreign key to the 'accounts' table. This suggests a logical relationship where metadata associated with an account can be linked to the financial data of the same account, allowing for comprehensive account management and reporting.",
+            "test_sql": "SELECT COUNT(*) FROM account_meta t1 JOIN account_piggy_bank t2 ON t1.account_id = t2.account_id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 39,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "account_piggy_bank",
+            "from_column": "account_id",
+            "to_table": "accounts",
+            "to_column": "id",
+            "condition": "account_piggy_bank.account_id = accounts.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "inferred",
+            "from_table": "account_meta",
+            "from_column": "account_id",
+            "to_table": "transactions",
+            "to_column": "account_id",
+            "condition": "account_meta.account_id = transactions.account_id",
+            "confidence": "high",
+            "reasoning": "Both tables have an 'account_id' field, which is a common practice in database design to link related data. The 'account_meta' table stores metadata for accounts, while the 'transactions' table records financial transactions for accounts. It is logical to assume that metadata and transactions can be associated with the same account.",
+            "test_sql": "SELECT COUNT(*) FROM account_meta t1 JOIN transactions t2 ON t1.account_id = t2.account_id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 1371,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "account_piggy_bank",
+            "from_column": "piggy_bank_id",
+            "to_table": "piggy_banks",
+            "to_column": "id",
+            "condition": "account_piggy_bank.piggy_bank_id = piggy_banks.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "inferred",
+            "from_table": "account_piggy_bank",
+            "from_column": "piggy_bank_id",
+            "to_table": "piggy_bank_events",
+            "to_column": "piggy_bank_id",
+            "condition": "account_piggy_bank.piggy_bank_id = piggy_bank_events.piggy_bank_id",
+            "confidence": "high",
+            "reasoning": "Both tables reference the 'piggy_bank_id' field, which suggests a direct relationship between the piggy bank accounts and the events or transactions associated with them. This relationship is logical as it connects the current state of a piggy bank with its historical transactions.",
+            "test_sql": "SELECT COUNT(*) FROM account_piggy_bank t1 JOIN piggy_bank_events t2 ON t1.piggy_bank_id = t2.piggy_bank_id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 2,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "accounts",
+            "from_column": "account_type_id",
+            "to_table": "account_types",
+            "to_column": "id",
+            "condition": "accounts.account_type_id = account_types.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "inferred",
+            "from_table": "account_piggy_bank",
+            "from_column": "account_id",
+            "to_table": "transactions",
+            "to_column": "account_id",
+            "condition": "account_piggy_bank.account_id = transactions.account_id",
+            "confidence": "high",
+            "reasoning": "Both tables have an 'account_id' field, which is a common foreign key referencing the 'accounts' table. This suggests that transactions are related to specific accounts, and piggy banks are also associated with accounts. Therefore, it is logical to join these tables on 'account_id' to analyze transactions related to specific piggy banks.",
+            "test_sql": "SELECT COUNT(*) FROM account_piggy_bank t1 JOIN transactions t2 ON t1.account_id = t2.account_id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 168,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_id",
+            "to_table": "budgets",
+            "to_column": "user_id",
+            "condition": "accounts.user_id = budgets.user_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_id' field, suggesting that accounts and budgets are associated with users. This relationship is common in systems where financial accounts and budgets are managed per user.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN budgets t2 ON t1.user_id = t2.user_id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 215,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_id",
+            "to_table": "bills",
+            "to_column": "user_id",
+            "condition": "accounts.user_id = bills.user_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_id' field, which suggests that accounts and bills are associated with specific users. This is a common pattern where user-related data is linked across different tables.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN bills t2 ON t1.user_id = t2.user_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 387,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_id",
+            "to_table": "available_budgets",
+            "to_column": "user_id",
+            "condition": "accounts.user_id = available_budgets.user_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_id' field, which suggests that accounts and budgets are associated with specific users. This is a common pattern in financial systems where user-specific data is linked across different tables.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN available_budgets t2 ON t1.user_id = t2.user_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 1806,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "piggy_banks",
+            "from_column": "account_id",
+            "to_table": "accounts",
+            "to_column": "id",
+            "condition": "piggy_banks.account_id = accounts.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_id",
+            "to_table": "group_memberships",
+            "to_column": "user_id",
+            "condition": "accounts.user_id = group_memberships.user_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_id' field, which suggests a logical connection between user accounts and their group memberships. This relationship aligns with common business logic where user accounts are associated with group memberships based on the user.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN group_memberships t2 ON t1.user_id = t2.user_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 43,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "recurrences_transactions",
+            "from_column": "destination_id",
+            "to_table": "accounts",
+            "to_column": "id",
+            "condition": "recurrences_transactions.destination_id = accounts.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "recurrences_transactions",
+            "from_column": "source_id",
+            "to_table": "accounts",
+            "to_column": "id",
+            "condition": "recurrences_transactions.source_id = accounts.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_id",
+            "to_table": "preferences",
+            "to_column": "user_id",
+            "condition": "accounts.user_id = preferences.user_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_id' field, which suggests a logical relationship where each account is associated with a user, and each user can have preferences. This aligns with common business logic where user-specific data is linked through a user identifier.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN preferences t2 ON t1.user_id = t2.user_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 1333,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_id",
+            "to_table": "recurrences",
+            "to_column": "user_id",
+            "condition": "accounts.user_id = recurrences.user_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_id' field, which suggests that accounts and recurrences are associated with specific users. This is a common pattern where user-related data is linked across different tables using a user identifier.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN recurrences t2 ON t1.user_id = t2.user_id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 43,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "transactions",
+            "from_column": "account_id",
+            "to_table": "accounts",
+            "to_column": "id",
+            "condition": "transactions.account_id = accounts.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "accounts",
+            "from_column": "user_group_id",
+            "to_table": "user_groups",
+            "to_column": "id",
+            "condition": "accounts.user_group_id = user_groups.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "accounts",
+            "from_column": "user_id",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "accounts.user_id = users.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "attachments",
+            "from_column": "user_group_id",
+            "to_table": "user_groups",
+            "to_column": "id",
+            "condition": "attachments.user_group_id = user_groups.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "attachments",
+            "from_column": "user_id",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "attachments.user_id = users.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "auto_budgets",
+            "from_column": "budget_id",
+            "to_table": "budgets",
+            "to_column": "id",
+            "condition": "auto_budgets.budget_id = budgets.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "auto_budgets",
+            "from_column": "transaction_currency_id",
+            "to_table": "transaction_currencies",
+            "to_column": "id",
+            "condition": "auto_budgets.transaction_currency_id = transaction_currencies.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "available_budgets",
+            "from_column": "transaction_currency_id",
+            "to_table": "transaction_currencies",
+            "to_column": "id",
+            "condition": "available_budgets.transaction_currency_id = transaction_currencies.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "available_budgets",
+            "from_column": "user_group_id",
+            "to_table": "user_groups",
+            "to_column": "id",
+            "condition": "available_budgets.user_group_id = user_groups.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "available_budgets",
+            "from_column": "user_id",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "available_budgets.user_id = users.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "bills",
+            "from_column": "transaction_currency_id",
+            "to_table": "transaction_currencies",
+            "to_column": "id",
+            "condition": "bills.transaction_currency_id = transaction_currencies.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "transaction_journals",
+            "from_column": "bill_id",
+            "to_table": "bills",
+            "to_column": "id",
+            "condition": "transaction_journals.bill_id = bills.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "bills",
+            "from_column": "user_group_id",
+            "to_table": "user_groups",
+            "to_column": "id",
+            "condition": "bills.user_group_id = user_groups.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "bills",
+            "from_column": "user_id",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "bills.user_id = users.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "budget_transaction_journal",
+            "from_column": "budget_limit_id",
+            "to_table": "budget_limits",
+            "to_column": "id",
+            "condition": "budget_transaction_journal.budget_limit_id = budget_limits.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "budget_limits",
+            "from_column": "budget_id",
+            "to_table": "budgets",
+            "to_column": "id",
+            "condition": "budget_limits.budget_id = budgets.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "budget_limits",
+            "from_column": "transaction_currency_id",
+            "to_table": "transaction_currencies",
+            "to_column": "id",
+            "condition": "budget_limits.transaction_currency_id = transaction_currencies.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "budget_transaction_journal",
+            "from_column": "budget_id",
+            "to_table": "budgets",
+            "to_column": "id",
+            "condition": "budget_transaction_journal.budget_id = budgets.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_group_id",
+            "to_table": "transaction_currency_user_group",
+            "to_column": "user_group_id",
+            "condition": "accounts.user_group_id = transaction_currency_user_group.user_group_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_group_id' field, which suggests a logical connection between accounts and the currency preferences or configurations for user groups. This relationship aligns with the business logic that accounts may need to adhere to currency settings defined at the user group level.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN transaction_currency_user_group t2 ON t1.user_group_id = t2.user_group_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 172,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "budget_transaction_journal",
+            "from_column": "transaction_journal_id",
+            "to_table": "transaction_journals",
+            "to_column": "id",
+            "condition": "budget_transaction_journal.transaction_journal_id = transaction_journals.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "budgets",
+            "from_column": "user_group_id",
+            "to_table": "user_groups",
+            "to_column": "id",
+            "condition": "budgets.user_group_id = user_groups.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "budgets",
+            "from_column": "user_id",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "budgets.user_id = users.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "category_transaction_journal",
+            "from_column": "category_id",
+            "to_table": "categories",
+            "to_column": "id",
+            "condition": "category_transaction_journal.category_id = categories.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "categories",
+            "from_column": "user_group_id",
+            "to_table": "user_groups",
+            "to_column": "id",
+            "condition": "categories.user_group_id = user_groups.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "categories",
+            "from_column": "user_id",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "categories.user_id = users.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "category_transaction_journal",
+            "from_column": "transaction_journal_id",
+            "to_table": "transaction_journals",
+            "to_column": "id",
+            "condition": "category_transaction_journal.transaction_journal_id = transaction_journals.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "currency_exchange_rates",
+            "from_column": "from_currency_id",
+            "to_table": "transaction_currencies",
+            "to_column": "id",
+            "condition": "currency_exchange_rates.from_currency_id = transaction_currencies.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "currency_exchange_rates",
+            "from_column": "to_currency_id",
+            "to_table": "transaction_currencies",
+            "to_column": "id",
+            "condition": "currency_exchange_rates.to_currency_id = transaction_currencies.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "currency_exchange_rates",
+            "from_column": "user_group_id",
+            "to_table": "user_groups",
+            "to_column": "id",
+            "condition": "currency_exchange_rates.user_group_id = user_groups.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "currency_exchange_rates",
+            "from_column": "user_id",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "currency_exchange_rates.user_id = users.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "group_memberships",
+            "from_column": "user_group_id",
+            "to_table": "user_groups",
+            "to_column": "id",
+            "condition": "group_memberships.user_group_id = user_groups.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "group_memberships",
+            "from_column": "user_role_id",
+            "to_table": "user_roles",
+            "to_column": "id",
+            "condition": "group_memberships.user_role_id = user_roles.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "group_memberships",
+            "from_column": "user_id",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "group_memberships.user_id = users.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "journal_links",
+            "from_column": "link_type_id",
+            "to_table": "link_types",
+            "to_column": "id",
+            "condition": "journal_links.link_type_id = link_types.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "journal_links",
+            "from_column": "destination_id",
+            "to_table": "transaction_journals",
+            "to_column": "id",
+            "condition": "journal_links.destination_id = transaction_journals.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "journal_links",
+            "from_column": "source_id",
+            "to_table": "transaction_journals",
+            "to_column": "id",
+            "condition": "journal_links.source_id = transaction_journals.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "journal_meta",
+            "from_column": "transaction_journal_id",
+            "to_table": "transaction_journals",
+            "to_column": "id",
+            "condition": "journal_meta.transaction_journal_id = transaction_journals.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "object_groups",
+            "from_column": "user_group_id",
+            "to_table": "user_groups",
+            "to_column": "id",
+            "condition": "object_groups.user_group_id = user_groups.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "object_groups",
+            "from_column": "user_id",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "object_groups.user_id = users.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "piggy_bank_events",
+            "from_column": "piggy_bank_id",
+            "to_table": "piggy_banks",
+            "to_column": "id",
+            "condition": "piggy_bank_events.piggy_bank_id = piggy_banks.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "piggy_bank_events",
+            "from_column": "transaction_journal_id",
+            "to_table": "transaction_journals",
+            "to_column": "id",
+            "condition": "piggy_bank_events.transaction_journal_id = transaction_journals.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "piggy_banks",
+            "from_column": "transaction_currency_id",
+            "to_table": "transaction_currencies",
+            "to_column": "id",
+            "condition": "piggy_banks.transaction_currency_id = transaction_currencies.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "preferences",
+            "from_column": "user_group_id",
+            "to_table": "user_groups",
+            "to_column": "id",
+            "condition": "preferences.user_group_id = user_groups.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "preferences",
+            "from_column": "user_id",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "preferences.user_id = users.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "recurrences_repetitions",
+            "from_column": "recurrence_id",
+            "to_table": "recurrences",
+            "to_column": "id",
+            "condition": "recurrences_repetitions.recurrence_id = recurrences.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "recurrences_transactions",
+            "from_column": "recurrence_id",
+            "to_table": "recurrences",
+            "to_column": "id",
+            "condition": "recurrences_transactions.recurrence_id = recurrences.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "recurrences",
+            "from_column": "transaction_type_id",
+            "to_table": "transaction_types",
+            "to_column": "id",
+            "condition": "recurrences.transaction_type_id = transaction_types.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "recurrences",
+            "from_column": "user_group_id",
+            "to_table": "user_groups",
+            "to_column": "id",
+            "condition": "recurrences.user_group_id = user_groups.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "recurrences",
+            "from_column": "user_id",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "recurrences.user_id = users.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "rt_meta",
+            "from_column": "rt_id",
+            "to_table": "recurrences_transactions",
+            "to_column": "id",
+            "condition": "rt_meta.rt_id = recurrences_transactions.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "recurrences_transactions",
+            "from_column": "foreign_currency_id",
+            "to_table": "transaction_currencies",
+            "to_column": "id",
+            "condition": "recurrences_transactions.foreign_currency_id = transaction_currencies.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "recurrences_transactions",
+            "from_column": "transaction_currency_id",
+            "to_table": "transaction_currencies",
+            "to_column": "id",
+            "condition": "recurrences_transactions.transaction_currency_id = transaction_currencies.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "recurrences_transactions",
+            "from_column": "transaction_type_id",
+            "to_table": "transaction_types",
+            "to_column": "id",
+            "condition": "recurrences_transactions.transaction_type_id = transaction_types.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "role_user",
+            "from_column": "role_id",
+            "to_table": "roles",
+            "to_column": "id",
+            "condition": "role_user.role_id = roles.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "role_user",
+            "from_column": "user_id",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "role_user.user_id = users.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "rule_actions",
+            "from_column": "rule_id",
+            "to_table": "rules",
+            "to_column": "id",
+            "condition": "rule_actions.rule_id = rules.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "rules",
+            "from_column": "rule_group_id",
+            "to_table": "rule_groups",
+            "to_column": "id",
+            "condition": "rules.rule_group_id = rule_groups.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "rule_groups",
+            "from_column": "user_group_id",
+            "to_table": "user_groups",
+            "to_column": "id",
+            "condition": "rule_groups.user_group_id = user_groups.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "rule_groups",
+            "from_column": "user_id",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "rule_groups.user_id = users.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "rule_triggers",
+            "from_column": "rule_id",
+            "to_table": "rules",
+            "to_column": "id",
+            "condition": "rule_triggers.rule_id = rules.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "rules",
+            "from_column": "user_group_id",
+            "to_table": "user_groups",
+            "to_column": "id",
+            "condition": "rules.user_group_id = user_groups.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "rules",
+            "from_column": "user_id",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "rules.user_id = users.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "tag_transaction_journal",
+            "from_column": "tag_id",
+            "to_table": "tags",
+            "to_column": "id",
+            "condition": "tag_transaction_journal.tag_id = tags.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "tag_transaction_journal",
+            "from_column": "transaction_journal_id",
+            "to_table": "transaction_journals",
+            "to_column": "id",
+            "condition": "tag_transaction_journal.transaction_journal_id = transaction_journals.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "tags",
+            "from_column": "user_group_id",
+            "to_table": "user_groups",
+            "to_column": "id",
+            "condition": "tags.user_group_id = user_groups.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "tags",
+            "from_column": "user_id",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "tags.user_id = users.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "transaction_currency_user_group",
+            "from_column": "transaction_currency_id",
+            "to_table": "transaction_currencies",
+            "to_column": "id",
+            "condition": "transaction_currency_user_group.transaction_currency_id = transaction_currencies.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "transaction_journals",
+            "from_column": "transaction_currency_id",
+            "to_table": "transaction_currencies",
+            "to_column": "id",
+            "condition": "transaction_journals.transaction_currency_id = transaction_currencies.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "transactions",
+            "from_column": "foreign_currency_id",
+            "to_table": "transaction_currencies",
+            "to_column": "id",
+            "condition": "transactions.foreign_currency_id = transaction_currencies.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "transactions",
+            "from_column": "transaction_currency_id",
+            "to_table": "transaction_currencies",
+            "to_column": "id",
+            "condition": "transactions.transaction_currency_id = transaction_currencies.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "transaction_currency_user_group",
+            "from_column": "user_group_id",
+            "to_table": "user_groups",
+            "to_column": "id",
+            "condition": "transaction_currency_user_group.user_group_id = user_groups.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "transaction_journals",
+            "from_column": "transaction_group_id",
+            "to_table": "transaction_groups",
+            "to_column": "id",
+            "condition": "transaction_journals.transaction_group_id = transaction_groups.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "transaction_groups",
+            "from_column": "user_group_id",
+            "to_table": "user_groups",
+            "to_column": "id",
+            "condition": "transaction_groups.user_group_id = user_groups.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "transaction_groups",
+            "from_column": "user_id",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "transaction_groups.user_id = users.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "transaction_journals",
+            "from_column": "transaction_type_id",
+            "to_table": "transaction_types",
+            "to_column": "id",
+            "condition": "transaction_journals.transaction_type_id = transaction_types.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "transactions",
+            "from_column": "transaction_journal_id",
+            "to_table": "transaction_journals",
+            "to_column": "id",
+            "condition": "transactions.transaction_journal_id = transaction_journals.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "transaction_journals",
+            "from_column": "user_group_id",
+            "to_table": "user_groups",
+            "to_column": "id",
+            "condition": "transaction_journals.user_group_id = user_groups.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "transaction_journals",
+            "from_column": "user_id",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "transaction_journals.user_id = users.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "foreign_key",
+            "from_table": "users",
+            "from_column": "user_group_id",
+            "to_table": "user_groups",
+            "to_column": "id",
+            "condition": "users.user_group_id = user_groups.id",
+            "confidence": "high",
+            "reasoning": "Explicit foreign key constraint",
+            "relationship_type": "foreign_key",
+            "verified": true
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_id",
+            "to_table": "attachments",
+            "to_column": "user_id",
+            "condition": "accounts.user_id = attachments.user_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_id' field, suggesting that attachments could be related to accounts through the user who owns them. This relationship is based on the assumption that users can have both accounts and attachments, and these might be linked through the user_id.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN attachments t2 ON t1.user_id = t2.user_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 86,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_group_id",
+            "to_table": "budgets",
+            "to_column": "user_group_id",
+            "condition": "accounts.user_group_id = budgets.user_group_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_group_id' field, indicating that accounts and budgets can be associated with user groups. This relationship is plausible in systems where financial management is organized by groups.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN budgets t2 ON t1.user_group_id = t2.user_group_id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 215,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_group_id",
+            "to_table": "bills",
+            "to_column": "user_group_id",
+            "condition": "accounts.user_group_id = bills.user_group_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_group_id' field, indicating that accounts and bills might be categorized or grouped by user groups. This relationship is less direct than the user_id relationship but still plausible.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN bills t2 ON t1.user_group_id = t2.user_group_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 387,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_group_id",
+            "to_table": "available_budgets",
+            "to_column": "user_group_id",
+            "condition": "accounts.user_group_id = available_budgets.user_group_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_group_id' field, indicating that accounts and budgets can be associated with user groups. This relationship is plausible in scenarios where financial data is managed at a group level.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN available_budgets t2 ON t1.user_group_id = t2.user_group_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 1806,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_id",
+            "to_table": "categories",
+            "to_column": "user_id",
+            "condition": "accounts.user_id = categories.user_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_id' field, suggesting that accounts and categories might be associated with the same user. This relationship could be used to organize accounts and categories by user, allowing for user-specific data management.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN categories t2 ON t1.user_id = t2.user_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 430,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_group_id",
+            "to_table": "categories",
+            "to_column": "user_group_id",
+            "condition": "accounts.user_group_id = categories.user_group_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_group_id' field, indicating that accounts and categories might be organized or accessed based on user groups. This relationship could facilitate group-based access control or categorization.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN categories t2 ON t1.user_group_id = t2.user_group_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 430,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_id",
+            "to_table": "oauth_clients",
+            "to_column": "user_id",
+            "condition": "accounts.user_id = oauth_clients.user_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_id' field, suggesting a potential relationship where an account could be associated with an OAuth client through the same user. This is a common pattern where user-specific data is linked across different functionalities, such as account management and OAuth client management.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN oauth_clients t2 ON t1.user_id = t2.user_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 43,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_id",
+            "to_table": "currency_exchange_rates",
+            "to_column": "user_id",
+            "condition": "accounts.user_id = currency_exchange_rates.user_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_id' field, suggesting that exchange rates might be customized or associated with specific users who also have accounts. This relationship could be used to track which users have specific exchange rates applied to their accounts.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN currency_exchange_rates t2 ON t1.user_id = t2.user_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 1290,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_group_id",
+            "to_table": "currency_exchange_rates",
+            "to_column": "user_group_id",
+            "condition": "accounts.user_group_id = currency_exchange_rates.user_group_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_group_id' field, indicating that accounts and exchange rates might be grouped or customized for specific user groups. This relationship could be useful for applying group-specific exchange rates to accounts.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN currency_exchange_rates t2 ON t1.user_group_id = t2.user_group_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 1290,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_group_id",
+            "to_table": "group_memberships",
+            "to_column": "user_group_id",
+            "condition": "accounts.user_group_id = group_memberships.user_group_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_group_id' field, indicating a potential relationship where accounts are linked to group memberships through the group they belong to. This is a common pattern in systems where user accounts are organized by groups.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN group_memberships t2 ON t1.user_group_id = t2.user_group_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 43,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_id",
+            "to_table": "object_groups",
+            "to_column": "user_id",
+            "condition": "accounts.user_id = object_groups.user_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_id' field, suggesting that accounts and object groups can be associated with the same user. This relationship is logical given that both tables involve user-related data, and it is common for different entities in a system to be linked through a user identifier.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN object_groups t2 ON t1.user_id = t2.user_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 215,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_group_id",
+            "to_table": "object_groups",
+            "to_column": "user_group_id",
+            "condition": "accounts.user_group_id = object_groups.user_group_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_group_id' field, indicating that accounts and object groups can be associated with the same user group. This relationship is plausible as it allows for grouping and managing accounts and object groups under the same user group, facilitating shared access or management.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN object_groups t2 ON t1.user_group_id = t2.user_group_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 215,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_group_id",
+            "to_table": "preferences",
+            "to_column": "user_group_id",
+            "condition": "accounts.user_group_id = preferences.user_group_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_group_id' field, indicating a potential relationship where accounts and preferences can be grouped by user groups. This is a common pattern in systems that manage group-based settings or permissions.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN preferences t2 ON t1.user_group_id = t2.user_group_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 344,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_group_id",
+            "to_table": "recurrences",
+            "to_column": "user_group_id",
+            "condition": "accounts.user_group_id = recurrences.user_group_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_group_id' field, indicating that accounts and recurrences can be associated with user groups. This relationship is less direct than the user_id relationship but still plausible in scenarios where group-level operations are tracked.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN recurrences t2 ON t1.user_group_id = t2.user_group_id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 43,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_id",
+            "to_table": "rule_groups",
+            "to_column": "user_id",
+            "condition": "accounts.user_id = rule_groups.user_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_id' field, suggesting a potential relationship where accounts and rule groups are associated with the same user. This could imply that rules are applied to accounts based on the user who owns them.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN rule_groups t2 ON t1.user_id = t2.user_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 172,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_group_id",
+            "to_table": "rule_groups",
+            "to_column": "user_group_id",
+            "condition": "accounts.user_group_id = rule_groups.user_group_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_group_id' field, indicating a potential relationship where accounts and rule groups are associated with the same user group. This could suggest that certain rules apply to all accounts within a user group.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN rule_groups t2 ON t1.user_group_id = t2.user_group_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 172,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_id",
+            "to_table": "rules",
+            "to_column": "user_id",
+            "condition": "accounts.user_id = rules.user_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_id' field, suggesting that rules might be applied to accounts based on the user associated with them. This relationship is inferred based on the common field name and type, indicating a potential business logic connection where rules are applied to user-specific accounts.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN rules t2 ON t1.user_id = t2.user_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 172,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_group_id",
+            "to_table": "rules",
+            "to_column": "user_group_id",
+            "condition": "accounts.user_group_id = rules.user_group_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_group_id' field, suggesting that rules might be applied to accounts based on the user group they belong to. This relationship is inferred based on the common field name and type, indicating a potential business logic connection where rules are applied to accounts within specific user groups.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN rules t2 ON t1.user_group_id = t2.user_group_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 172,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_id",
+            "to_table": "tags",
+            "to_column": "user_id",
+            "condition": "accounts.user_id = tags.user_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_id' field, suggesting that accounts and tags could be associated with the same user. This relationship is based on the common practice of linking user-specific data across different tables.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN tags t2 ON t1.user_id = t2.user_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 3397,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_group_id",
+            "to_table": "tags",
+            "to_column": "user_group_id",
+            "condition": "accounts.user_group_id = tags.user_group_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_group_id' field, indicating that accounts and tags might be associated with the same user group. This is a common pattern where data is grouped by user groups for organizational purposes.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN tags t2 ON t1.user_group_id = t2.user_group_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 3397,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accounts",
+            "from_column": "user_group_id",
+            "to_table": "attachments",
+            "to_column": "user_group_id",
+            "condition": "accounts.user_group_id = attachments.user_group_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_group_id' field, which might suggest a relationship through user groups. However, without additional context, this relationship is speculative and assumes that accounts and attachments are organized or managed by user groups.",
+            "test_sql": "SELECT COUNT(*) FROM accounts t1 JOIN attachments t2 ON t1.user_group_id = t2.user_group_id LIMIT 1",
+            "relationship_type": "statistical",
+            "verified": true,
+            "test_result": 86,
+            "verification_method": "sql_test"
+        }
+    ]
+}

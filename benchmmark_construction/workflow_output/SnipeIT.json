@@ -1,0 +1,398 @@
+{
+  "platform": "SnipeIT",
+  "core_tables": [
+    "accessories",
+    "action_logs",
+    "assets",
+    "categories",
+    "companies",
+    "components",
+    "consumables",
+    "custom_field_custom_fieldset",
+    "custom_fields",
+    "custom_fieldsets",
+    "departments",
+    "depreciations",
+    "license_seats",
+    "licenses",
+    "locations",
+    "login_attempts",
+    "manufacturers",
+    "migrations",
+    "models",
+    "settings",
+    "status_labels",
+    "suppliers",
+    "users",
+    "users_groups"
+  ],
+  "discovered_workflows": {
+    "asset_management": {
+      "name": "asset_management",
+      "description": "Manage the lifecycle of physical and digital assets, including tracking, assignment, and status updates.",
+      "core_tables": [
+        "assets",
+        "models",
+        "locations",
+        "status_labels",
+        "users"
+      ],
+      "key_relationships": [
+        {
+          "type": "inferred",
+          "from_table": "assets",
+          "from_column": "model_id",
+          "to_table": "models",
+          "to_column": "id",
+          "condition": "assets.model_id = models.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM assets t1 JOIN models t2 ON t1.model_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 2597,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "assets",
+          "from_column": "location_id",
+          "to_table": "locations",
+          "to_column": "id",
+          "condition": "assets.location_id = locations.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM assets t1 JOIN locations t2 ON t1.location_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 2597,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "assets",
+          "from_column": "status_id",
+          "to_table": "status_labels",
+          "to_column": "id",
+          "condition": "assets.status_id = status_labels.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM assets t1 JOIN status_labels t2 ON t1.status_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 2597,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "assets",
+          "from_column": "assigned_to",
+          "to_table": "users",
+          "to_column": "id",
+          "condition": "assets.assigned_to = users.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM assets t1 JOIN users t2 ON t1.assigned_to = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 400,
+          "verification_method": "sql_test"
+        }
+      ],
+      "business_value": "Efficiently track and manage assets throughout their lifecycle, ensuring optimal utilization and compliance with company policies.",
+      "workflow_type": "asset_management"
+    },
+    "license_management": {
+      "name": "license_management",
+      "description": "Track and manage software licenses, including compliance, expiration, and seat allocation.",
+      "core_tables": [
+        "licenses",
+        "license_seats",
+        "users",
+        "suppliers"
+      ],
+      "key_relationships": [
+        {
+          "type": "inferred",
+          "from_table": "license_seats",
+          "from_column": "license_id",
+          "to_table": "licenses",
+          "to_column": "id",
+          "condition": "license_seats.license_id = licenses.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM license_seats t1 JOIN licenses t2 ON t1.license_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 50,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "licenses",
+          "from_column": "supplier_id",
+          "to_table": "suppliers",
+          "to_column": "id",
+          "condition": "licenses.supplier_id = suppliers.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM licenses t1 JOIN suppliers t2 ON t1.supplier_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 4,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "licenses",
+          "from_column": "created_by",
+          "to_table": "users",
+          "to_column": "id",
+          "condition": "licenses.created_by = users.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM licenses t1 JOIN users t2 ON t1.created_by = t2.id LIMIT 1",
+          "relationship_type": "business_logic",
+          "verified": true,
+          "test_result": 4,
+          "verification_method": "sql_test"
+        }
+      ],
+      "business_value": "Ensure compliance with software licensing agreements and optimize license usage across the organization.",
+      "workflow_type": "license_management"
+    },
+    "user_management": {
+      "name": "user_management",
+      "description": "Manage user accounts, including creation, authentication, and group assignments.",
+      "core_tables": [
+        "users",
+        "departments",
+        "users_groups",
+        "login_attempts"
+      ],
+      "key_relationships": [
+        {
+          "type": "inferred",
+          "from_table": "users",
+          "from_column": "department_id",
+          "to_table": "departments",
+          "to_column": "id",
+          "condition": "users.department_id = departments.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM users t1 JOIN departments t2 ON t1.department_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 59,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "users",
+          "from_column": "id",
+          "to_table": "users_groups",
+          "to_column": "user_id",
+          "condition": "users.id = users_groups.user_id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM users t1 JOIN users_groups t2 ON t1.id = t2.user_id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 1,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "login_attempts",
+          "from_column": "username",
+          "to_table": "users",
+          "to_column": "username",
+          "condition": "login_attempts.username = users.username",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM login_attempts t1 JOIN users t2 ON t1.username = t2.username LIMIT 1",
+          "relationship_type": "business_logic",
+          "verified": true,
+          "test_result": 4,
+          "verification_method": "sql_test"
+        }
+      ],
+      "business_value": "Streamline user account management and ensure secure access to the system.",
+      "workflow_type": "user_management"
+    },
+    "inventory_management": {
+      "name": "inventory_management",
+      "description": "Manage inventory of consumables and components, including stock levels and supplier information.",
+      "core_tables": [
+        "consumables",
+        "components",
+        "suppliers",
+        "locations"
+      ],
+      "key_relationships": [
+        {
+          "type": "inferred",
+          "from_table": "consumables",
+          "from_column": "supplier_id",
+          "to_table": "suppliers",
+          "to_column": "id",
+          "condition": "consumables.supplier_id = suppliers.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM consumables t1 JOIN suppliers t2 ON t1.supplier_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 3,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "components",
+          "from_column": "supplier_id",
+          "to_table": "suppliers",
+          "to_column": "id",
+          "condition": "components.supplier_id = suppliers.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM components t1 JOIN suppliers t2 ON t1.supplier_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 4,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "components",
+          "from_column": "location_id",
+          "to_table": "locations",
+          "to_column": "id",
+          "condition": "components.location_id = locations.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM components t1 JOIN locations t2 ON t1.location_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 4,
+          "verification_method": "sql_test"
+        }
+      ],
+      "business_value": "Optimize inventory levels and ensure timely replenishment of consumables and components.",
+      "workflow_type": "inventory_management"
+    },
+    "maintenance_management": {
+      "name": "maintenance_management",
+      "description": "Schedule and track maintenance activities for assets, including warranty alerts and service history.",
+      "core_tables": [
+        "assets",
+        "action_logs",
+        "manufacturers",
+        "users"
+      ],
+      "key_relationships": [
+        {
+          "type": "inferred",
+          "from_table": "action_logs",
+          "from_column": "item_id",
+          "to_table": "assets",
+          "to_column": "id",
+          "condition": "action_logs.item_id = assets.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM action_logs t1 JOIN assets t2 ON t1.item_id = t2.id LIMIT 1",
+          "relationship_type": "business_logic",
+          "verified": true,
+          "test_result": 421,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "assets",
+          "from_column": "created_by",
+          "to_table": "users",
+          "to_column": "id",
+          "condition": "assets.created_by = users.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM assets t1 JOIN users t2 ON t1.created_by = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 2597,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "assets",
+          "from_column": "supplier_id",
+          "to_table": "manufacturers",
+          "to_column": "id",
+          "condition": "assets.supplier_id = manufacturers.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM assets t1 JOIN manufacturers t2 ON t1.supplier_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 2597,
+          "verification_method": "sql_test"
+        }
+      ],
+      "business_value": "Ensure timely maintenance of assets to extend their lifecycle and prevent downtime.",
+      "workflow_type": "maintenance_management"
+    },
+    "procurement_management": {
+      "name": "procurement_management",
+      "description": "Manage procurement processes, including supplier relationships and purchase tracking.",
+      "core_tables": [
+        "accessories",
+        "suppliers",
+        "companies",
+        "categories"
+      ],
+      "key_relationships": [
+        {
+          "type": "inferred",
+          "from_table": "accessories",
+          "from_column": "supplier_id",
+          "to_table": "suppliers",
+          "to_column": "id",
+          "condition": "accessories.supplier_id = suppliers.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM accessories t1 JOIN suppliers t2 ON t1.supplier_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 4,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "accessories",
+          "from_column": "category_id",
+          "to_table": "categories",
+          "to_column": "id",
+          "condition": "accessories.category_id = categories.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM accessories t1 JOIN categories t2 ON t1.category_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 4,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "accessories",
+          "from_column": "company_id",
+          "to_table": "companies",
+          "to_column": "id",
+          "condition": "accessories.company_id = companies.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM accessories t1 JOIN companies t2 ON t1.company_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 4,
+          "verification_method": "sql_test"
+        }
+      ],
+      "business_value": "Streamline procurement processes and maintain strong supplier relationships to ensure timely delivery of goods.",
+      "workflow_type": "procurement_management"
+    }
+  },
+  "discovery_metadata": {
+    "total_tables_analyzed": 24,
+    "relationships_found": 73,
+    "workflows_identified": 6,
+    "table_analysis_count": 24,
+    "config_used": {
+      "discovery_type": "universal",
+      "llm_model": "gpt-4o",
+      "max_relationships": 1000,
+      "confidence_levels": {
+        "high": 3,
+        "medium": 2,
+        "low": 1
+      }
+    }
+  }
+}

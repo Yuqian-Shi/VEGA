@@ -1,0 +1,372 @@
+{
+  "platform": "OpenProject",
+  "core_tables": [
+    "ar_internal_metadata",
+    "attachment_journals",
+    "attachments",
+    "categories",
+    "colors",
+    "delayed_jobs",
+    "enabled_modules",
+    "enumerations",
+    "grid_widgets",
+    "grids",
+    "journals",
+    "meeting_agenda_items",
+    "meeting_journals",
+    "meeting_participants",
+    "meetings",
+    "member_roles",
+    "members",
+    "menu_items",
+    "news",
+    "news_journals",
+    "notification_settings",
+    "ordered_work_packages",
+    "project_journals",
+    "projects",
+    "projects_types",
+    "queries",
+    "relations",
+    "role_permissions",
+    "roles",
+    "schema_migrations",
+    "sessions",
+    "settings",
+    "statuses",
+    "tokens",
+    "types",
+    "user_passwords",
+    "user_preferences",
+    "users",
+    "version_settings",
+    "versions",
+    "views",
+    "watchers",
+    "wiki_page_journals",
+    "wiki_pages",
+    "wikis",
+    "work_package_hierarchies",
+    "work_package_journals",
+    "work_packages",
+    "workflows"
+  ],
+  "discovered_workflows": {
+    "project_initiation_and_management": {
+      "name": "project_initiation_and_management",
+      "description": "This workflow covers the initiation and management of projects, including setting up project details, associating members, and enabling necessary modules.",
+      "core_tables": [
+        "projects",
+        "members",
+        "enabled_modules",
+        "project_journals"
+      ],
+      "key_relationships": [
+        {
+          "type": "inferred",
+          "from_table": "members",
+          "from_column": "project_id",
+          "to_table": "projects",
+          "to_column": "id",
+          "condition": "members.project_id = projects.id",
+          "confidence": "high",
+          "reasoning": "The 'project_id' field in the 'members' table likely corresponds to the 'id' field in the 'projects' table, indicating which project a member is associated with. This is a common foreign key relationship where a member is linked to a specific project.",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 2,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "enabled_modules",
+          "from_column": "project_id",
+          "to_table": "projects",
+          "to_column": "id",
+          "condition": "enabled_modules.project_id = projects.id",
+          "confidence": "high",
+          "reasoning": "The 'project_id' field in the 'enabled_modules' table suggests a direct relationship with the 'id' field in the 'projects' table. This is a common pattern where a module is associated with a specific project, allowing for the customization of features per project.",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 13,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "project_journals",
+          "from_column": "id",
+          "to_table": "projects",
+          "to_column": "id",
+          "condition": "project_journals.id = projects.id",
+          "confidence": "high",
+          "reasoning": "The 'project_id' field in the 'project_journals' table suggests a direct relationship with the 'id' field in the 'projects' table. This is a common pattern where project journals are associated with specific projects, allowing for tracking and documentation of project changes.",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 2,
+          "verification_method": "sql_test"
+        }
+      ],
+      "business_value": "Facilitates the setup and management of projects, ensuring that all necessary resources and configurations are in place for successful project execution.",
+      "workflow_type": "project_management"
+    },
+    "task_assignment_and_tracking": {
+      "name": "task_assignment_and_tracking",
+      "description": "This workflow manages the assignment and tracking of tasks within projects, including the creation of work packages and monitoring their progress.",
+      "core_tables": [
+        "work_packages",
+        "work_package_journals",
+        "projects",
+        "statuses"
+      ],
+      "key_relationships": [
+        {
+          "type": "foreign_key",
+          "from_table": "work_packages",
+          "from_column": "project_id",
+          "to_table": "projects",
+          "to_column": "id",
+          "condition": "work_packages.project_id = projects.id",
+          "confidence": "high",
+          "reasoning": "Explicit foreign key constraint",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "inferred",
+          "from_table": "work_package_journals",
+          "from_column": "project_id",
+          "to_table": "projects",
+          "to_column": "id",
+          "condition": "work_package_journals.project_id = projects.id",
+          "confidence": "high",
+          "reasoning": "The 'project_id' field in the 'work_package_journals' table likely references the 'id' field in the 'projects' table, indicating which project each work package journal entry is associated with. This is a common pattern in project management systems where work packages are linked to specific projects.",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 36,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "work_packages",
+          "from_column": "status_id",
+          "to_table": "statuses",
+          "to_column": "id",
+          "condition": "work_packages.status_id = statuses.id",
+          "confidence": "high",
+          "reasoning": "Explicit foreign key constraint",
+          "relationship_type": "foreign_key",
+          "verified": true
+        }
+      ],
+      "business_value": "Enables efficient task management and tracking, ensuring that tasks are properly assigned, monitored, and completed within the project timeline.",
+      "workflow_type": "task_management"
+    },
+    "meeting_scheduling_and_management": {
+      "name": "meeting_scheduling_and_management",
+      "description": "This workflow handles the scheduling and management of meetings, including agenda creation, participant tracking, and meeting documentation.",
+      "core_tables": [
+        "meetings",
+        "meeting_agenda_items",
+        "meeting_participants",
+        "projects"
+      ],
+      "key_relationships": [
+        {
+          "type": "foreign_key",
+          "from_table": "meeting_agenda_items",
+          "from_column": "meeting_id",
+          "to_table": "meetings",
+          "to_column": "id",
+          "condition": "meeting_agenda_items.meeting_id = meetings.id",
+          "confidence": "high",
+          "reasoning": "Explicit foreign key constraint",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "inferred",
+          "from_table": "meeting_participants",
+          "from_column": "meeting_id",
+          "to_table": "meetings",
+          "to_column": "id",
+          "condition": "meeting_participants.meeting_id = meetings.id",
+          "confidence": "high",
+          "reasoning": "The 'meeting_id' field in the 'meeting_participants' table is likely intended to reference the 'id' field in the 'meetings' table. This relationship makes sense because it connects participants to the specific meetings they are involved in, which is a common pattern in database design where a participant or attendee table references a meeting or event table.",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 1,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "meetings",
+          "from_column": "project_id",
+          "to_table": "projects",
+          "to_column": "id",
+          "condition": "meetings.project_id = projects.id",
+          "confidence": "high",
+          "reasoning": "The 'project_id' field in the 'meetings' table suggests a direct relationship with the 'id' field in the 'projects' table. This is a common pattern where meetings are associated with specific projects, allowing for organization and management of meetings within the context of a project.",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 1,
+          "verification_method": "sql_test"
+        }
+      ],
+      "business_value": "Streamlines the process of organizing and managing meetings, ensuring that all necessary details are documented and participants are tracked effectively.",
+      "workflow_type": "meeting_management"
+    },
+    "user_authentication_and_management": {
+      "name": "user_authentication_and_management",
+      "description": "This workflow manages user authentication and account management, including session tracking, password management, and user preferences.",
+      "core_tables": [
+        "users",
+        "user_passwords",
+        "sessions",
+        "user_preferences"
+      ],
+      "key_relationships": [
+        {
+          "type": "inferred",
+          "from_table": "user_passwords",
+          "from_column": "user_id",
+          "to_table": "users",
+          "to_column": "id",
+          "condition": "user_passwords.user_id = users.id",
+          "confidence": "high",
+          "reasoning": "The 'user_id' field in the 'user_passwords' table likely corresponds to the 'id' field in the 'users' table. This is a common pattern where a user account in the 'users' table is linked to their password information in the 'user_passwords' table. The data types are compatible, and the naming convention suggests a direct relationship.",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 1,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "sessions",
+          "from_column": "user_id",
+          "to_table": "users",
+          "to_column": "id",
+          "condition": "sessions.user_id = users.id",
+          "confidence": "high",
+          "reasoning": "The 'user_id' field in the 'sessions' table likely corresponds to the 'id' field in the 'users' table, as it is common for session data to be associated with a specific user. This relationship allows tracking of which user is associated with each session, which is a typical pattern in web applications for managing user sessions.",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 1,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "user_preferences",
+          "from_column": "user_id",
+          "to_table": "users",
+          "to_column": "id",
+          "condition": "user_preferences.user_id = users.id",
+          "confidence": "high",
+          "reasoning": "The 'user_id' field in the 'user_preferences' table likely corresponds to the 'id' field in the 'users' table, as it is common for user-specific settings to be linked to a user account. This relationship allows for the retrieval of user preferences based on the user account information.",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 1,
+          "verification_method": "sql_test"
+        }
+      ],
+      "business_value": "Ensures secure and efficient management of user accounts, including authentication, session tracking, and personalized user settings.",
+      "workflow_type": "user_management"
+    },
+    "document_and_attachment_management": {
+      "name": "document_and_attachment_management",
+      "description": "This workflow manages the uploading, storing, and tracking of documents and attachments within the system.",
+      "core_tables": [
+        "attachments",
+        "attachment_journals",
+        "users"
+      ],
+      "key_relationships": [
+        {
+          "type": "inferred",
+          "from_table": "attachments",
+          "from_column": "author_id",
+          "to_table": "users",
+          "to_column": "id",
+          "condition": "attachments.author_id = users.id",
+          "confidence": "high",
+          "reasoning": "The 'author_id' field in the 'attachments' table likely refers to the user who created or uploaded the attachment. This aligns with the 'id' field in the 'users' table, which uniquely identifies each user. This is a common pattern where a foreign key relationship exists between a record and its creator or owner.",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 2,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "attachment_journals",
+          "from_column": "author_id",
+          "to_table": "users",
+          "to_column": "id",
+          "condition": "attachment_journals.author_id = users.id",
+          "confidence": "high",
+          "reasoning": "The 'author_id' field in the 'attachment_journals' table likely refers to the user who created or uploaded the attachment. This aligns with the 'id' field in the 'users' table, which uniquely identifies each user. This relationship is a common pattern where a foreign key in one table references the primary key of another table to establish a link between records.",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 2,
+          "verification_method": "sql_test"
+        }
+      ],
+      "business_value": "Facilitates the efficient management of documents and attachments, ensuring that all files are properly stored, tracked, and associated with their respective authors.",
+      "workflow_type": "content_management"
+    },
+    "project_versioning_and_release_management": {
+      "name": "project_versioning_and_release_management",
+      "description": "This workflow manages the versioning and release of projects, including tracking different versions and their associated settings.",
+      "core_tables": [
+        "versions",
+        "version_settings",
+        "projects"
+      ],
+      "key_relationships": [
+        {
+          "type": "inferred",
+          "from_table": "versions",
+          "from_column": "project_id",
+          "to_table": "projects",
+          "to_column": "id",
+          "condition": "versions.project_id = projects.id",
+          "confidence": "high",
+          "reasoning": "The 'project_id' field in the 'versions' table suggests a direct relationship with the 'id' field in the 'projects' table. This is a common foreign key relationship where each version is associated with a specific project.",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 4,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "version_settings",
+          "from_column": "project_id",
+          "to_table": "projects",
+          "to_column": "id",
+          "condition": "version_settings.project_id = projects.id",
+          "confidence": "high",
+          "reasoning": "The 'project_id' field in the 'version_settings' table suggests a direct association with the 'projects' table, where each version setting is linked to a specific project. This is a common pattern where settings or configurations are tied to a parent entity, in this case, a project.",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 4,
+          "verification_method": "sql_test"
+        }
+      ],
+      "business_value": "Ensures effective management of project versions and releases, allowing for detailed tracking and configuration of different project iterations.",
+      "workflow_type": "version_management"
+    }
+  },
+  "discovery_metadata": {
+    "total_tables_analyzed": 49,
+    "relationships_found": 345,
+    "workflows_identified": 6,
+    "table_analysis_count": 49,
+    "config_used": {
+      "discovery_type": "universal",
+      "llm_model": "gpt-4o",
+      "max_relationships": 1000,
+      "confidence_levels": {
+        "high": 3,
+        "medium": 2,
+        "low": 1
+      }
+    }
+  }
+}

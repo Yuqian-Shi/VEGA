@@ -1,0 +1,370 @@
+{
+  "platform": "EspoCRM",
+  "core_tables": [
+    "account",
+    "account_contact",
+    "action_history_record",
+    "attachment",
+    "auth_log_record",
+    "auth_token",
+    "call",
+    "case",
+    "contact",
+    "currency",
+    "email_address",
+    "email_template",
+    "entity_email_address",
+    "entity_phone_number",
+    "import",
+    "import_entity",
+    "import_error",
+    "knowledge_base_article",
+    "lead",
+    "phone_number",
+    "scheduled_job",
+    "scheduled_job_log_record",
+    "system_data",
+    "task",
+    "user"
+  ],
+  "discovered_workflows": {
+    "lead_management": {
+      "name": "lead_management",
+      "description": "Capture, qualify, and manage leads through the sales pipeline, ensuring efficient tracking and conversion.",
+      "core_tables": [
+        "lead",
+        "contact",
+        "account",
+        "account_contact"
+      ],
+      "key_relationships": [
+        {
+          "type": "inferred",
+          "from_table": "account",
+          "from_column": "id",
+          "to_table": "account_contact",
+          "to_column": "account_id",
+          "condition": "account.id = account_contact.account_id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM account t1 JOIN account_contact t2 ON t1.id = t2.account_id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 21,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "account",
+          "from_column": "id",
+          "to_table": "contact",
+          "to_column": "account_id",
+          "condition": "account.id = contact.account_id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM account t1 JOIN contact t2 ON t1.id = t2.account_id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 21,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "account_contact",
+          "from_column": "contact_id",
+          "to_table": "contact",
+          "to_column": "id",
+          "condition": "account_contact.contact_id = contact.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM account_contact t1 JOIN contact t2 ON t1.contact_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 21,
+          "verification_method": "sql_test"
+        }
+      ],
+      "business_value": "Enhances sales efficiency by providing a structured approach to lead management, ensuring leads are properly tracked and converted into opportunities.",
+      "workflow_type": "sales_management"
+    },
+    "customer_support_case_management": {
+      "name": "customer_support_case_management",
+      "description": "Manage customer support cases from creation to resolution, ensuring timely responses and SLA compliance.",
+      "core_tables": [
+        "case",
+        "account",
+        "contact",
+        "user"
+      ],
+      "key_relationships": [
+        {
+          "type": "inferred",
+          "from_table": "case",
+          "from_column": "account_id",
+          "to_table": "account",
+          "to_column": "id",
+          "condition": "case.account_id = account.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM case t1 JOIN account t2 ON t1.account_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 21,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "case",
+          "from_column": "contact_id",
+          "to_table": "contact",
+          "to_column": "id",
+          "condition": "case.contact_id = contact.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM case t1 JOIN contact t2 ON t1.contact_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 21,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "case",
+          "from_column": "assigned_user_id",
+          "to_table": "user",
+          "to_column": "id",
+          "condition": "case.assigned_user_id = user.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM case t1 JOIN user t2 ON t1.assigned_user_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 21,
+          "verification_method": "sql_test"
+        }
+      ],
+      "business_value": "Improves customer satisfaction by ensuring cases are handled efficiently and within agreed service levels.",
+      "workflow_type": "customer_support"
+    },
+    "marketing_campaign_management": {
+      "name": "marketing_campaign_management",
+      "description": "Plan, execute, and track marketing campaigns to optimize reach and engagement.",
+      "core_tables": [
+        "account",
+        "contact",
+        "lead",
+        "email_template"
+      ],
+      "key_relationships": [
+        {
+          "type": "inferred",
+          "from_table": "account",
+          "from_column": "campaign_id",
+          "to_table": "contact",
+          "to_column": "campaign_id",
+          "condition": "account.campaign_id = contact.campaign_id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM account t1 JOIN contact t2 ON t1.campaign_id = t2.campaign_id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 21,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "lead",
+          "from_column": "campaign_id",
+          "to_table": "contact",
+          "to_column": "campaign_id",
+          "condition": "lead.campaign_id = contact.campaign_id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM lead t1 JOIN contact t2 ON t1.campaign_id = t2.campaign_id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 21,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "email_template",
+          "from_column": "created_by_id",
+          "to_table": "user",
+          "to_column": "id",
+          "condition": "email_template.created_by_id = user.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM email_template t1 JOIN user t2 ON t1.created_by_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 1,
+          "verification_method": "sql_test"
+        }
+      ],
+      "business_value": "Maximizes marketing effectiveness by providing tools to plan and track campaigns, ensuring targeted communication and improved ROI.",
+      "workflow_type": "marketing_management"
+    },
+    "authentication_and_security_management": {
+      "name": "authentication_and_security_management",
+      "description": "Manage user authentication and security logs to ensure secure access and track authentication events.",
+      "core_tables": [
+        "auth_log_record",
+        "auth_token",
+        "user",
+        "action_history_record"
+      ],
+      "key_relationships": [
+        {
+          "type": "inferred",
+          "from_table": "auth_log_record",
+          "from_column": "auth_token_id",
+          "to_table": "auth_token",
+          "to_column": "id",
+          "condition": "auth_log_record.auth_token_id = auth_token.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM auth_log_record t1 JOIN auth_token t2 ON t1.auth_token_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 5,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "auth_log_record",
+          "from_column": "user_id",
+          "to_table": "user",
+          "to_column": "id",
+          "condition": "auth_log_record.user_id = user.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM auth_log_record t1 JOIN user t2 ON t1.user_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 5,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "action_history_record",
+          "from_column": "auth_log_record_id",
+          "to_table": "auth_log_record",
+          "to_column": "id",
+          "condition": "action_history_record.auth_log_record_id = auth_log_record.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM action_history_record t1 JOIN auth_log_record t2 ON t1.auth_log_record_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 34,
+          "verification_method": "sql_test"
+        }
+      ],
+      "business_value": "Ensures secure access to the system by managing authentication processes and tracking user activities, enhancing security and compliance.",
+      "workflow_type": "security_management"
+    },
+    "data_import_and_error_handling": {
+      "name": "data_import_and_error_handling",
+      "description": "Manage data import processes and handle errors to ensure data integrity and successful import operations.",
+      "core_tables": [
+        "import",
+        "import_entity",
+        "import_error",
+        "attachment"
+      ],
+      "key_relationships": [
+        {
+          "type": "inferred",
+          "from_table": "import",
+          "from_column": "id",
+          "to_table": "import_error",
+          "to_column": "import_id",
+          "condition": "import.id = import_error.import_id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM import t1 JOIN import_error t2 ON t1.id = t2.import_id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 30,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "import",
+          "from_column": "id",
+          "to_table": "import_entity",
+          "to_column": "import_id",
+          "condition": "import.id = import_entity.import_id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM import t1 JOIN import_entity t2 ON t1.id = t2.import_id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 120,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "attachment",
+          "from_column": "id",
+          "to_table": "import",
+          "to_column": "file_id",
+          "condition": "attachment.id = import.file_id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM attachment t1 JOIN import t2 ON t1.id = t2.file_id LIMIT 1",
+          "relationship_type": "business_logic",
+          "verified": true,
+          "test_result": 8,
+          "verification_method": "sql_test"
+        }
+      ],
+      "business_value": "Facilitates efficient data import processes while ensuring data integrity and handling errors effectively, improving data quality and operational efficiency.",
+      "workflow_type": "data_management"
+    },
+    "task_and_activity_management": {
+      "name": "task_and_activity_management",
+      "description": "Manage tasks and activities to ensure efficient workflow and task completion within the organization.",
+      "core_tables": [
+        "task",
+        "user",
+        "contact",
+        "account"
+      ],
+      "key_relationships": [
+        {
+          "type": "inferred",
+          "from_table": "contact",
+          "from_column": "assigned_user_id",
+          "to_table": "task",
+          "to_column": "assigned_user_id",
+          "condition": "contact.assigned_user_id = task.assigned_user_id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM contact t1 JOIN task t2 ON t1.assigned_user_id = t2.assigned_user_id LIMIT 1",
+          "relationship_type": "business_logic",
+          "verified": true,
+          "test_result": 320,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "account",
+          "from_column": "id",
+          "to_table": "task",
+          "to_column": "id",
+          "condition": "account.id = task.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM account t1 JOIN task t2 ON t1.id = t2.id LIMIT 1",
+          "relationship_type": "business_logic",
+          "verified": true,
+          "test_result": 2,
+          "verification_method": "sql_test"
+        }
+      ],
+      "business_value": "Enhances productivity by providing a structured approach to task management, ensuring tasks are completed efficiently and on time.",
+      "workflow_type": "task_management"
+    }
+  },
+  "discovery_metadata": {
+    "total_tables_analyzed": 25,
+    "relationships_found": 56,
+    "workflows_identified": 6,
+    "table_analysis_count": 25,
+    "config_used": {
+      "discovery_type": "universal",
+      "llm_model": "gpt-4o",
+      "max_relationships": 1000,
+      "confidence_levels": {
+        "high": 3,
+        "medium": 2,
+        "low": 1
+      }
+    }
+  }
+}

@@ -1,0 +1,34 @@
+database:
+  type: "mysql"
+  host: "127.0.0.1"
+  port: 3904
+  user: "itop"
+  password: "It0pDbP@ss!"
+  database: "itop"
+  charset: "utf8mb4"
+  autocommit: true
+  connect_timeout: 10
+  read_timeout: 30
+  write_timeout: 30
+
+platform_info:
+  name: "iTop"
+  type: "ITIL Service Management Platform"
+  description: "Open-source ITSM solution for Configuration, Incident, Problem, Change and Service Management"
+  industry: "IT Services"
+  target_users: "IT operations teams, service desk agents, system administrators"
+  business_model: "On-premise"
+
+workflow_guidelines:
+  - "Asset discovery and CMDB population"
+  - "Incident logging and tiered support"
+  - "Problem identification and root-cause analysis"
+  - "Change request lifecycle and CAB approval"
+  - "Service catalog and SLA management"
+  - "Knowledge base and FAQ maintenance"
+
+task_metadata:
+  "sites":
+    - "itop"
+  "storage_state": "./.auth/itop_state.json"
+  "start_url": "http://127.0.0.1:9904"
