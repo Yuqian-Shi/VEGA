@@ -1,0 +1,73 @@
+database:
+  type: "postgresql"
+  host: "127.0.0.1"
+  port: 3902
+  user: "openproject"
+  password: "openproject"
+  database: "openproject"
+  charset: "utf8"
+  autocommit: true
+  connect_timeout: 10
+  read_timeout: 30
+  write_timeout: 30
+
+platform_info:
+  name: "OpenProject"
+  type: "Web-based Project Management & Collaboration Platform"
+  description: |
+    Open-source solution for project planning, task tracking, agile & hybrid methodologies,
+    time & cost reporting, documentation and team collaboration.
+  industry: "Cross-industry (Software, Engineering, Consulting, NGOs, Public Sector)"
+  target_users: |
+    Project managers, product owners, scrum masters, development teams,
+    PMOs, executives, consultants, operations & support teams
+  business_model: "On-premise / Self-hosted"
+
+workflow_guidelines:
+  # 1. 启动阶段
+  - "Create organization hierarchy & global roles (System Admin)"
+  - "Set up authentication sources (LDAP/SAML/OIDC) and security policies"
+  - "Design project types & templates (Scrum, Kanban, Waterfall, Hybrid)"
+  - "Define global work package types, statuses, priorities and workflows"
+  - "Configure custom fields, forms, types & attributes for each use-case"
+
+  # 2. 项目生命周期
+  - "Initiate project: select template, set start/end dates, assign project admin"
+  - "Populate project charter & objectives in the Wiki or Project overview"
+  - "Break down scope into work packages (Epics → User Stories → Tasks)"
+  - "Maintain product backlog with story points & acceptance criteria"
+  - "Plan sprints/iterations using agile boards (Scrum or Kanban)"
+  - "Conduct daily stand-ups directly in task boards with inline comments"
+  - "Track velocity & burndown charts to forecast release dates"
+  - "Perform sprint retrospectives and update process documentation"
+
+  # 3. 时间与成本管理
+  - "Log spent time on tasks via built-in time tracking or integrations"
+  - "Assign hourly rates & cost types for budget vs. actual comparison"
+  - "Generate cost reports and share with finance or steering committee"
+  - "Use Gantt charts to visualize dependencies, critical path & milestones"
+
+  # 4. 协作与沟通
+  - "Enable meetings module to schedule & document project meetings"
+  - "Use @mentions, notifications and activity feeds for async collaboration"
+  - "Store project documentation, specs and meeting minutes in the Wiki"
+  - "Link documents, files and repositories (Git/SVN) to work packages"
+  - "Enable forums for community Q&A or long-running discussions"
+
+  # 5. 质量与风险管理
+  - "Create risk & opportunity work packages with probability/impact matrix"
+  - "Track test cases, test runs and defects within the same project"
+  - "Set up automated CI/CD webhooks to update task statuses on commits"
+  - "Use baseline & version comparison for scope change management"
+
+  # 6. 报告与持续改进
+  - "Configure dashboards for C-level, PMO and team views"
+  - "Schedule PDF or XLS export of progress & cost reports"
+  - "Run custom queries to create KPIs: lead time, cycle time, velocity"
+  - "Iterate on workflows based on retrospective feedback and metrics"
+
+task_metadata:
+  "sites":
+    - "openproject"
+  "storage_state": "./.auth/openproject_state.json"
+  "start_url": "http://127.0.0.1:9902"

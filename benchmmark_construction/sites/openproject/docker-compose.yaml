@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:13
+    restart: unless-stopped
+    ports:
+      - "3902:5432"
+    environment:
+      POSTGRES_USER: openproject
+      POSTGRES_PASSWORD: openproject
+      POSTGRES_DB: openproject
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  openproject:
+    image: openproject/community:13
+    restart: unless-stopped
+    depends_on:
+      - db
+    ports:
+      - "9902:8080"                  # 本地端口可改
+    environment:
+      # 数据库连接
+      DATABASE_URL: "postgresql://openproject:openproject@db/openproject"
+      # 必须设置，64 位随机串
+      SECRET_KEY_BASE: "changeme_$(openssl rand -hex 64)"
+      # 关闭 HTTPS（首次启动图方便）
+      OPENPROJECT_HTTPS: "false"
+      OPENPROJECT_HOST__NAME: "localhost:8080"
+    volumes:
+      - opdata:/var/openproject/assets
+
+volumes:
+  pgdata:
+  opdata:

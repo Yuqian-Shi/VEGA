@@ -1,0 +1,1730 @@
+{
+    "core_tables": [
+        "accessories",
+        "action_logs",
+        "assets",
+        "categories",
+        "companies",
+        "components",
+        "consumables",
+        "custom_field_custom_fieldset",
+        "custom_fields",
+        "custom_fieldsets",
+        "departments",
+        "depreciations",
+        "license_seats",
+        "licenses",
+        "locations",
+        "login_attempts",
+        "manufacturers",
+        "migrations",
+        "models",
+        "settings",
+        "status_labels",
+        "suppliers",
+        "users",
+        "users_groups"
+    ],
+    "table_analysis": {
+        "accessories": {
+            "business_purpose": "The 'accessories' table represents a catalog or inventory of accessory items within a business. It is designed to track various attributes of accessories, such as their quantity, category, location, and supplier information. This table is likely used in contexts where managing physical inventory is crucial, such as retail, manufacturing, or supply chain management.",
+            "key_fields": [
+                "id",
+                "name",
+                "category_id",
+                "qty",
+                "requestable",
+                "location_id",
+                "purchase_date",
+                "purchase_cost",
+                "company_id",
+                "manufacturer_id",
+                "supplier_id"
+            ],
+            "potential_relationships": [
+                "Category relationship: 'category_id' could link to a 'categories' table to classify accessories.",
+                "Location relationship: 'location_id' might connect to a 'locations' table to specify where accessories are stored.",
+                "Company relationship: 'company_id' could relate to a 'companies' table to associate accessories with specific companies.",
+                "Manufacturer relationship: 'manufacturer_id' might link to a 'manufacturers' table to identify the producer of the accessory.",
+                "Supplier relationship: 'supplier_id' could connect to a 'suppliers' table to track where accessories are sourced from."
+            ],
+            "business_operations": [
+                "Inventory management: Tracking the quantity and availability of accessories.",
+                "Procurement: Managing purchase details, costs, and supplier information.",
+                "Sales and distribution: Handling order numbers and ensuring accessories are requestable.",
+                "Asset management: Monitoring the lifecycle of accessories, including creation, updates, and deletions."
+            ]
+        },
+        "action_logs": {
+            "business_purpose": "The 'action_logs' table is designed to record and track various actions or events within a system. It serves as an audit log capturing details about actions performed, the entities involved, and metadata related to these actions.",
+            "key_fields": [
+                "id",
+                "created_by",
+                "action_type",
+                "target_id",
+                "target_type",
+                "item_type",
+                "item_id",
+                "created_at",
+                "action_date"
+            ],
+            "potential_relationships": [
+                "The 'created_by' field suggests a relationship with a table that stores user or employee information, indicating who performed the action.",
+                "The 'target_id' and 'target_type' fields imply a relationship with tables that store information about the entities being acted upon, such as products, documents, or other business objects.",
+                "The 'item_type' and 'item_id' fields suggest a relationship with tables that store specific items or resources involved in the action.",
+                "The 'company_id' field indicates a potential relationship with a table that stores company or organizational information, linking actions to specific companies."
+            ],
+            "business_operations": [
+                "Audit and compliance checks to ensure actions are properly logged and traceable.",
+                "Tracking changes or updates to business entities, such as inventory items, documents, or customer records.",
+                "Monitoring user activity and behavior within the system for security or performance analysis.",
+                "Generating reports on actions performed over time for business intelligence and decision-making."
+            ]
+        },
+        "assets": {
+            "business_purpose": "The 'assets' table represents a system for managing physical and digital assets within an organization. It tracks various attributes of assets such as identification, assignment, purchase details, lifecycle status, and usage metrics.",
+            "key_fields": [
+                "id",
+                "name",
+                "asset_tag",
+                "serial",
+                "model_id",
+                "purchase_date",
+                "asset_eol_date",
+                "purchase_cost",
+                "assigned_to",
+                "status_id",
+                "location_id",
+                "company_id"
+            ],
+            "potential_relationships": [
+                "The 'model_id' field suggests a relationship with a 'models' table that contains details about different asset models.",
+                "The 'assigned_to' field indicates a potential relationship with a table that manages users or employees to whom assets are assigned.",
+                "The 'status_id' field implies a relationship with a 'statuses' table that defines various asset statuses.",
+                "The 'supplier_id' field suggests a relationship with a 'suppliers' table that contains information about asset suppliers.",
+                "The 'location_id' and 'rtd_location_id' fields indicate relationships with a 'locations' table that manages asset locations.",
+                "The 'company_id' field suggests a relationship with a 'companies' table that manages different companies or business units."
+            ],
+            "business_operations": [
+                "Asset registration and tracking, including adding new assets and updating existing ones.",
+                "Asset assignment and reassignment to employees or departments.",
+                "Monitoring asset lifecycle events such as purchase, end-of-life, and warranty expiration.",
+                "Financial operations related to asset purchase costs and depreciation.",
+                "Inventory management, including asset check-in and check-out processes.",
+                "Auditing and compliance operations to ensure asset records are up-to-date and accurate."
+            ]
+        },
+        "categories": {
+            "business_purpose": "The 'categories' table appears to represent a classification system for various entities or items within a business context. It includes fields that suggest it is used to manage categories with specific attributes, such as terms of use (EULA), acceptance requirements, and alert settings.",
+            "key_fields": [
+                "id",
+                "name",
+                "created_at",
+                "updated_at",
+                "deleted_at",
+                "eula_text",
+                "use_default_eula",
+                "require_acceptance",
+                "alert_on_response",
+                "category_type"
+            ],
+            "potential_relationships": [
+                "This table might have relationships with tables that store items or entities that need categorization, such as products, services, or assets. It could also relate to tables managing user interactions or agreements, given the EULA and acceptance fields."
+            ],
+            "business_operations": [
+                "Creating and managing categories for different business entities",
+                "Tracking changes and updates to category definitions",
+                "Managing user agreements and acceptance of terms related to categories",
+                "Sending alerts based on category responses",
+                "Handling check-in processes related to categories"
+            ]
+        },
+        "companies": {
+            "business_purpose": "The 'companies' table represents a business entity that stores information about different companies. It is likely used to manage and track company details within a business application or system.",
+            "key_fields": [
+                "id",
+                "name",
+                "email",
+                "phone",
+                "created_at",
+                "updated_at"
+            ],
+            "potential_relationships": [
+                "This table might have relationships with tables that store information about employees, company locations, or business transactions. It could also relate to a table that tracks user actions if 'created_by' refers to a user entity."
+            ],
+            "business_operations": [
+                "Adding new companies to the system",
+                "Updating company information",
+                "Retrieving company contact details",
+                "Tracking changes to company records over time",
+                "Associating companies with user actions or records if 'created_by' is linked to a user entity"
+            ]
+        },
+        "components": {
+            "business_purpose": "The 'components' table represents a catalog or inventory of various components used by a company. It includes details about each component such as its name, category, location, supplier, manufacturer, and purchase information. This table is likely used to manage and track components within a business, including their acquisition, storage, and usage.",
+            "key_fields": [
+                "id",
+                "name",
+                "category_id",
+                "location_id",
+                "company_id",
+                "supplier_id",
+                "qty",
+                "purchase_date",
+                "purchase_cost",
+                "manufacturer_id",
+                "serial"
+            ],
+            "potential_relationships": [
+                "Category relationship through 'category_id' to categorize components",
+                "Location relationship through 'location_id' to track where components are stored",
+                "Company relationship through 'company_id' to associate components with specific companies",
+                "Supplier relationship through 'supplier_id' to identify suppliers of components",
+                "Manufacturer relationship through 'manufacturer_id' to identify manufacturers of components"
+            ],
+            "business_operations": [
+                "Inventory management to track quantities and locations of components",
+                "Procurement processes to manage purchase orders and costs",
+                "Supplier and manufacturer management to maintain relationships and sourcing information",
+                "Quality control and maintenance operations to ensure components meet standards and are properly maintained",
+                "Asset tracking to monitor the lifecycle and usage of components within the company"
+            ]
+        },
+        "consumables": {
+            "business_purpose": "The 'consumables' table represents inventory management for consumable items within a business. It tracks details about each consumable item, including its quantity, supplier, location, and other relevant attributes necessary for managing stock levels and procurement.",
+            "key_fields": [
+                "id",
+                "name",
+                "category_id",
+                "location_id",
+                "supplier_id",
+                "qty",
+                "requestable",
+                "purchase_date",
+                "purchase_cost",
+                "company_id",
+                "manufacturer_id"
+            ],
+            "potential_relationships": [
+                "Relationship with a 'categories' table to classify consumables into different categories using 'category_id'.",
+                "Relationship with a 'locations' table to specify where consumables are stored using 'location_id'.",
+                "Relationship with a 'suppliers' table to identify the supplier of each consumable using 'supplier_id'.",
+                "Relationship with a 'companies' table to associate consumables with specific companies using 'company_id'.",
+                "Relationship with a 'manufacturers' table to identify the manufacturer of each consumable using 'manufacturer_id'."
+            ],
+            "business_operations": [
+                "Inventory tracking and management to monitor stock levels and ensure availability.",
+                "Procurement processes to manage purchasing of consumables from suppliers.",
+                "Stock replenishment operations to maintain minimum stock levels using 'min_amt'.",
+                "Request and approval processes for consumables that are marked as 'requestable'.",
+                "Cost analysis and budgeting based on 'purchase_cost' and 'purchase_date'."
+            ]
+        },
+        "custom_field_custom_fieldset": {
+            "business_purpose": "The table 'custom_field_custom_fieldset' represents a mapping or association between custom fields and custom fieldsets, likely used in a system that allows for dynamic form creation or customization of data entry forms. This table facilitates the organization and management of custom fields within specific fieldsets, which can be used to group related fields together for a particular context or application.",
+            "key_fields": [
+                "id",
+                "custom_field_id",
+                "custom_fieldset_id",
+                "order",
+                "required"
+            ],
+            "potential_relationships": [
+                "One-to-Many relationship with a 'custom_fields' table, where 'custom_field_id' is a foreign key referencing the primary key of 'custom_fields'.",
+                "One-to-Many relationship with a 'custom_fieldsets' table, where 'custom_fieldset_id' is a foreign key referencing the primary key of 'custom_fieldsets'."
+            ],
+            "business_operations": [
+                "Creating and managing custom forms or data entry interfaces by associating fields with fieldsets.",
+                "Defining the order of fields within a fieldset to control the sequence of data entry.",
+                "Specifying whether a field is required within a fieldset, which can enforce data validation rules during data entry."
+            ]
+        },
+        "custom_fields": {
+            "business_purpose": "The 'custom_fields' table is designed to store metadata about custom fields that can be dynamically added to other entities or processes within a business application. These fields allow for flexible data collection and customization of forms or records, enabling users to define additional attributes as needed.",
+            "key_fields": [
+                "id",
+                "name",
+                "format",
+                "element",
+                "field_values",
+                "field_encrypted",
+                "db_column",
+                "show_in_email",
+                "display_in_user_view"
+            ],
+            "potential_relationships": [
+                "This table might have a one-to-many relationship with a table that stores the actual data entries for these custom fields, where each custom field definition can be associated with multiple data entries.",
+                "It could also relate to a table that defines entities or forms to which these custom fields are applied, allowing for dynamic form or entity customization."
+            ],
+            "business_operations": [
+                "Defining new custom fields for data collection forms or records.",
+                "Updating existing custom field definitions to change their attributes or behavior.",
+                "Retrieving custom field definitions to render dynamic forms or interfaces.",
+                "Managing visibility and encryption settings for custom fields in various contexts, such as emails or user views."
+            ]
+        },
+        "custom_fieldsets": {
+            "business_purpose": "The 'custom_fieldsets' table likely represents a collection of custom fields or attributes that can be associated with other entities or records within a business application. This allows for the extension of data models with additional, user-defined fields.",
+            "key_fields": [
+                "id",
+                "name",
+                "created_at",
+                "updated_at",
+                "created_by"
+            ],
+            "potential_relationships": [
+                "This table might have a one-to-many relationship with a 'custom_fields' table, where each fieldset can contain multiple custom fields.",
+                "It could be related to a 'records' or 'entities' table, where each record or entity can be associated with a specific custom fieldset.",
+                "The 'created_by' field suggests a potential relationship with a 'users' or 'employees' table, indicating who created the fieldset."
+            ],
+            "business_operations": [
+                "Creating new custom fieldsets to extend the data model with additional attributes.",
+                "Updating existing fieldsets to modify their names or attributes.",
+                "Tracking the creation and modification times of fieldsets for auditing purposes.",
+                "Associating fieldsets with other entities or records to customize data storage."
+            ]
+        },
+        "departments": {
+            "business_purpose": "The 'departments' table represents organizational units within a company. It is designed to store information about different departments, including their contact details, location, and management structure.",
+            "key_fields": [
+                "id",
+                "name",
+                "created_by",
+                "company_id",
+                "location_id",
+                "manager_id"
+            ],
+            "potential_relationships": [
+                "The 'company_id' field suggests a relationship with a 'companies' table, indicating which company the department belongs to.",
+                "The 'location_id' field implies a relationship with a 'locations' table, specifying where the department is situated.",
+                "The 'manager_id' field suggests a relationship with a 'managers' or 'employees' table, identifying the person managing the department.",
+                "The 'created_by' field indicates a potential relationship with a 'users' or 'employees' table, identifying who created the department record."
+            ],
+            "business_operations": [
+                "Creating new department records when a new department is established.",
+                "Updating department details such as contact information, location, or management changes.",
+                "Retrieving department information for organizational reporting or directory purposes.",
+                "Managing department lifecycle, including archiving or deleting departments when they are no longer active."
+            ]
+        },
+        "depreciations": {
+            "business_purpose": "The 'depreciations' table represents a system for tracking the depreciation of assets over time. It likely stores information about different types of depreciation methods or schedules that can be applied to assets within a business context.",
+            "key_fields": [
+                "id",
+                "name",
+                "months",
+                "depreciation_min",
+                "depreciation_type"
+            ],
+            "potential_relationships": [
+                "This table might relate to an 'assets' table where each asset has a depreciation method associated with it.",
+                "It could also relate to a 'transactions' or 'financial_records' table where depreciation calculations are recorded.",
+                "A potential relationship with a 'users' or 'employees' table could exist through the 'created_by' field, indicating who created the depreciation record."
+            ],
+            "business_operations": [
+                "Defining and managing different depreciation methods or schedules.",
+                "Calculating asset depreciation for financial reporting and accounting purposes.",
+                "Auditing and reviewing depreciation methods applied to assets.",
+                "Tracking changes to depreciation methods over time, as indicated by the 'created_at' and 'updated_at' timestamps."
+            ]
+        },
+        "license_seats": {
+            "business_purpose": "The 'license_seats' table is designed to manage and track the allocation of software or service licenses to specific users or entities. It likely represents the seats or slots available under a particular license agreement, allowing for the assignment of these seats to individuals or assets within an organization.",
+            "key_fields": [
+                "id",
+                "license_id",
+                "assigned_to",
+                "asset_id",
+                "created_at",
+                "updated_at",
+                "deleted_at"
+            ],
+            "potential_relationships": [
+                "The 'license_id' field suggests a relationship with a 'licenses' table, where each license has multiple seats.",
+                "The 'assigned_to' field indicates a potential relationship with a table representing users or entities to whom the license seats are assigned.",
+                "The 'asset_id' field implies a relationship with an 'assets' table, linking the license seat to a specific asset or piece of equipment."
+            ],
+            "business_operations": [
+                "Assigning a license seat to a user or asset.",
+                "Tracking the usage and allocation of license seats over time.",
+                "Auditing and reporting on license seat assignments and changes.",
+                "Managing the lifecycle of license seats, including creation, updates, and soft deletion (indicated by the 'deleted_at' field)."
+            ]
+        },
+        "licenses": {
+            "business_purpose": "The 'licenses' table represents the management of software or product licenses within a business. It tracks details about each license, including purchase information, usage constraints, and associated entities like suppliers and manufacturers.",
+            "key_fields": [
+                "id",
+                "name",
+                "serial",
+                "purchase_date",
+                "purchase_cost",
+                "order_number",
+                "seats",
+                "expiration_date",
+                "termination_date",
+                "company_id",
+                "manufacturer_id",
+                "category_id"
+            ],
+            "potential_relationships": [
+                "The 'licenses' table might have relationships with a 'companies' table through 'company_id', indicating which company owns or uses the license.",
+                "It could relate to a 'manufacturers' table via 'manufacturer_id', specifying the manufacturer of the licensed product.",
+                "A 'categories' table might be linked through 'category_id', categorizing the type of license.",
+                "The 'supplier_id' could connect to a 'suppliers' table, detailing the supplier from whom the license was purchased.",
+                "The 'created_by' field might relate to a 'users' table, indicating the user who created the license record."
+            ],
+            "business_operations": [
+                "Tracking and managing software licenses, including purchase and expiration details.",
+                "Financial operations involving the calculation of depreciation and purchase costs.",
+                "Compliance and audit processes to ensure licenses are valid and properly maintained.",
+                "Inventory management to track the number of seats and reassignable licenses.",
+                "Supplier and manufacturer relationship management for procurement and support."
+            ]
+        },
+        "locations": {
+            "business_purpose": "The 'locations' table represents physical or organizational locations within a business or enterprise. It stores detailed information about each location, including its address, contact information, and organizational hierarchy.",
+            "key_fields": [
+                "id",
+                "name",
+                "city",
+                "state",
+                "country",
+                "created_at",
+                "updated_at",
+                "parent_id",
+                "manager_id",
+                "company_id"
+            ],
+            "potential_relationships": [
+                "Hierarchical relationship with itself through 'parent_id' to represent sub-locations or branches.",
+                "Association with a 'company' entity through 'company_id' to link locations to specific companies.",
+                "Potential relationship with a 'manager' entity through 'manager_id' to assign a manager to each location."
+            ],
+            "business_operations": [
+                "Managing and organizing physical or virtual locations within a company.",
+                "Tracking and updating location details such as address and contact information.",
+                "Assigning and managing hierarchical relationships between locations.",
+                "Linking locations to specific companies or business units.",
+                "Assigning managers to oversee specific locations."
+            ]
+        },
+        "login_attempts": {
+            "business_purpose": "The 'login_attempts' table is designed to track and record attempts to log into a system or application. It captures details about each login attempt, including the username used, the IP address from which the attempt was made, the user agent string, whether the attempt was successful, and timestamps for when the attempt was created and last updated.",
+            "key_fields": [
+                "id",
+                "username",
+                "remote_ip",
+                "successful",
+                "created_at"
+            ],
+            "potential_relationships": [
+                "This table might relate to a 'users' table where 'username' could be a foreign key referencing a user entity. It could also relate to a 'security_logs' table for detailed logging of security events or a 'sessions' table to track active sessions based on successful login attempts."
+            ],
+            "business_operations": [
+                "Monitoring login activity for security purposes, analyzing failed login attempts to detect potential unauthorized access, auditing user access patterns, generating reports on login success rates, and implementing security measures such as IP blocking or CAPTCHA challenges based on failed attempts."
+            ]
+        },
+        "manufacturers": {
+            "business_purpose": "The 'manufacturers' table represents a business entity that stores information about manufacturers, likely for products or services. It includes details such as the manufacturer's name, contact information, and support resources.",
+            "key_fields": [
+                "id",
+                "name",
+                "created_at",
+                "updated_at",
+                "deleted_at",
+                "url",
+                "support_url",
+                "warranty_lookup_url",
+                "support_phone",
+                "support_email"
+            ],
+            "potential_relationships": [
+                "This table might have relationships with a 'products' table, where each product is associated with a manufacturer. It could also relate to a 'support_tickets' table, where support interactions are logged against a manufacturer."
+            ],
+            "business_operations": [
+                "Adding new manufacturers to the system",
+                "Updating manufacturer details",
+                "Retrieving manufacturer information for product listings",
+                "Accessing support and warranty information for customer service operations",
+                "Archiving or soft-deleting manufacturers when they are no longer active"
+            ]
+        },
+        "migrations": {
+            "business_purpose": "The 'migrations' table is used to track database schema changes over time. It records each migration that has been applied to the database, allowing for version control and rollback capabilities in database management.",
+            "key_fields": [
+                "id",
+                "migration",
+                "batch"
+            ],
+            "potential_relationships": [
+                "This table might relate to tables that represent database schema changes or version control systems. It could be linked to tables that manage application versions or deployment processes."
+            ],
+            "business_operations": [
+                "Applying new database migrations during application deployment",
+                "Rolling back database changes to a previous state",
+                "Tracking the history of database schema changes",
+                "Ensuring consistency between application code and database structure"
+            ]
+        },
+        "models": {
+            "business_purpose": "The 'models' table appears to represent a catalog of product models or items, potentially for a manufacturing or inventory management system. It stores information about different models, including their identifiers, names, associated manufacturers, categories, and other attributes relevant to their lifecycle and management.",
+            "key_fields": [
+                "id",
+                "name",
+                "model_number",
+                "manufacturer_id",
+                "category_id",
+                "created_at",
+                "updated_at",
+                "depreciation_id",
+                "eol",
+                "deleted_at",
+                "requestable"
+            ],
+            "potential_relationships": [
+                "The 'manufacturer_id' field suggests a relationship with a 'manufacturers' table, linking each model to its manufacturer.",
+                "The 'category_id' field indicates a potential relationship with a 'categories' table, categorizing each model.",
+                "The 'depreciation_id' field implies a connection to a 'depreciation' table, possibly detailing depreciation schedules or methods.",
+                "The 'fieldset_id' field might relate to a 'fieldsets' table, which could define additional attributes or configurations for models.",
+                "The 'created_by' field suggests a possible link to a 'users' or 'employees' table, identifying who created the model entry."
+            ],
+            "business_operations": [
+                "Adding new product models to the catalog.",
+                "Updating existing model information, such as name, model number, or associated manufacturer.",
+                "Tracking the lifecycle of models, including creation, updates, and deletion (soft delete with 'deleted_at').",
+                "Managing inventory or product availability, indicated by the 'requestable' field.",
+                "Handling depreciation and end-of-life (EOL) processes for models.",
+                "Storing and retrieving images and notes related to each model."
+            ]
+        },
+        "settings": {
+            "business_purpose": "The 'settings' table represents the configuration settings for an IT asset management system. It stores various parameters and preferences that dictate how the system operates, including display settings, authentication configurations, alert settings, and other system-wide options.",
+            "key_fields": [
+                "id",
+                "created_at",
+                "updated_at",
+                "created_by",
+                "per_page",
+                "site_name",
+                "qr_code",
+                "auto_increment_assets",
+                "load_remote",
+                "alerts_enabled",
+                "default_currency",
+                "ldap_enabled",
+                "ldap_server",
+                "ldap_port",
+                "saml_enabled",
+                "google_login",
+                "profile_edit",
+                "shortcuts_enabled"
+            ],
+            "potential_relationships": [
+                "This table might have a one-to-one relationship with a 'company' or 'organization' table, where each company has its own set of settings.",
+                "It could have a one-to-many relationship with a 'users' table, where different users might have different settings applied based on roles or preferences.",
+                "There might be a relationship with an 'assets' table, where settings like 'auto_increment_assets' and 'qr_code' are used to manage asset identifiers and tracking."
+            ],
+            "business_operations": [
+                "System initialization and configuration, where default settings are established.",
+                "User interface customization, where display settings like 'per_page' and 'site_name' are applied.",
+                "Authentication and security operations, involving LDAP and SAML configurations.",
+                "Notification and alert management, using fields like 'alerts_enabled' and 'alert_email'.",
+                "Asset management operations, particularly those involving asset identification and tracking."
+            ]
+        },
+        "status_labels": {
+            "business_purpose": "The 'status_labels' table represents a system for managing labels that can be applied to various entities or processes within a business application. These labels likely indicate the status or categorization of items, such as tasks, projects, or documents, and include metadata about their creation, modification, and visibility.",
+            "key_fields": [
+                "id",
+                "name",
+                "created_by",
+                "created_at",
+                "updated_at",
+                "deleted_at",
+                "deployable",
+                "pending",
+                "archived",
+                "show_in_nav",
+                "default_label"
+            ],
+            "potential_relationships": [
+                "This table might have relationships with tables representing entities that require status labeling, such as tasks, projects, or documents. It could be linked to a table that tracks user information, given the 'created_by' field, which suggests a relationship with a user or employee table."
+            ],
+            "business_operations": [
+                "Creating new status labels for categorizing or managing items.",
+                "Updating existing labels to reflect changes in status or categorization.",
+                "Archiving labels that are no longer in use.",
+                "Deploying labels to make them active or applicable to certain processes.",
+                "Managing visibility of labels in navigation or user interfaces.",
+                "Setting default labels for new items or processes."
+            ]
+        },
+        "suppliers": {
+            "business_purpose": "The 'suppliers' table represents a business entity that stores information about suppliers or vendors that provide goods or services to a company. This table is used to manage and track supplier details, including contact information, addresses, and other relevant data.",
+            "key_fields": [
+                "id",
+                "name",
+                "email",
+                "phone",
+                "created_at",
+                "updated_at"
+            ],
+            "potential_relationships": [
+                "One-to-many relationship with a 'products' table, where each supplier can supply multiple products.",
+                "One-to-many relationship with a 'purchase_orders' table, where each supplier can have multiple purchase orders.",
+                "One-to-many relationship with a 'contacts' table, where each supplier can have multiple contact persons."
+            ],
+            "business_operations": [
+                "Adding new suppliers to the database.",
+                "Updating supplier information such as contact details and addresses.",
+                "Retrieving supplier information for procurement and inventory management.",
+                "Tracking supplier activity and performance over time.",
+                "Managing supplier-related documentation and communication."
+            ]
+        },
+        "users": {
+            "business_purpose": "The 'users' table represents a system for managing user accounts and profiles within an application. It includes fields for authentication, personal information, and user preferences, indicating its role in handling user identity, access control, and personalization.",
+            "key_fields": [
+                "id",
+                "email",
+                "password",
+                "activated",
+                "created_at",
+                "updated_at",
+                "username",
+                "company_id",
+                "manager_id",
+                "department_id"
+            ],
+            "potential_relationships": [
+                "One-to-Many relationship with a 'company' table, where 'company_id' links users to their respective companies.",
+                "Self-referential relationship for managerial hierarchy, where 'manager_id' links to another user in the same table.",
+                "One-to-Many relationship with a 'department' table, where 'department_id' associates users with their departments.",
+                "One-to-Many relationship with a 'location' table, where 'location_id' links users to specific locations."
+            ],
+            "business_operations": [
+                "User registration and account creation, involving fields like 'email', 'password', and 'activation_code'.",
+                "User authentication and login processes, utilizing 'email', 'password', and 'last_login'.",
+                "Profile management, including updating personal information such as 'first_name', 'last_name', 'address', and 'phone'.",
+                "Access control and permissions management, using 'permissions' and 'activated' fields.",
+                "User activity tracking and auditing, leveraging 'created_at', 'updated_at', and 'deleted_at'.",
+                "Organizational management, involving 'company_id', 'manager_id', and 'department_id' to structure user roles and hierarchies."
+            ]
+        },
+        "users_groups": {
+            "business_purpose": "The 'users_groups' table represents a many-to-many relationship between users and groups, indicating which users belong to which groups. It is likely used in a system where users can be organized into different groups for purposes such as permissions, roles, or collaborative activities.",
+            "key_fields": [
+                "user_id",
+                "group_id"
+            ],
+            "potential_relationships": [
+                "This table might have relationships with a 'users' table, where 'user_id' is a foreign key referencing the primary key of the 'users' table.",
+                "It might also relate to a 'groups' table, where 'group_id' is a foreign key referencing the primary key of the 'groups' table."
+            ],
+            "business_operations": [
+                "Assigning users to groups for access control or role management.",
+                "Retrieving all groups a particular user belongs to for permission checks.",
+                "Listing all users within a specific group for collaboration or communication purposes.",
+                "Managing group memberships, such as adding or removing users from groups."
+            ]
+        }
+    },
+    "relationships": [
+        {
+            "type": "inferred",
+            "from_table": "accessories",
+            "from_column": "category_id",
+            "to_table": "categories",
+            "to_column": "id",
+            "condition": "accessories.category_id = categories.id",
+            "confidence": "high",
+            "reasoning": "The 'category_id' field in the 'accessories' table is likely intended to reference the 'id' field in the 'categories' table. This is a common pattern where items are categorized using a foreign key relationship to a categories table. The data types are compatible, and the naming convention suggests a direct relationship.",
+            "test_sql": "SELECT COUNT(*) FROM accessories t1 JOIN categories t2 ON t1.category_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 4,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accessories",
+            "from_column": "manufacturer_id",
+            "to_table": "manufacturers",
+            "to_column": "id",
+            "condition": "accessories.manufacturer_id = manufacturers.id",
+            "confidence": "high",
+            "reasoning": "The 'manufacturer_id' in the 'accessories' table likely refers to the 'id' in the 'manufacturers' table, as it is common for products or accessories to be associated with their manufacturers. The data types are compatible, and this relationship aligns with typical database design patterns where a product or accessory is linked to its manufacturer.",
+            "test_sql": "SELECT COUNT(*) FROM accessories t1 JOIN manufacturers t2 ON t1.manufacturer_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 4,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accessories",
+            "from_column": "location_id",
+            "to_table": "locations",
+            "to_column": "id",
+            "condition": "accessories.location_id = locations.id",
+            "confidence": "high",
+            "reasoning": "The 'location_id' in the 'accessories' table likely refers to the 'id' in the 'locations' table, indicating where each accessory is stored. This is a common pattern in inventory management systems where items are associated with specific storage locations.",
+            "test_sql": "SELECT COUNT(*) FROM accessories t1 JOIN locations t2 ON t1.location_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 4,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accessories",
+            "from_column": "supplier_id",
+            "to_table": "suppliers",
+            "to_column": "id",
+            "condition": "accessories.supplier_id = suppliers.id",
+            "confidence": "high",
+            "reasoning": "The 'supplier_id' in the 'accessories' table likely refers to the 'id' in the 'suppliers' table, indicating which supplier provides each accessory. This is a common foreign key relationship where an accessory is linked to its supplier.",
+            "test_sql": "SELECT COUNT(*) FROM accessories t1 JOIN suppliers t2 ON t1.supplier_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 4,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "action_logs",
+            "from_column": "created_by",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "action_logs.created_by = users.id",
+            "confidence": "high",
+            "reasoning": "The 'created_by' field in the 'action_logs' table likely refers to the user who performed the action, which corresponds to the 'id' field in the 'users' table representing the user's unique identifier.",
+            "test_sql": "SELECT COUNT(*) FROM action_logs t1 JOIN users t2 ON t1.created_by = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 420,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "assets",
+            "from_column": "model_id",
+            "to_table": "models",
+            "to_column": "id",
+            "condition": "assets.model_id = models.id",
+            "confidence": "high",
+            "reasoning": "The 'model_id' in the 'assets' table likely corresponds to the 'id' in the 'models' table, indicating that each asset is associated with a specific model. This is a common pattern where assets are linked to their respective models for inventory and management purposes.",
+            "test_sql": "SELECT COUNT(*) FROM assets t1 JOIN models t2 ON t1.model_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 2597,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "assets",
+            "from_column": "location_id",
+            "to_table": "locations",
+            "to_column": "id",
+            "condition": "assets.location_id = locations.id",
+            "confidence": "high",
+            "reasoning": "The 'location_id' field in the 'assets' table likely refers to the 'id' field in the 'locations' table, as assets are typically associated with specific physical or organizational locations. The data types are compatible, and this follows a common foreign key pattern where an asset is linked to a location.",
+            "test_sql": "SELECT COUNT(*) FROM assets t1 JOIN locations t2 ON t1.location_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 2597,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "assets",
+            "from_column": "status_id",
+            "to_table": "status_labels",
+            "to_column": "id",
+            "condition": "assets.status_id = status_labels.id",
+            "confidence": "high",
+            "reasoning": "The 'status_id' field in the 'assets' table likely corresponds to the 'id' field in the 'status_labels' table, as both fields are integers and the 'status_id' in 'assets' suggests a reference to a status or label, which is what 'status_labels' provides.",
+            "test_sql": "SELECT COUNT(*) FROM assets t1 JOIN status_labels t2 ON t1.status_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 2597,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "assets",
+            "from_column": "supplier_id",
+            "to_table": "suppliers",
+            "to_column": "id",
+            "condition": "assets.supplier_id = suppliers.id",
+            "confidence": "high",
+            "reasoning": "The 'supplier_id' field in the 'assets' table likely refers to the 'id' field in the 'suppliers' table, indicating that each asset can be associated with a supplier. This is a common pattern where assets are linked to their suppliers for procurement and inventory management purposes.",
+            "test_sql": "SELECT COUNT(*) FROM assets t1 JOIN suppliers t2 ON t1.supplier_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 2597,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "categories",
+            "from_column": "id",
+            "to_table": "components",
+            "to_column": "category_id",
+            "condition": "categories.id = components.category_id",
+            "confidence": "high",
+            "reasoning": "The 'category_id' field in the 'components' table likely serves as a foreign key referencing the 'id' field in the 'categories' table. This relationship is common in database design where items or entities are categorized, allowing components to be grouped under specific categories.",
+            "test_sql": "SELECT COUNT(*) FROM categories t1 JOIN components t2 ON t1.id = t2.category_id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 4,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "categories",
+            "from_column": "id",
+            "to_table": "consumables",
+            "to_column": "category_id",
+            "condition": "categories.id = consumables.category_id",
+            "confidence": "high",
+            "reasoning": "The 'category_id' field in the 'consumables' table likely serves as a foreign key referencing the 'id' field in the 'categories' table. This relationship is common in database design where items (consumables) are categorized using a separate categories table.",
+            "test_sql": "SELECT COUNT(*) FROM categories t1 JOIN consumables t2 ON t1.id = t2.category_id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 3,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "assets",
+            "from_column": "assigned_to",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "assets.assigned_to = users.id",
+            "confidence": "high",
+            "reasoning": "The 'assigned_to' field in the 'assets' table likely refers to the user who is responsible for or using the asset. This aligns with the 'id' field in the 'users' table, which uniquely identifies each user. This relationship is common in asset management systems where assets are assigned to users.",
+            "test_sql": "SELECT COUNT(*) FROM assets t1 JOIN users t2 ON t1.assigned_to = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 400,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "categories",
+            "from_column": "id",
+            "to_table": "licenses",
+            "to_column": "category_id",
+            "condition": "categories.id = licenses.category_id",
+            "confidence": "high",
+            "reasoning": "The 'licenses' table contains a 'category_id' field, which likely serves as a foreign key referencing the 'id' field in the 'categories' table. This relationship is common in database design where items (licenses) are categorized using a separate categories table.",
+            "test_sql": "SELECT COUNT(*) FROM categories t1 JOIN licenses t2 ON t1.id = t2.category_id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 4,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "categories",
+            "from_column": "id",
+            "to_table": "models",
+            "to_column": "category_id",
+            "condition": "categories.id = models.category_id",
+            "confidence": "high",
+            "reasoning": "The 'category_id' field in the 'models' table suggests a direct relationship with the 'id' field in the 'categories' table. This is a common pattern where items (models) are categorized using a foreign key reference to a categories table.",
+            "test_sql": "SELECT COUNT(*) FROM categories t1 JOIN models t2 ON t1.id = t2.category_id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 18,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "companies",
+            "from_column": "id",
+            "to_table": "consumables",
+            "to_column": "company_id",
+            "condition": "companies.id = consumables.company_id",
+            "confidence": "high",
+            "reasoning": "The 'company_id' field in the 'consumables' table likely serves as a foreign key referencing the 'id' field in the 'companies' table. This relationship makes sense as consumables can be associated with specific companies, indicating which company owns or manages the consumable items.",
+            "test_sql": "SELECT COUNT(*) FROM companies t1 JOIN consumables t2 ON t1.id = t2.company_id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 3,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "companies",
+            "from_column": "id",
+            "to_table": "components",
+            "to_column": "company_id",
+            "condition": "companies.id = components.company_id",
+            "confidence": "high",
+            "reasoning": "The 'company_id' field in the 'components' table likely serves as a foreign key referencing the 'id' field in the 'companies' table. This relationship makes sense as components are often associated with specific companies, indicating ownership or usage by that company.",
+            "test_sql": "SELECT COUNT(*) FROM companies t1 JOIN components t2 ON t1.id = t2.company_id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 4,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "companies",
+            "from_column": "id",
+            "to_table": "users",
+            "to_column": "company_id",
+            "condition": "companies.id = users.company_id",
+            "confidence": "high",
+            "reasoning": "The 'company_id' field in the 'users' table likely serves as a foreign key linking each user to a specific company in the 'companies' table. This is a common pattern in database design where users are associated with companies they belong to.",
+            "test_sql": "SELECT COUNT(*) FROM companies t1 JOIN users t2 ON t1.id = t2.company_id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 59,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "components",
+            "from_column": "manufacturer_id",
+            "to_table": "manufacturers",
+            "to_column": "id",
+            "condition": "components.manufacturer_id = manufacturers.id",
+            "confidence": "high",
+            "reasoning": "The 'manufacturer_id' in the 'components' table likely serves as a foreign key referencing the 'id' in the 'manufacturers' table. This relationship is common in database design where components are associated with their respective manufacturers.",
+            "test_sql": "SELECT COUNT(*) FROM components t1 JOIN manufacturers t2 ON t1.manufacturer_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 4,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "components",
+            "from_column": "location_id",
+            "to_table": "locations",
+            "to_column": "id",
+            "condition": "components.location_id = locations.id",
+            "confidence": "high",
+            "reasoning": "The 'location_id' in the 'components' table likely refers to the 'id' in the 'locations' table, indicating where each component is stored. This is a common pattern in database design where items are linked to their storage locations.",
+            "test_sql": "SELECT COUNT(*) FROM components t1 JOIN locations t2 ON t1.location_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 4,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "components",
+            "from_column": "supplier_id",
+            "to_table": "suppliers",
+            "to_column": "id",
+            "condition": "components.supplier_id = suppliers.id",
+            "confidence": "high",
+            "reasoning": "The 'supplier_id' in the 'components' table likely refers to the 'id' in the 'suppliers' table, indicating which supplier provided the component. This is a common foreign key relationship where a component is associated with a supplier.",
+            "test_sql": "SELECT COUNT(*) FROM components t1 JOIN suppliers t2 ON t1.supplier_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 4,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "consumables",
+            "from_column": "manufacturer_id",
+            "to_table": "manufacturers",
+            "to_column": "id",
+            "condition": "consumables.manufacturer_id = manufacturers.id",
+            "confidence": "high",
+            "reasoning": "The 'manufacturer_id' in the 'consumables' table likely refers to the 'id' in the 'manufacturers' table, as it is common for inventory management systems to track which manufacturer produces each consumable item. The data types are compatible, and the naming convention suggests a direct relationship.",
+            "test_sql": "SELECT COUNT(*) FROM consumables t1 JOIN manufacturers t2 ON t1.manufacturer_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 3,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "consumables",
+            "from_column": "supplier_id",
+            "to_table": "suppliers",
+            "to_column": "id",
+            "condition": "consumables.supplier_id = suppliers.id",
+            "confidence": "high",
+            "reasoning": "The 'supplier_id' field in the 'consumables' table likely references the 'id' field in the 'suppliers' table, as it is common for inventory items to be associated with their suppliers. The data types are compatible, and this relationship aligns with typical database design patterns where a foreign key in one table references the primary key in another.",
+            "test_sql": "SELECT COUNT(*) FROM consumables t1 JOIN suppliers t2 ON t1.supplier_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 3,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "custom_field_custom_fieldset",
+            "from_column": "custom_fieldset_id",
+            "to_table": "custom_fieldsets",
+            "to_column": "id",
+            "condition": "custom_field_custom_fieldset.custom_fieldset_id = custom_fieldsets.id",
+            "confidence": "high",
+            "reasoning": "The 'custom_fieldset_id' in the 'custom_field_custom_fieldset' table likely references the 'id' in the 'custom_fieldsets' table. This is inferred from the naming convention and the business purpose of associating custom fields with fieldsets. The data types are compatible, and this follows a common database design pattern where a mapping table references the primary key of another table.",
+            "test_sql": "SELECT COUNT(*) FROM custom_field_custom_fieldset t1 JOIN custom_fieldsets t2 ON t1.custom_fieldset_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 11,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "custom_field_custom_fieldset",
+            "from_column": "custom_field_id",
+            "to_table": "custom_fields",
+            "to_column": "id",
+            "condition": "custom_field_custom_fieldset.custom_field_id = custom_fields.id",
+            "confidence": "high",
+            "reasoning": "The 'custom_field_id' in the 'custom_field_custom_fieldset' table likely references the 'id' in the 'custom_fields' table. This is a common pattern where a mapping table associates entries from one table to another, and the naming convention suggests a direct relationship between custom fields and their definitions.",
+            "test_sql": "SELECT COUNT(*) FROM custom_field_custom_fieldset t1 JOIN custom_fields t2 ON t1.custom_field_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 11,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "departments",
+            "from_column": "location_id",
+            "to_table": "locations",
+            "to_column": "id",
+            "condition": "departments.location_id = locations.id",
+            "confidence": "high",
+            "reasoning": "The 'location_id' in the 'departments' table likely refers to the 'id' in the 'locations' table, indicating that each department is situated at a specific location. This is a common foreign key relationship where a department is linked to a location.",
+            "test_sql": "SELECT COUNT(*) FROM departments t1 JOIN locations t2 ON t1.location_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 6,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "users",
+            "from_column": "department_id",
+            "to_table": "departments",
+            "to_column": "id",
+            "condition": "users.department_id = departments.id",
+            "confidence": "high",
+            "reasoning": "The 'department_id' field in the 'users' table likely associates users with their respective departments, suggesting a relationship with the 'departments' table where 'id' is the primary key.",
+            "test_sql": "SELECT COUNT(*) FROM users t1 JOIN departments t2 ON t1.department_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 59,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "depreciations",
+            "from_column": "id",
+            "to_table": "models",
+            "to_column": "depreciation_id",
+            "condition": "depreciations.id = models.depreciation_id",
+            "confidence": "high",
+            "reasoning": "The 'depreciation_id' field in the 'models' table suggests a direct relationship to the 'depreciations' table, where each model can be associated with a specific depreciation method or schedule. This is a common pattern where a model or asset references a depreciation method by its ID.",
+            "test_sql": "SELECT COUNT(*) FROM depreciations t1 JOIN models t2 ON t1.id = t2.depreciation_id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 18,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "license_seats",
+            "from_column": "license_id",
+            "to_table": "licenses",
+            "to_column": "id",
+            "condition": "license_seats.license_id = licenses.id",
+            "confidence": "high",
+            "reasoning": "The 'license_id' in the 'license_seats' table likely corresponds to the 'id' in the 'licenses' table, representing a foreign key relationship where each seat is associated with a specific license. This is a common pattern in database design where a child table references a parent table.",
+            "test_sql": "SELECT COUNT(*) FROM license_seats t1 JOIN licenses t2 ON t1.license_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 50,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "licenses",
+            "from_column": "supplier_id",
+            "to_table": "suppliers",
+            "to_column": "id",
+            "condition": "licenses.supplier_id = suppliers.id",
+            "confidence": "high",
+            "reasoning": "The 'supplier_id' field in the 'licenses' table likely refers to the 'id' field in the 'suppliers' table, indicating which supplier provided the license. This is a common foreign key relationship where a license is associated with a supplier.",
+            "test_sql": "SELECT COUNT(*) FROM licenses t1 JOIN suppliers t2 ON t1.supplier_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 4,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "login_attempts",
+            "from_column": "username",
+            "to_table": "users",
+            "to_column": "username",
+            "condition": "login_attempts.username = users.username",
+            "confidence": "high",
+            "reasoning": "The 'username' field in both tables likely represents the same entity, i.e., the user attempting to log in. This relationship is common in systems where login attempts are tracked against registered users.",
+            "test_sql": "SELECT COUNT(*) FROM login_attempts t1 JOIN users t2 ON t1.username = t2.username LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 4,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "manufacturers",
+            "from_column": "id",
+            "to_table": "models",
+            "to_column": "manufacturer_id",
+            "condition": "manufacturers.id = models.manufacturer_id",
+            "confidence": "high",
+            "reasoning": "The 'manufacturer_id' field in the 'models' table suggests a direct relationship with the 'id' field in the 'manufacturers' table. This is a common pattern where a product model is associated with its manufacturer, allowing for the retrieval of manufacturer details for each model.",
+            "test_sql": "SELECT COUNT(*) FROM manufacturers t1 JOIN models t2 ON t1.id = t2.manufacturer_id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 17,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "users",
+            "from_column": "id",
+            "to_table": "users_groups",
+            "to_column": "user_id",
+            "condition": "users.id = users_groups.user_id",
+            "confidence": "high",
+            "reasoning": "The 'user_id' in the 'users_groups' table is likely intended to reference the 'id' field in the 'users' table, as it is common practice to use a user's primary key to establish a relationship in a many-to-many association table. The data types are compatible, and the naming convention aligns with typical foreign key relationships.",
+            "test_sql": "SELECT COUNT(*) FROM users t1 JOIN users_groups t2 ON t1.id = t2.user_id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 1,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accessories",
+            "from_column": "created_by",
+            "to_table": "action_logs",
+            "to_column": "created_by",
+            "condition": "accessories.created_by = action_logs.created_by",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'created_by' field, which likely represents the user or employee who created the record. This suggests a logical relationship where actions related to accessories could be tracked by the user who created them.",
+            "test_sql": "SELECT COUNT(*) FROM accessories t1 JOIN action_logs t2 ON t1.created_by = t2.created_by LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 1680,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accessories",
+            "from_column": "supplier_id",
+            "to_table": "assets",
+            "to_column": "supplier_id",
+            "condition": "accessories.supplier_id = assets.supplier_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'supplier_id' field, suggesting that accessories and assets might be sourced from the same suppliers. This relationship is based on the business logic that both accessories and assets can be linked to suppliers, even though no explicit foreign key is defined.",
+            "test_sql": "SELECT COUNT(*) FROM accessories t1 JOIN assets t2 ON t1.supplier_id = t2.supplier_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 2083,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accessories",
+            "from_column": "location_id",
+            "to_table": "assets",
+            "to_column": "location_id",
+            "condition": "accessories.location_id = assets.location_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'location_id' field, suggesting that accessories and assets might be stored or used in the same locations. This relationship is based on the business logic of inventory and asset management where location tracking is crucial.",
+            "test_sql": "SELECT COUNT(*) FROM accessories t1 JOIN assets t2 ON t1.location_id = t2.location_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 998,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accessories",
+            "from_column": "location_id",
+            "to_table": "departments",
+            "to_column": "location_id",
+            "condition": "accessories.location_id = departments.location_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'location_id' field, which suggests that accessories might be stored in locations that are associated with specific departments. This relationship is based on the assumption that the same location identifiers are used across both tables to denote physical locations.",
+            "test_sql": "SELECT COUNT(*) FROM accessories t1 JOIN departments t2 ON t1.location_id = t2.location_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 1,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accessories",
+            "from_column": "supplier_id",
+            "to_table": "licenses",
+            "to_column": "supplier_id",
+            "condition": "accessories.supplier_id = licenses.supplier_id",
+            "confidence": "high",
+            "reasoning": "The 'supplier_id' field in both tables suggests that the same supplier might provide both physical accessories and software licenses. This relationship is plausible in a business context where a supplier deals with both types of products.",
+            "test_sql": "SELECT COUNT(*) FROM accessories t1 JOIN licenses t2 ON t1.supplier_id = t2.supplier_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 3,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "action_logs",
+            "from_column": "created_by",
+            "to_table": "categories",
+            "to_column": "created_by",
+            "condition": "action_logs.created_by = categories.created_by",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'created_by' field, which suggests a potential relationship where actions and categories are created by the same entity. This could be useful for tracking who initiated actions and who created categories.",
+            "test_sql": "SELECT COUNT(*) FROM action_logs t1 JOIN categories t2 ON t1.created_by = t2.created_by LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 6300,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accessories",
+            "from_column": "created_by",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "accessories.created_by = users.id",
+            "confidence": "high",
+            "reasoning": "The 'created_by' field in the 'accessories' table likely refers to the user who created or added the accessory record. This is a common pattern where records in a table are associated with the user who created them.",
+            "test_sql": "SELECT COUNT(*) FROM accessories t1 JOIN users t2 ON t1.created_by = t2.id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 4,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "action_logs",
+            "from_column": "item_id",
+            "to_table": "assets",
+            "to_column": "id",
+            "condition": "action_logs.item_id = assets.id",
+            "confidence": "high",
+            "reasoning": "The 'item_id' in 'action_logs' likely refers to an asset being acted upon, which corresponds to the 'id' in the 'assets' table. This relationship is inferred based on the business logic that actions are performed on assets.",
+            "test_sql": "SELECT COUNT(*) FROM action_logs t1 JOIN assets t2 ON t1.item_id = t2.id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 421,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "action_logs",
+            "from_column": "created_by",
+            "to_table": "depreciations",
+            "to_column": "created_by",
+            "condition": "action_logs.created_by = depreciations.created_by",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'created_by' field, which suggests a potential relationship based on the user or entity that created the records. This could be a logical relationship where actions and depreciation records are linked to the same creator.",
+            "test_sql": "SELECT COUNT(*) FROM action_logs t1 JOIN depreciations t2 ON t1.created_by = t2.created_by LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 1260,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "action_logs",
+            "from_column": "created_by",
+            "to_table": "license_seats",
+            "to_column": "created_by",
+            "condition": "action_logs.created_by = license_seats.created_by",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'created_by' field, which likely represents the user or entity responsible for creating the record. This suggests a potential relationship where actions logged in 'action_logs' could be related to the creation of license seats in 'license_seats'.",
+            "test_sql": "SELECT COUNT(*) FROM action_logs t1 JOIN license_seats t2 ON t1.created_by = t2.created_by LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 8400,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "action_logs",
+            "from_column": "created_by",
+            "to_table": "manufacturers",
+            "to_column": "created_by",
+            "condition": "action_logs.created_by = manufacturers.created_by",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'created_by' field, which suggests a potential relationship where actions logged in the system could be associated with the creation of manufacturer records. This could imply that the same user or entity responsible for creating a manufacturer record is also logging actions related to it.",
+            "test_sql": "SELECT COUNT(*) FROM action_logs t1 JOIN manufacturers t2 ON t1.created_by = t2.created_by LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 6300,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "action_logs",
+            "from_column": "created_by",
+            "to_table": "status_labels",
+            "to_column": "created_by",
+            "condition": "action_logs.created_by = status_labels.created_by",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'created_by' field, which suggests that actions and status labels might be associated with the same user or entity responsible for their creation. This relationship is inferred based on the naming convention and typical database design patterns where 'created_by' fields link to user or entity identifiers.",
+            "test_sql": "SELECT COUNT(*) FROM action_logs t1 JOIN status_labels t2 ON t1.created_by = t2.created_by LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 2940,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "action_logs",
+            "from_column": "created_by",
+            "to_table": "models",
+            "to_column": "created_by",
+            "condition": "action_logs.created_by = models.created_by",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'created_by' field, which suggests that actions logged in 'action_logs' could be related to the creation of models in the 'models' table. This relationship is based on the assumption that the same user or entity responsible for creating a model might also perform actions logged in the 'action_logs' table.",
+            "test_sql": "SELECT COUNT(*) FROM action_logs t1 JOIN models t2 ON t1.created_by = t2.created_by LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 7560,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "action_logs",
+            "from_column": "item_id",
+            "to_table": "models",
+            "to_column": "id",
+            "condition": "action_logs.item_id = models.id",
+            "confidence": "high",
+            "reasoning": "The 'item_id' in 'action_logs' could refer to a model in the 'models' table, especially if the 'item_type' in 'action_logs' specifies that the action is related to a model. This relationship is inferred based on the potential for actions to be logged against specific models.",
+            "test_sql": "SELECT COUNT(*) FROM action_logs t1 JOIN models t2 ON t1.item_id = t2.id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 22,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "assets",
+            "from_column": "location_id",
+            "to_table": "components",
+            "to_column": "location_id",
+            "condition": "assets.location_id = components.location_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'location_id' field, suggesting that assets and components might be stored or managed at the same locations. This relationship is logical for tracking inventory and asset management within the same physical or organizational locations.",
+            "test_sql": "SELECT COUNT(*) FROM assets t1 JOIN components t2 ON t1.location_id = t2.location_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 1088,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "assets",
+            "from_column": "assigned_to",
+            "to_table": "license_seats",
+            "to_column": "assigned_to",
+            "condition": "assets.assigned_to = license_seats.assigned_to",
+            "confidence": "high",
+            "reasoning": "Both tables have an 'assigned_to' field, which suggests a potential relationship where both assets and license seats are assigned to the same entity. This could represent a business logic relationship where both assets and licenses are tracked by the same user or department.",
+            "test_sql": "SELECT COUNT(*) FROM assets t1 JOIN license_seats t2 ON t1.assigned_to = t2.assigned_to LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 136,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "assets",
+            "from_column": "supplier_id",
+            "to_table": "licenses",
+            "to_column": "supplier_id",
+            "condition": "assets.supplier_id = licenses.supplier_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'supplier_id' field, indicating that assets and licenses might be procured from the same suppliers. This relationship is plausible in contexts where supplier management is centralized.",
+            "test_sql": "SELECT COUNT(*) FROM assets t1 JOIN licenses t2 ON t1.supplier_id = t2.supplier_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 2110,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "assets",
+            "from_column": "rtd_location_id",
+            "to_table": "locations",
+            "to_column": "id",
+            "condition": "assets.rtd_location_id = locations.id",
+            "confidence": "high",
+            "reasoning": "The 'rtd_location_id' field in the 'assets' table suggests a relationship with the 'id' field in the 'locations' table. This could represent a specific type of location related to the asset, such as a return-to-depot location. The naming convention and data types support this inference.",
+            "test_sql": "SELECT COUNT(*) FROM assets t1 JOIN locations t2 ON t1.rtd_location_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 2597,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "assets",
+            "from_column": "created_by",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "assets.created_by = users.id",
+            "confidence": "high",
+            "reasoning": "The 'created_by' field in the 'assets' table likely refers to the user who created the asset record. This can be linked to the 'id' field in the 'users' table, which identifies users. This relationship is typical in systems where user actions are tracked for auditing purposes.",
+            "test_sql": "SELECT COUNT(*) FROM assets t1 JOIN users t2 ON t1.created_by = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 2597,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "categories",
+            "from_column": "created_by",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "categories.created_by = users.id",
+            "confidence": "high",
+            "reasoning": "The 'created_by' field in the 'categories' table likely refers to the user who created the category. This is a common pattern where a record in one table is associated with a user in another table through a user ID.",
+            "test_sql": "SELECT COUNT(*) FROM categories t1 JOIN users t2 ON t1.created_by = t2.id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 15,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "companies",
+            "from_column": "id",
+            "to_table": "models",
+            "to_column": "manufacturer_id",
+            "condition": "companies.id = models.manufacturer_id",
+            "confidence": "high",
+            "reasoning": "The 'manufacturer_id' field in the 'models' table suggests a potential link to a table that represents manufacturers. Given the 'companies' table stores information about business entities, it is plausible that companies could be manufacturers of the models. This relationship is inferred based on typical business logic where companies manufacture products.",
+            "test_sql": "SELECT COUNT(*) FROM companies t1 JOIN models t2 ON t1.id = t2.manufacturer_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 17,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "components",
+            "from_column": "location_id",
+            "to_table": "departments",
+            "to_column": "location_id",
+            "condition": "components.location_id = departments.location_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'location_id' field, indicating that components may be stored in locations that correspond to department locations. This relationship is logical as departments may manage or utilize components stored at their location.",
+            "test_sql": "SELECT COUNT(*) FROM components t1 JOIN departments t2 ON t1.location_id = t2.location_id LIMIT 1",
+            "relationship_type": "logical",
+            "verified": true,
+            "test_result": 4,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "components",
+            "from_column": "company_id",
+            "to_table": "users",
+            "to_column": "company_id",
+            "condition": "components.company_id = users.company_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'company_id' field, suggesting a potential relationship where components are associated with users based on the company they belong to. This aligns with common business logic where users manage or interact with components within the same company.",
+            "test_sql": "SELECT COUNT(*) FROM components t1 JOIN users t2 ON t1.company_id = t2.company_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 46,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "consumables",
+            "from_column": "manufacturer_id",
+            "to_table": "models",
+            "to_column": "manufacturer_id",
+            "condition": "consumables.manufacturer_id = models.manufacturer_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'manufacturer_id' field, which suggests a potential relationship where consumables are associated with models from the same manufacturer. This relationship is inferred based on the common field name and the typical business logic of associating products with their manufacturers.",
+            "test_sql": "SELECT COUNT(*) FROM consumables t1 JOIN models t2 ON t1.manufacturer_id = t2.manufacturer_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 1,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "custom_field_custom_fieldset",
+            "from_column": "custom_fieldset_id",
+            "to_table": "models",
+            "to_column": "fieldset_id",
+            "condition": "custom_field_custom_fieldset.custom_fieldset_id = models.fieldset_id",
+            "confidence": "high",
+            "reasoning": "The 'custom_fieldset_id' in 'custom_field_custom_fieldset' and 'fieldset_id' in 'models' suggest a potential relationship where models might be associated with specific fieldsets. This could be used to apply custom fields to models, allowing for dynamic attributes or configurations based on the fieldset.",
+            "test_sql": "SELECT COUNT(*) FROM custom_field_custom_fieldset t1 JOIN models t2 ON t1.custom_fieldset_id = t2.fieldset_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 60,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "consumables",
+            "from_column": "created_by",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "consumables.created_by = users.id",
+            "confidence": "high",
+            "reasoning": "The 'created_by' field in the 'consumables' table likely refers to the user who created or added the consumable item. This is a common pattern where actions or records are attributed to specific users in a system.",
+            "test_sql": "SELECT COUNT(*) FROM consumables t1 JOIN users t2 ON t1.created_by = t2.id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 3,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "custom_fields",
+            "from_column": "fieldset_id",
+            "to_table": "models",
+            "to_column": "fieldset_id",
+            "condition": "custom_fields.id = models.fieldset_id",
+            "confidence": "high",
+            "reasoning": "The 'fieldset_id' in the 'models' table suggests a potential relationship with the 'custom_fields' table, where each model might be associated with a set of custom fields defined by a fieldset. This relationship is inferred based on the presence of the 'fieldset_id' column in the 'models' table, which could logically link to the 'custom_fields' table to apply specific custom fields to models.",
+            "test_sql": "SELECT COUNT(*) FROM custom_fields t1 JOIN models t2 ON t1.id = t2.fieldset_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 12,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "custom_fieldsets",
+            "from_column": "id",
+            "to_table": "models",
+            "to_column": "fieldset_id",
+            "condition": "custom_fieldsets.id = models.fieldset_id",
+            "confidence": "high",
+            "reasoning": "The 'fieldset_id' in the 'models' table suggests a potential link to the 'custom_fieldsets' table, where each model can be associated with a specific set of custom fields. This relationship is inferred based on the naming convention and the business purpose of extending model attributes with custom fieldsets.",
+            "test_sql": "SELECT COUNT(*) FROM custom_fieldsets t1 JOIN models t2 ON t1.id = t2.fieldset_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 10,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "departments",
+            "from_column": "created_by",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "departments.created_by = users.id",
+            "confidence": "high",
+            "reasoning": "The 'created_by' field in the 'departments' table likely refers to a user who created the department record, suggesting a relationship with the 'users' table where 'id' is the primary key.",
+            "test_sql": "SELECT COUNT(*) FROM departments t1 JOIN users t2 ON t1.created_by = t2.id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 6,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "depreciations",
+            "from_column": "created_by",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "depreciations.created_by = users.id",
+            "confidence": "high",
+            "reasoning": "The 'created_by' field in the 'depreciations' table likely refers to the user who created the depreciation record. This is a common pattern where records in a table are associated with the user who created or modified them, using a foreign key relationship to the 'users' table.",
+            "test_sql": "SELECT COUNT(*) FROM depreciations t1 JOIN users t2 ON t1.created_by = t2.id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 3,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "licenses",
+            "from_column": "manufacturer_id",
+            "to_table": "models",
+            "to_column": "manufacturer_id",
+            "condition": "licenses.manufacturer_id = models.manufacturer_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'manufacturer_id' field, suggesting a potential relationship where licenses are associated with models produced by the same manufacturer. This is a common pattern in inventory and asset management systems.",
+            "test_sql": "SELECT COUNT(*) FROM licenses t1 JOIN models t2 ON t1.manufacturer_id = t2.manufacturer_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 1,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "licenses",
+            "from_column": "created_by",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "licenses.created_by = users.id",
+            "confidence": "high",
+            "reasoning": "The 'created_by' field in the 'licenses' table likely refers to a user who created or is responsible for the license record. This aligns with the 'id' field in the 'users' table, which uniquely identifies each user. This relationship is common in systems where records are associated with the user who created them.",
+            "test_sql": "SELECT COUNT(*) FROM licenses t1 JOIN users t2 ON t1.created_by = t2.id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 4,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "models",
+            "from_column": "created_by",
+            "to_table": "status_labels",
+            "to_column": "created_by",
+            "condition": "models.created_by = status_labels.created_by",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'created_by' field, which suggests that the same entity (likely a user or employee) could be responsible for creating entries in both tables. This relationship is based on the assumption that the 'created_by' field in both tables refers to the same entity, even though no explicit foreign key is defined.",
+            "test_sql": "SELECT COUNT(*) FROM models t1 JOIN status_labels t2 ON t1.created_by = t2.created_by LIMIT 1",
+            "relationship_type": "logical",
+            "verified": true,
+            "test_result": 126,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "models",
+            "from_column": "created_by",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "models.created_by = users.id",
+            "confidence": "high",
+            "reasoning": "The 'created_by' field in the 'models' table likely refers to the user who created the model entry. This suggests a relationship where each model can be associated with a user who is responsible for its creation.",
+            "test_sql": "SELECT COUNT(*) FROM models t1 JOIN users t2 ON t1.created_by = t2.id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 18,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "status_labels",
+            "from_column": "created_by",
+            "to_table": "users",
+            "to_column": "id",
+            "condition": "status_labels.created_by = users.id",
+            "confidence": "high",
+            "reasoning": "The 'created_by' field in the 'status_labels' table likely refers to the user who created the status label. This suggests a relationship where each status label is associated with a user who created it. The data types are compatible, and this is a common pattern in database design where actions or records are linked to the user who performed them.",
+            "test_sql": "SELECT COUNT(*) FROM status_labels t1 JOIN users t2 ON t1.created_by = t2.id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 7,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accessories",
+            "from_column": "manufacturer_id",
+            "to_table": "licenses",
+            "to_column": "manufacturer_id",
+            "condition": "accessories.manufacturer_id = licenses.manufacturer_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'manufacturer_id' field, which could imply that the same manufacturer produces both physical accessories and software licenses. However, this is less common and thus has a lower confidence level.",
+            "test_sql": "SELECT COUNT(*) FROM accessories t1 JOIN licenses t2 ON t1.manufacturer_id = t2.manufacturer_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 1,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "accessories",
+            "from_column": "manufacturer_id",
+            "to_table": "models",
+            "to_column": "manufacturer_id",
+            "condition": "accessories.manufacturer_id = models.manufacturer_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'manufacturer_id' field, which could imply that accessories and models are linked to the same manufacturer. However, without explicit foreign key constraints or additional context, this relationship is speculative.",
+            "test_sql": "SELECT COUNT(*) FROM accessories t1 JOIN models t2 ON t1.manufacturer_id = t2.manufacturer_id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 16,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "action_logs",
+            "from_column": "created_by",
+            "to_table": "licenses",
+            "to_column": "created_by",
+            "condition": "action_logs.created_by = licenses.created_by",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'created_by' field, which might indicate a relationship where the same user is responsible for creating both action logs and license records. However, without additional context, this relationship is speculative.",
+            "test_sql": "SELECT COUNT(*) FROM action_logs t1 JOIN licenses t2 ON t1.created_by = t2.created_by LIMIT 1",
+            "relationship_type": "logical",
+            "verified": true,
+            "test_result": 1680,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "assets",
+            "from_column": "location_id",
+            "to_table": "departments",
+            "to_column": "location_id",
+            "condition": "assets.location_id = departments.location_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'location_id' field, which might indicate that assets are located in the same physical location as departments. However, without additional context, this relationship is speculative.",
+            "test_sql": "SELECT COUNT(*) FROM assets t1 JOIN departments t2 ON t1.location_id = t2.location_id LIMIT 1",
+            "relationship_type": "statistical",
+            "verified": true,
+            "test_result": 1581,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "custom_fields",
+            "from_column": "id",
+            "to_table": "custom_fieldsets",
+            "to_column": "id",
+            "condition": "custom_fields.id = custom_fieldsets.id",
+            "confidence": "high",
+            "reasoning": "The 'id' fields in both tables are primary keys and auto-incremented, which typically serve as unique identifiers within their respective tables. There is no direct indication that these IDs are related, but they are the only common field types that could potentially be used for a join. However, without explicit foreign keys or business logic linking these tables, this relationship is speculative.",
+            "test_sql": "SELECT COUNT(*) FROM custom_fields t1 JOIN custom_fieldsets t2 ON t1.id = t2.id LIMIT 1",
+            "relationship_type": "statistical",
+            "verified": true,
+            "test_result": 2,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "licenses",
+            "from_column": "created_by",
+            "to_table": "status_labels",
+            "to_column": "created_by",
+            "condition": "licenses.created_by = status_labels.created_by",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'created_by' field, which suggests a potential relationship based on the user or entity that created the records. However, without additional context or a common user table, this relationship is speculative.",
+            "test_sql": "SELECT COUNT(*) FROM licenses t1 JOIN status_labels t2 ON t1.created_by = t2.created_by LIMIT 1",
+            "relationship_type": "logical",
+            "verified": true,
+            "test_result": 28,
+            "verification_method": "sql_test"
+        }
+    ]
+}

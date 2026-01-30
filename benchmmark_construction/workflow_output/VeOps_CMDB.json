@@ -1,0 +1,393 @@
+{
+  "platform": "VeOps CMDB",
+  "core_tables": [
+    "acl_apps",
+    "acl_audit_login_logs",
+    "acl_audit_permission_logs",
+    "acl_audit_resource_logs",
+    "acl_audit_role_logs",
+    "acl_operation_records",
+    "acl_permissions",
+    "acl_resource_types",
+    "acl_resources",
+    "acl_role_permissions",
+    "acl_role_relations",
+    "acl_roles",
+    "c_ad_ci_types",
+    "c_ad_rules",
+    "c_attribute_histories",
+    "c_attributes",
+    "c_choice_texts",
+    "c_ci_relations",
+    "c_ci_type_attribute_group_items",
+    "c_ci_type_attribute_groups",
+    "c_ci_type_attributes",
+    "c_ci_type_groups",
+    "c_ci_type_relations",
+    "c_ci_types",
+    "c_cis",
+    "c_prv",
+    "c_psa",
+    "c_ptv",
+    "c_records",
+    "c_relation_histories",
+    "c_relation_types",
+    "c_sc",
+    "c_value_index_integers",
+    "c_value_index_texts",
+    "c_value_texts",
+    "common_department",
+    "common_employee",
+    "users"
+  ],
+  "discovered_workflows": {
+    "access_control_management": {
+      "name": "access_control_management",
+      "description": "Manage access control by defining roles, permissions, and resources, and auditing changes to ensure compliance and security.",
+      "core_tables": [
+        "acl_apps",
+        "acl_roles",
+        "acl_permissions",
+        "acl_resources",
+        "acl_role_permissions"
+      ],
+      "key_relationships": [
+        {
+          "type": "foreign_key",
+          "from_table": "acl_permissions",
+          "from_column": "app_id",
+          "to_table": "acl_apps",
+          "to_column": "id",
+          "condition": "acl_permissions.app_id = acl_apps.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "acl_resources",
+          "from_column": "app_id",
+          "to_table": "acl_apps",
+          "to_column": "id",
+          "condition": "acl_resources.app_id = acl_apps.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "acl_role_permissions",
+          "from_column": "app_id",
+          "to_table": "acl_apps",
+          "to_column": "id",
+          "condition": "acl_role_permissions.app_id = acl_apps.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "acl_roles",
+          "from_column": "app_id",
+          "to_table": "acl_apps",
+          "to_column": "id",
+          "condition": "acl_roles.app_id = acl_apps.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "acl_role_permissions",
+          "from_column": "perm_id",
+          "to_table": "acl_permissions",
+          "to_column": "id",
+          "condition": "acl_role_permissions.perm_id = acl_permissions.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "acl_role_permissions",
+          "from_column": "resource_id",
+          "to_table": "acl_resources",
+          "to_column": "id",
+          "condition": "acl_role_permissions.resource_id = acl_resources.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "acl_role_permissions",
+          "from_column": "rid",
+          "to_table": "acl_roles",
+          "to_column": "id",
+          "condition": "acl_role_permissions.rid = acl_roles.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        }
+      ],
+      "business_value": "Ensures secure and compliant access control management by defining roles and permissions, auditing changes, and managing resources effectively.",
+      "workflow_type": "access_control_management"
+    },
+    "resource_audit_logging": {
+      "name": "resource_audit_logging",
+      "description": "Track and audit changes to resources, roles, and permissions to ensure compliance and security within the system.",
+      "core_tables": [
+        "acl_audit_resource_logs",
+        "acl_audit_role_logs",
+        "acl_audit_permission_logs",
+        "acl_resources",
+        "acl_roles"
+      ],
+      "key_relationships": [
+        {
+          "type": "inferred",
+          "from_table": "acl_audit_resource_logs",
+          "from_column": "link_id",
+          "to_table": "acl_resources",
+          "to_column": "id",
+          "condition": "acl_audit_resource_logs.link_id = acl_resources.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM acl_audit_resource_logs t1 JOIN acl_resources t2 ON t1.link_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 9,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "acl_audit_role_logs",
+          "from_column": "link_id",
+          "to_table": "acl_roles",
+          "to_column": "id",
+          "condition": "acl_audit_role_logs.link_id = acl_roles.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM acl_audit_role_logs t1 JOIN acl_roles t2 ON t1.link_id = t2.id LIMIT 1",
+          "relationship_type": "business_logic",
+          "verified": true,
+          "test_result": 1,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "acl_audit_permission_logs",
+          "from_column": "resource_type_id",
+          "to_table": "acl_resources",
+          "to_column": "resource_type_id",
+          "condition": "acl_audit_permission_logs.resource_type_id = acl_resources.resource_type_id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM acl_audit_permission_logs t1 JOIN acl_resources t2 ON t1.resource_type_id = t2.resource_type_id LIMIT 1",
+          "relationship_type": "business_logic",
+          "verified": true,
+          "test_result": 122,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "acl_audit_permission_logs",
+          "from_column": "rid",
+          "to_table": "acl_roles",
+          "to_column": "id",
+          "condition": "acl_audit_permission_logs.rid = acl_roles.id",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM acl_audit_permission_logs t1 JOIN acl_roles t2 ON t1.rid = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 16,
+          "verification_method": "sql_test"
+        }
+      ],
+      "business_value": "Provides comprehensive auditing and logging of resource, role, and permission changes to ensure system security and compliance.",
+      "workflow_type": "audit_logging"
+    },
+    "configuration_item_management": {
+      "name": "configuration_item_management",
+      "description": "Manage configuration items (CIs) by defining types, attributes, and relationships, and track changes over time.",
+      "core_tables": [
+        "c_cis",
+        "c_ci_types",
+        "c_attributes",
+        "c_ci_type_attributes",
+        "c_attribute_histories"
+      ],
+      "key_relationships": [
+        {
+          "type": "foreign_key",
+          "from_table": "c_cis",
+          "from_column": "type_id",
+          "to_table": "c_ci_types",
+          "to_column": "id",
+          "condition": "c_cis.type_id = c_ci_types.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "c_ci_type_attributes",
+          "from_column": "type_id",
+          "to_table": "c_ci_types",
+          "to_column": "id",
+          "condition": "c_ci_type_attributes.type_id = c_ci_types.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "c_attribute_histories",
+          "from_column": "ci_id",
+          "to_table": "c_cis",
+          "to_column": "id",
+          "condition": "c_attribute_histories.ci_id = c_cis.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "c_attribute_histories",
+          "from_column": "attr_id",
+          "to_table": "c_attributes",
+          "to_column": "id",
+          "condition": "c_attribute_histories.attr_id = c_attributes.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        }
+      ],
+      "business_value": "Facilitates effective management of configuration items by defining types, attributes, and tracking changes, ensuring accurate configuration management.",
+      "workflow_type": "configuration_management"
+    },
+    "user_access_audit": {
+      "name": "user_access_audit",
+      "description": "Audit user access and login activities to ensure security and compliance within the system.",
+      "core_tables": [
+        "acl_audit_login_logs",
+        "users",
+        "common_employee"
+      ],
+      "key_relationships": [
+        {
+          "type": "inferred",
+          "from_table": "acl_audit_login_logs",
+          "from_column": "username",
+          "to_table": "users",
+          "to_column": "username",
+          "condition": "acl_audit_login_logs.username = users.username",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM acl_audit_login_logs t1 JOIN users t2 ON t1.username = t2.username LIMIT 1",
+          "relationship_type": "business_logic",
+          "verified": true,
+          "test_result": 1,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "acl_audit_login_logs",
+          "from_column": "username",
+          "to_table": "common_employee",
+          "to_column": "username",
+          "condition": "acl_audit_login_logs.username = common_employee.username",
+          "confidence": "high",
+          "test_sql": "SELECT COUNT(*) FROM acl_audit_login_logs t1 JOIN common_employee t2 ON t1.username = t2.username LIMIT 1",
+          "relationship_type": "business_logic",
+          "verified": true,
+          "test_result": 1,
+          "verification_method": "sql_test"
+        }
+      ],
+      "business_value": "Ensures system security and compliance by auditing user access and login activities, providing traceability and accountability.",
+      "workflow_type": "user_management"
+    },
+    "department_employee_management": {
+      "name": "department_employee_management",
+      "description": "Manage organizational structure by defining departments and employees, and track their relationships and changes.",
+      "core_tables": [
+        "common_department",
+        "common_employee"
+      ],
+      "key_relationships": [
+        {
+          "type": "foreign_key",
+          "from_table": "common_employee",
+          "from_column": "department_id",
+          "to_table": "common_department",
+          "to_column": "department_id",
+          "condition": "common_employee.department_id = common_department.department_id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        }
+      ],
+      "business_value": "Facilitates effective management of organizational structure by defining departments and employees, ensuring accurate tracking and management.",
+      "workflow_type": "organization_management"
+    },
+    "configuration_item_relationship_management": {
+      "name": "configuration_item_relationship_management",
+      "description": "Manage relationships between configuration items (CIs) to represent dependencies and associations within the system.",
+      "core_tables": [
+        "c_ci_relations",
+        "c_cis",
+        "c_relation_types"
+      ],
+      "key_relationships": [
+        {
+          "type": "foreign_key",
+          "from_table": "c_ci_relations",
+          "from_column": "first_ci_id",
+          "to_table": "c_cis",
+          "to_column": "id",
+          "condition": "c_ci_relations.first_ci_id = c_cis.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "c_ci_relations",
+          "from_column": "second_ci_id",
+          "to_table": "c_cis",
+          "to_column": "id",
+          "condition": "c_ci_relations.second_ci_id = c_cis.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "c_ci_relations",
+          "from_column": "relation_type_id",
+          "to_table": "c_relation_types",
+          "to_column": "id",
+          "condition": "c_ci_relations.relation_type_id = c_relation_types.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        }
+      ],
+      "business_value": "Enables effective management of configuration item relationships, representing dependencies and associations, ensuring accurate system modeling.",
+      "workflow_type": "relationship_management"
+    }
+  },
+  "discovery_metadata": {
+    "total_tables_analyzed": 38,
+    "relationships_found": 220,
+    "workflows_identified": 6,
+    "table_analysis_count": 38,
+    "config_used": {
+      "discovery_type": "universal",
+      "llm_model": "gpt-4o",
+      "max_relationships": 1000,
+      "confidence_levels": {
+        "high": 3,
+        "medium": 2,
+        "low": 1
+      }
+    }
+  }
+}

@@ -1,0 +1,39 @@
+database:
+  type: "mysql"
+  host: "127.0.0.1"
+  port: 3903
+  user: "cmdb"
+  password: "123456"
+  database: "cmdb"
+  charset: "utf8mb4"
+  autocommit: true
+  connect_timeout: 10
+  read_timeout: 30
+  write_timeout: 30
+
+platform_info:
+  name: "VeOps_CMDB"
+  type: "Cloud-Native Configuration Management Database"
+  description: |
+    Open-source, schema-free CMDB & auto-discovery platform built for cloud-native environments.
+    Provides model designer, resource auto-discovery, relationship graph, permission control,
+    and API-first integration.
+  industry: "Technology / Cloud / DevOps"
+  target_users: "SRE teams, DevOps engineers, platform administrators, security auditors"
+  business_model: "On-premise & Kubernetes-native"
+
+workflow_guidelines:
+  - "Model-driven resource definition and attribute extension"
+  - "Auto-discovery via agent, SNMP, Kubernetes, public-cloud APIs"
+  - "Relationship & dependency mapping with topology visualization"
+  - "Fine-grained RBAC and action audit"
+  - "CI/CD integration: push deployment events back to CMDB"
+  - "Custom dashboards and metric export to Prometheus/Grafana"
+  - "Knowledge base linkage: attach runbooks to CI records"
+  - "Scheduled compliance scan and drift alerting"
+
+task_metadata:
+  "sites":
+    - "veops_cmdb"
+  "storage_state": "./.auth/veops_cmdb_state.json"
+  "start_url": "http://127.0.0.1:9903"

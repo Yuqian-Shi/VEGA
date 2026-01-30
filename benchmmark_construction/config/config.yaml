@@ -1,0 +1,83 @@
+# 默认配置文件 - 简化版本
+defaults:
+  - conf: zentao
+  - _self_
+
+# 应用基础配置
+app:
+  name: "workflow_discovery"
+  version: "1.0.0"
+  debug: false
+
+# 核心表配置
+core_tables: []
+
+output_base_dir: "${oc.env:PYTHONPATH}"
+
+# 平台配置
+platform: null
+
+# 输出配置
+output:
+  file: "discovered_workflows.json"
+  format: "json"
+  encoding: "utf-8"
+
+# OpenAI 配置
+openai:
+  api_key: "${oc.env:OPENAI_API_KEY}"
+  base_url: "${oc.env:OPENAI_BASE_URL,https://api.openai.com/v1}"
+  model: "gpt-4.1"
+  temperature: 0.0
+  max_tokens: 4000
+  timeout: 60
+
+# 工作流发现配置
+discovery:
+  max_tables: 150
+  # 关系发现
+  relationships:
+    max_per_table: 50
+    max_total: 1000
+    confidence_threshold: "low"
+    enable_llm_analysis: true
+    enable_foreign_key_check: true
+    parallel: 5
+    
+  # 工作流生成
+  workflows:
+    min_count: 6
+    max_count: 15
+    min_tables_per_workflow: 2
+    max_tables_per_workflow: 12
+    enable_llm_generation: true
+    
+  # 置信度级别
+  confidence_levels:
+    high: 3
+    medium: 2
+    low: 1
+
+# 缓存配置
+cache:
+  enabled: true
+  ttl: 3600  # 1小时
+  schema_cache: true
+  analysis_cache: true
+  relationship_cache: true
+
+# 题目生成配置
+task_generation:
+  target_count: 1
+  template_count: 1
+  variants_per_template: 3
+  task_type: "query"  # query, cud, all
+  output_file: "generated_tasks_enhanced.jsonl"
+  verbose: false
+  workflow_config: null
+  difficulty_level: advanced   # 或 intermediate / advanced
+
+task_factory:
+  raw_question_dir: null
+  raw_question_file: null
+  max_task_id: 0

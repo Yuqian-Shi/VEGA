@@ -1,0 +1,34 @@
+database:
+  type: "mysql"
+  host: "127.0.0.1"
+  port: 3907
+  user: "snipeit"
+  password: "changeme1234"
+  database: "snipeit"
+  charset: "utf8mb4"
+  autocommit: true
+  connect_timeout: 10
+  read_timeout: 30
+  write_timeout: 30
+
+platform_info:
+  name: "SnipeIT"
+  type: "Open-Source Asset Management Platform"
+  description: "Web-based asset and license management system for IT equipment tracking and lifecycle management"
+  industry: "IT Asset Management"
+  target_users: "IT administrators, procurement teams, asset managers, finance departments"
+  business_model: "Self-hosted / Cloud"
+
+workflow_guidelines:
+  - "Asset inventory import and audit reconciliation"
+  - "Hardware assignment and checkout to users"
+  - "License compliance and expiration tracking"
+  - "Maintenance schedules and warranty alerts"
+  - "Consumables replenishment and stock control"
+  - "User off-boarding and asset recovery"
+
+task_metadata:
+  sites:
+    - "snipeit"
+  storage_state: "./.auth/snipeit_state.json"
+  start_url: "http://127.0.0.1:9907"

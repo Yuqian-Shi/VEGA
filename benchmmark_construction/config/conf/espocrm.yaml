@@ -1,0 +1,36 @@
+database:
+  type: "mysql"
+  host: "127.0.0.1"
+  port: 3900
+  user: "espocrm"
+  password: "database_password"
+  database: "espocrm"
+  charset: "utf8mb4"
+  autocommit: true
+  connect_timeout: 10
+  read_timeout: 20
+  write_timeout: 60
+
+platform_info:
+  name: "EspoCRM"
+  type: "Customer Relationship Management Platform"
+  description: "Open-source CRM for sales automation, marketing campaigns, customer support and custom entity management"
+  industry: "CRM / Sales & Marketing"
+  target_users: "Sales teams, marketing teams, customer support agents, business analysts"
+  business_model: "On-premise / Cloud-ready"
+
+workflow_guidelines:
+  - "Lead capture and qualification"
+  - "Opportunity pipeline and forecasting"
+  - "Account & contact management"
+  - "Marketing campaign execution and tracking"
+  - "Case/ticket lifecycle and SLA management"
+  - "Knowledge base and FAQ maintenance"
+  - "Custom entity creation and workflow automation"
+
+
+task_metadata:
+  "sites":
+    - "espocrm"
+  "storage_state": "./.auth/espocrm_state.json"
+  "start_url": "http://127.0.0.1:9900"

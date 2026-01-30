@@ -1,0 +1,66 @@
+# 各维度权重配置 (总和应为1.0)
+weights:
+  table_complexity: 0.15      # 表复杂度权重
+  relationship_complexity: 0.15 # 关联关系复杂度权重
+  operation_complexity: 0.20   # 操作类型复杂度权重
+  result_complexity: 0.20      # 结果复杂度权重
+  sql_complexity: 0.30         # SQL语句复杂度权重
+
+# 操作类型难度映射 (1-5分)
+operation_difficulty:
+  SELECT: 1    # 查询操作 - 简单
+  INSERT: 5    # 创建操作 - 困难
+  UPDATE: 5    # 更新操作 - 困难
+  DELETE: 5    # 删除操作 - 困难
+
+# 表复杂度评分规则
+table_complexity_rules:
+  single_table: 1.0
+  multi_table:
+    2: 2.0     # 2个表
+    3: 3.0     # 3个表
+    4: 4.0     # 4个表
+    default: 5.0  # 4个表以上
+
+# 关联关系复杂度评分规则
+relationship_complexity_rules:
+  count_ranges:
+    - {max: 0, score: 1.0}    # 0个关联关系
+    - {max: 2, score: 2.0}    # 1-2个关联关系
+    - {max: 4, score: 3.0}    # 3-4个关联关系
+    - {max: 6, score: 4.0}    # 5-6个关联关系
+    - {max: 999, score: 5.0}  # 6个以上关联关系
+
+# 结果复杂度评分规则
+result_complexity_rules:
+  count_ranges:
+    - {max: 0, score: 1.0}    # 0个结果
+    - {max: 1, score: 1.5}    # 1个结果
+    - {max: 3, score: 2.5}    # 2-3个结果
+    - {max: 5, score: 3.5}    # 4-5个结果
+    - {max: 10, score: 4.0}   # 6-10个结果
+    - {max: 999, score: 5.0}  # 10个以上结果
+
+# SQL复杂度评分规则
+sql_complexity_rules:
+  base_score: 1.0
+  join_multiplier: 0.5        # 每个JOIN增加0.5分
+  where_multiplier: 0.3       # 每个WHERE/AND/OR增加0.3分
+  subquery_bonus: 1.0         # 子查询增加1分
+  aggregation_bonus: 0.5      # 聚合函数增加0.5分
+  max_score: 5.0              # 最高分数
+
+# 难度等级划分
+difficulty_levels:
+  - {max_score: 1.5, level: "简单"}
+  - {max_score: 2.5, level: "较简单"}
+  - {max_score: 3.5, level: "中等"}
+  - {max_score: 4.5, level: "较困难"}
+  - {max_score: 5.0, level: "困难"}
+
+# 输出配置
+output:
+  include_details: true        # 是否包含分析
+  include_weights: true        # 是否包含权重
+  round_decimals: 2
+  output_format: "json"        # 输出格式

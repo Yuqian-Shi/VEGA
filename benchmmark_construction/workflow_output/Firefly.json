@@ -1,0 +1,456 @@
+{
+  "platform": "Firefly",
+  "core_tables": [
+    "account_meta",
+    "account_piggy_bank",
+    "account_types",
+    "accounts",
+    "attachments",
+    "auto_budgets",
+    "available_budgets",
+    "bills",
+    "budget_limits",
+    "budget_transaction_journal",
+    "budgets",
+    "categories",
+    "category_transaction_journal",
+    "configuration",
+    "currency_exchange_rates",
+    "group_memberships",
+    "journal_links",
+    "journal_meta",
+    "link_types",
+    "migrations",
+    "notes",
+    "oauth_clients",
+    "object_groupables",
+    "object_groups",
+    "piggy_bank_events",
+    "piggy_banks",
+    "preferences",
+    "recurrences",
+    "recurrences_repetitions",
+    "recurrences_transactions",
+    "role_user",
+    "roles",
+    "rt_meta",
+    "rule_actions",
+    "rule_groups",
+    "rule_triggers",
+    "rules",
+    "tag_transaction_journal",
+    "tags",
+    "transaction_currencies",
+    "transaction_currency_user_group",
+    "transaction_groups",
+    "transaction_journals",
+    "transaction_types",
+    "transactions",
+    "user_groups",
+    "user_roles",
+    "users"
+  ],
+  "discovered_workflows": {
+    "account_management": {
+      "name": "account_management",
+      "description": "Manage user accounts, including creation, archiving, and reactivation, along with associated metadata and account types.",
+      "core_tables": [
+        "accounts",
+        "account_meta",
+        "account_types"
+      ],
+      "key_relationships": [
+        {
+          "type": "foreign_key",
+          "from_table": "account_meta",
+          "from_column": "account_id",
+          "to_table": "accounts",
+          "to_column": "id",
+          "condition": "account_meta.account_id = accounts.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "accounts",
+          "from_column": "account_type_id",
+          "to_table": "account_types",
+          "to_column": "id",
+          "condition": "accounts.account_type_id = account_types.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        }
+      ],
+      "business_value": "Facilitates the management of user accounts and their associated metadata, ensuring proper classification and organization of accounts.",
+      "workflow_type": "user_management"
+    },
+    "budget_management": {
+      "name": "budget_management",
+      "description": "Manage budgets, including creation, allocation, and tracking of budget limits and transactions.",
+      "core_tables": [
+        "budgets",
+        "budget_limits",
+        "budget_transaction_journal",
+        "transaction_journals"
+      ],
+      "key_relationships": [
+        {
+          "type": "foreign_key",
+          "from_table": "budget_limits",
+          "from_column": "budget_id",
+          "to_table": "budgets",
+          "to_column": "id",
+          "condition": "budget_limits.budget_id = budgets.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "budget_transaction_journal",
+          "from_column": "budget_id",
+          "to_table": "budgets",
+          "to_column": "id",
+          "condition": "budget_transaction_journal.budget_id = budgets.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "budget_transaction_journal",
+          "from_column": "budget_limit_id",
+          "to_table": "budget_limits",
+          "to_column": "id",
+          "condition": "budget_transaction_journal.budget_limit_id = budget_limits.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "budget_transaction_journal",
+          "from_column": "transaction_journal_id",
+          "to_table": "transaction_journals",
+          "to_column": "id",
+          "condition": "budget_transaction_journal.transaction_journal_id = transaction_journals.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        }
+      ],
+      "business_value": "Enables effective financial planning and control by managing budgets and tracking transactions against budget limits.",
+      "workflow_type": "financial_management"
+    },
+    "transaction_processing": {
+      "name": "transaction_processing",
+      "description": "Process financial transactions, including logging, categorization, and currency management.",
+      "core_tables": [
+        "transactions",
+        "transaction_journals",
+        "transaction_currencies",
+        "transaction_types"
+      ],
+      "key_relationships": [
+        {
+          "type": "foreign_key",
+          "from_table": "transactions",
+          "from_column": "transaction_journal_id",
+          "to_table": "transaction_journals",
+          "to_column": "id",
+          "condition": "transactions.transaction_journal_id = transaction_journals.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "transactions",
+          "from_column": "transaction_currency_id",
+          "to_table": "transaction_currencies",
+          "to_column": "id",
+          "condition": "transactions.transaction_currency_id = transaction_currencies.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "transaction_journals",
+          "from_column": "transaction_type_id",
+          "to_table": "transaction_types",
+          "to_column": "id",
+          "condition": "transaction_journals.transaction_type_id = transaction_types.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        }
+      ],
+      "business_value": "Ensures accurate and efficient processing of financial transactions, supporting multi-currency operations and transaction categorization.",
+      "workflow_type": "transaction_management"
+    },
+    "recurring_transaction_management": {
+      "name": "recurring_transaction_management",
+      "description": "Manage recurring transactions, including scheduling, tracking, and currency handling.",
+      "core_tables": [
+        "recurrences",
+        "recurrences_transactions",
+        "transaction_currencies",
+        "transaction_types"
+      ],
+      "key_relationships": [
+        {
+          "type": "foreign_key",
+          "from_table": "recurrences_transactions",
+          "from_column": "recurrence_id",
+          "to_table": "recurrences",
+          "to_column": "id",
+          "condition": "recurrences_transactions.recurrence_id = recurrences.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "recurrences",
+          "from_column": "transaction_type_id",
+          "to_table": "transaction_types",
+          "to_column": "id",
+          "condition": "recurrences.transaction_type_id = transaction_types.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "recurrences_transactions",
+          "from_column": "transaction_currency_id",
+          "to_table": "transaction_currencies",
+          "to_column": "id",
+          "condition": "recurrences_transactions.transaction_currency_id = transaction_currencies.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        }
+      ],
+      "business_value": "Automates the management of recurring financial transactions, ensuring timely execution and accurate currency handling.",
+      "workflow_type": "financial_management"
+    },
+    "bill_management": {
+      "name": "bill_management",
+      "description": "Manage bills, including creation, scheduling, and currency handling.",
+      "core_tables": [
+        "bills",
+        "transaction_journals",
+        "transaction_currencies"
+      ],
+      "key_relationships": [
+        {
+          "type": "foreign_key",
+          "from_table": "bills",
+          "from_column": "transaction_currency_id",
+          "to_table": "transaction_currencies",
+          "to_column": "id",
+          "condition": "bills.transaction_currency_id = transaction_currencies.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "transaction_journals",
+          "from_column": "bill_id",
+          "to_table": "bills",
+          "to_column": "id",
+          "condition": "transaction_journals.bill_id = bills.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        }
+      ],
+      "business_value": "Facilitates the management of bills, ensuring timely payments and accurate currency handling.",
+      "workflow_type": "financial_management"
+    },
+    "savings_goal_management": {
+      "name": "savings_goal_management",
+      "description": "Manage savings goals through piggy banks, tracking progress and associated transactions.",
+      "core_tables": [
+        "piggy_banks",
+        "account_piggy_bank",
+        "piggy_bank_events",
+        "transaction_journals"
+      ],
+      "key_relationships": [
+        {
+          "type": "foreign_key",
+          "from_table": "account_piggy_bank",
+          "from_column": "piggy_bank_id",
+          "to_table": "piggy_banks",
+          "to_column": "id",
+          "condition": "account_piggy_bank.piggy_bank_id = piggy_banks.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "piggy_bank_events",
+          "from_column": "piggy_bank_id",
+          "to_table": "piggy_banks",
+          "to_column": "id",
+          "condition": "piggy_bank_events.piggy_bank_id = piggy_banks.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "piggy_bank_events",
+          "from_column": "transaction_journal_id",
+          "to_table": "transaction_journals",
+          "to_column": "id",
+          "condition": "piggy_bank_events.transaction_journal_id = transaction_journals.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        }
+      ],
+      "business_value": "Supports users in setting and tracking savings goals, providing insights into progress and associated financial activities.",
+      "workflow_type": "financial_management"
+    },
+    "user_group_management": {
+      "name": "user_group_management",
+      "description": "Manage user groups and their memberships, roles, and associated preferences.",
+      "core_tables": [
+        "user_groups",
+        "group_memberships",
+        "user_roles",
+        "preferences"
+      ],
+      "key_relationships": [
+        {
+          "type": "foreign_key",
+          "from_table": "group_memberships",
+          "from_column": "user_group_id",
+          "to_table": "user_groups",
+          "to_column": "id",
+          "condition": "group_memberships.user_group_id = user_groups.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "group_memberships",
+          "from_column": "user_role_id",
+          "to_table": "user_roles",
+          "to_column": "id",
+          "condition": "group_memberships.user_role_id = user_roles.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "preferences",
+          "from_column": "user_group_id",
+          "to_table": "user_groups",
+          "to_column": "id",
+          "condition": "preferences.user_group_id = user_groups.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        }
+      ],
+      "business_value": "Enables the organization and management of users into groups, facilitating role-based access control and preference management.",
+      "workflow_type": "user_management"
+    },
+    "currency_exchange_management": {
+      "name": "currency_exchange_management",
+      "description": "Manage currency exchange rates for transactions, supporting multi-currency operations.",
+      "core_tables": [
+        "currency_exchange_rates",
+        "transaction_currencies"
+      ],
+      "key_relationships": [
+        {
+          "type": "foreign_key",
+          "from_table": "currency_exchange_rates",
+          "from_column": "from_currency_id",
+          "to_table": "transaction_currencies",
+          "to_column": "id",
+          "condition": "currency_exchange_rates.from_currency_id = transaction_currencies.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "currency_exchange_rates",
+          "from_column": "to_currency_id",
+          "to_table": "transaction_currencies",
+          "to_column": "id",
+          "condition": "currency_exchange_rates.to_currency_id = transaction_currencies.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        }
+      ],
+      "business_value": "Facilitates accurate currency conversion for financial transactions, supporting global financial operations.",
+      "workflow_type": "financial_management"
+    },
+    "transaction_tagging": {
+      "name": "transaction_tagging",
+      "description": "Tag transactions for better categorization and analysis.",
+      "core_tables": [
+        "tags",
+        "tag_transaction_journal",
+        "transaction_journals"
+      ],
+      "key_relationships": [
+        {
+          "type": "foreign_key",
+          "from_table": "tag_transaction_journal",
+          "from_column": "tag_id",
+          "to_table": "tags",
+          "to_column": "id",
+          "condition": "tag_transaction_journal.tag_id = tags.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "tag_transaction_journal",
+          "from_column": "transaction_journal_id",
+          "to_table": "transaction_journals",
+          "to_column": "id",
+          "condition": "tag_transaction_journal.transaction_journal_id = transaction_journals.id",
+          "confidence": "high",
+          "relationship_type": "foreign_key",
+          "verified": true
+        }
+      ],
+      "business_value": "Enhances transaction categorization and analysis by allowing users to tag transactions, improving financial insights.",
+      "workflow_type": "content_management"
+    }
+  },
+  "discovery_metadata": {
+    "total_tables_analyzed": 48,
+    "relationships_found": 117,
+    "workflows_identified": 9,
+    "table_analysis_count": 48,
+    "config_used": {
+      "discovery_type": "universal",
+      "llm_model": "gpt-4o",
+      "max_relationships": 1000,
+      "confidence_levels": {
+        "high": 3,
+        "medium": 2,
+        "low": 1
+      }
+    }
+  }
+}

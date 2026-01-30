@@ -1,0 +1,112 @@
+# ───── Python ──────────────────────────────────────────
+# Byte-compiled / optimized / DLL
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django / Flask / FastAPI / Django REST Framework
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+instance/
+.webassets-cache
+.scrapy
+docs/_build/
+.pybuilder/
+target/
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder / PyCharm / VS Code / Jupyter
+.spyderproject
+.spyproject
+.ropeproject
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# mypy / ruff / black
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.ruff_cache/
+.black-cache/
+
+# IDEs
+.project
+.classpath
+.c9/
+.settings/
+*.sublime-workspace
+*.sublime-project
+*.sublime-settings
+*.sublime-macro
+.vscode-test/
+.vscode-test-tmp/
+.vscode-test-tmp2/
+.vscode-test-tmp3/
+.vscode
+
+outputs
+questions_bank
+tasks_bank

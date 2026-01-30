@@ -1,0 +1,299 @@
+{
+  "platform": "OpenProject",
+  "core_tables": [
+    "ar_internal_metadata",
+    "attachment_journals",
+    "attachments",
+    "categories",
+    "colors",
+    "delayed_jobs",
+    "enabled_modules",
+    "enumerations",
+    "grid_widgets",
+    "grids",
+    "journals",
+    "meeting_agenda_items",
+    "meeting_journals",
+    "meeting_participants",
+    "meetings",
+    "member_roles",
+    "members",
+    "menu_items",
+    "news",
+    "news_journals",
+    "notification_settings",
+    "ordered_work_packages",
+    "project_journals",
+    "projects",
+    "projects_types",
+    "queries",
+    "relations",
+    "role_permissions",
+    "roles",
+    "schema_migrations",
+    "sessions",
+    "settings",
+    "statuses",
+    "tokens",
+    "types",
+    "user_passwords",
+    "user_preferences",
+    "users",
+    "version_settings",
+    "versions",
+    "views",
+    "watchers",
+    "wiki_page_journals",
+    "wiki_pages",
+    "wikis",
+    "work_package_hierarchies",
+    "work_package_journals",
+    "work_packages",
+    "workflows"
+  ],
+  "discovered_workflows": {
+    "project_documentation_management": {
+      "name": "project_documentation_management",
+      "description": "Manage project documentation and knowledge sharing through wikis, linking them to projects and tracking changes.",
+      "core_tables": [
+        "wikis",
+        "wiki_pages",
+        "wiki_page_journals",
+        "projects"
+      ],
+      "key_relationships": [
+        {
+          "type": "inferred",
+          "from_table": "project_journals",
+          "from_column": "id",
+          "to_table": "wikis",
+          "to_column": "project_id",
+          "condition": "project_journals.id = wikis.project_id",
+          "confidence": "high",
+          "reasoning": "The 'project_id' field in the 'wikis' table suggests a direct association with projects, which are likely represented by the 'project_journals' table. The 'id' field in 'project_journals' is a primary key, making it a suitable candidate for linking with 'project_id' in 'wikis'. This relationship aligns with common database design patterns where a project can have associated documentation or wikis.",
+          "test_sql": "SELECT COUNT(*) FROM project_journals t1 JOIN wikis t2 ON t1.id = t2.project_id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 2,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "wiki_pages",
+          "from_column": "wiki_id",
+          "to_table": "wikis",
+          "to_column": "id",
+          "condition": "wiki_pages.wiki_id = wikis.id",
+          "confidence": "high",
+          "reasoning": "The 'wiki_id' field in the 'wiki_pages' table likely serves as a foreign key referencing the 'id' field in the 'wikis' table. This relationship is inferred from the naming convention and the business purpose of both tables, where 'wiki_pages' are expected to belong to a specific 'wiki'. The data types are compatible, and this pattern is common in database design where a collection of items (pages) is associated with a parent entity (wiki).",
+          "test_sql": "SELECT COUNT(*) FROM wiki_pages t1 JOIN wikis t2 ON t1.wiki_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 2,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "users",
+          "from_column": "id",
+          "to_table": "wiki_page_journals",
+          "to_column": "author_id",
+          "condition": "users.id = wiki_page_journals.author_id",
+          "confidence": "high",
+          "reasoning": "The 'author_id' field in the 'wiki_page_journals' table likely refers to the user who authored the journal entry. Given that 'users.id' is a primary key and 'author_id' is a foreign key candidate, this relationship is plausible. The naming convention and data type compatibility support this inference.",
+          "test_sql": "SELECT COUNT(*) FROM users t1 JOIN wiki_page_journals t2 ON t1.id = t2.author_id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 2,
+          "verification_method": "sql_test"
+        }
+      ],
+      "business_value": "Facilitates efficient documentation and knowledge sharing within projects, ensuring that all project-related information is organized and easily accessible.",
+      "workflow_type": "content_management"
+    },
+    "meeting_management": {
+      "name": "meeting_management",
+      "description": "Organize and manage meetings, including agenda items, participants, and documentation.",
+      "core_tables": [
+        "meetings",
+        "meeting_agenda_items",
+        "meeting_participants",
+        "projects"
+      ],
+      "key_relationships": [
+        {
+          "type": "foreign_key",
+          "from_table": "meeting_agenda_items",
+          "from_column": "meeting_id",
+          "to_table": "meetings",
+          "to_column": "id",
+          "condition": "meeting_agenda_items.meeting_id = meetings.id",
+          "confidence": "high",
+          "reasoning": "Explicit foreign key constraint",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "inferred",
+          "from_table": "meeting_agenda_items",
+          "from_column": "meeting_id",
+          "to_table": "meeting_participants",
+          "to_column": "meeting_id",
+          "condition": "meeting_agenda_items.meeting_id = meeting_participants.meeting_id",
+          "confidence": "high",
+          "reasoning": "Both tables have a 'meeting_id' field, which suggests a common link to a meeting entity. This relationship is logical as agenda items and participants are both associated with specific meetings.",
+          "test_sql": "SELECT COUNT(*) FROM meeting_agenda_items t1 JOIN meeting_participants t2 ON t1.meeting_id = t2.meeting_id LIMIT 1",
+          "relationship_type": "business_logic",
+          "verified": true,
+          "test_result": 8,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "meetings",
+          "from_column": "project_id",
+          "to_table": "projects",
+          "to_column": "id",
+          "condition": "meetings.project_id = projects.id",
+          "confidence": "high",
+          "reasoning": "The 'project_id' field in the 'meetings' table suggests a direct relationship with the 'id' field in the 'projects' table. This is a common pattern where meetings are associated with specific projects, allowing for organization and tracking of meetings within the context of project management.",
+          "test_sql": "SELECT COUNT(*) FROM meetings t1 JOIN projects t2 ON t1.project_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 1,
+          "verification_method": "sql_test"
+        }
+      ],
+      "business_value": "Streamlines the process of organizing meetings, ensuring that all relevant information is captured and accessible, and facilitating effective communication and collaboration.",
+      "workflow_type": "event_management"
+    },
+    "work_package_management": {
+      "name": "work_package_management",
+      "description": "Manage work packages within projects, including tracking status, type, and hierarchical relationships.",
+      "core_tables": [
+        "work_packages",
+        "work_package_journals",
+        "work_package_hierarchies",
+        "projects"
+      ],
+      "key_relationships": [
+        {
+          "type": "foreign_key",
+          "from_table": "work_packages",
+          "from_column": "project_id",
+          "to_table": "projects",
+          "to_column": "id",
+          "condition": "work_packages.project_id = projects.id",
+          "confidence": "high",
+          "reasoning": "Explicit foreign key constraint",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "inferred",
+          "from_table": "work_package_hierarchies",
+          "from_column": "ancestor_id",
+          "to_table": "work_packages",
+          "to_column": "id",
+          "condition": "work_package_hierarchies.ancestor_id = work_packages.id",
+          "confidence": "high",
+          "reasoning": "The 'ancestor_id' in 'work_package_hierarchies' likely references the 'id' in 'work_packages' to establish a hierarchical relationship where the ancestor work package is a parent or higher-level package in the hierarchy.",
+          "test_sql": "SELECT COUNT(*) FROM work_package_hierarchies t1 JOIN work_packages t2 ON t1.ancestor_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 54,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "inferred",
+          "from_table": "work_package_hierarchies",
+          "from_column": "descendant_id",
+          "to_table": "work_packages",
+          "to_column": "id",
+          "condition": "work_package_hierarchies.descendant_id = work_packages.id",
+          "confidence": "high",
+          "reasoning": "The 'descendant_id' in 'work_package_hierarchies' likely references the 'id' in 'work_packages' to establish a hierarchical relationship where the descendant work package is a child or lower-level package in the hierarchy.",
+          "test_sql": "SELECT COUNT(*) FROM work_package_hierarchies t1 JOIN work_packages t2 ON t1.descendant_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 54,
+          "verification_method": "sql_test"
+        }
+      ],
+      "business_value": "Enables efficient management of tasks and deliverables within projects, ensuring that work is organized, tracked, and completed according to project requirements.",
+      "workflow_type": "task_management"
+    },
+    "user_authentication_management": {
+      "name": "user_authentication_management",
+      "description": "Manage user authentication and session data, including password management and token-based access control.",
+      "core_tables": [
+        "users",
+        "user_passwords",
+        "tokens",
+        "sessions"
+      ],
+      "key_relationships": [
+        {
+          "type": "foreign_key",
+          "from_table": "user_passwords",
+          "from_column": "user_id",
+          "to_table": "users",
+          "to_column": "id",
+          "condition": "user_passwords.user_id = users.id",
+          "confidence": "high",
+          "reasoning": "The 'user_id' field in the 'user_passwords' table likely references the 'id' field in the 'users' table. This is a common pattern where a user table is linked to a password management table to associate each user with their authentication credentials. The data types are compatible, and the business logic supports the need for associating passwords with specific users.",
+          "test_sql": "SELECT COUNT(*) FROM user_passwords t1 JOIN users t2 ON t1.user_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 1,
+          "verification_method": "sql_test"
+        },
+        {
+          "type": "foreign_key",
+          "from_table": "tokens",
+          "from_column": "user_id",
+          "to_table": "users",
+          "to_column": "id",
+          "condition": "tokens.user_id = users.id",
+          "confidence": "high",
+          "reasoning": "Explicit foreign key constraint",
+          "relationship_type": "foreign_key",
+          "verified": true
+        },
+        {
+          "type": "inferred",
+          "from_table": "sessions",
+          "from_column": "user_id",
+          "to_table": "users",
+          "to_column": "id",
+          "condition": "sessions.user_id = users.id",
+          "confidence": "high",
+          "reasoning": "The 'user_id' field in the 'sessions' table likely corresponds to the 'id' field in the 'users' table, as it is common for session data to be linked to user accounts. This relationship allows tracking of which user is associated with each session.",
+          "test_sql": "SELECT COUNT(*) FROM sessions t1 JOIN users t2 ON t1.user_id = t2.id LIMIT 1",
+          "relationship_type": "foreign_key",
+          "verified": true,
+          "test_result": 1,
+          "verification_method": "sql_test"
+        }
+      ],
+      "business_value": "Ensures secure user authentication and session management, providing robust access control and tracking user activity within the system.",
+      "workflow_type": "user_management"
+    }
+  },
+  "discovery_metadata": {
+    "total_tables_analyzed": 49,
+    "relationships_found": 343,
+    "workflows_identified": 4,
+    "table_analysis_count": 49,
+    "config_used": {
+      "discovery_type": "universal",
+      "llm_model": "gpt-4o",
+      "max_relationships": 1000,
+      "confidence_levels": {
+        "high": 3,
+        "medium": 2,
+        "low": 1
+      }
+    }
+  }
+}

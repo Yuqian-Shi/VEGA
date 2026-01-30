@@ -1,0 +1,1467 @@
+{
+    "core_tables": [
+        "account",
+        "account_contact",
+        "action_history_record",
+        "attachment",
+        "auth_log_record",
+        "auth_token",
+        "call",
+        "case",
+        "contact",
+        "currency",
+        "email_address",
+        "email_template",
+        "entity_email_address",
+        "entity_phone_number",
+        "import",
+        "import_entity",
+        "import_error",
+        "knowledge_base_article",
+        "lead",
+        "phone_number",
+        "scheduled_job",
+        "scheduled_job_log_record",
+        "system_data",
+        "task",
+        "user"
+    ],
+    "table_analysis": {
+        "account": {
+            "business_purpose": "The 'account' table represents a business entity that likely corresponds to a customer or client account within a CRM (Customer Relationship Management) system. It stores information about the account's identity, contact details, and associated metadata.",
+            "key_fields": [
+                "id",
+                "name",
+                "deleted",
+                "website",
+                "type",
+                "industry",
+                "billing_address_street",
+                "billing_address_city",
+                "billing_address_state",
+                "billing_address_country",
+                "billing_address_postal_code",
+                "shipping_address_street",
+                "shipping_address_city",
+                "shipping_address_state",
+                "shipping_address_country",
+                "shipping_address_postal_code",
+                "created_at",
+                "modified_at",
+                "campaign_id",
+                "created_by_id",
+                "modified_by_id",
+                "assigned_user_id"
+            ],
+            "potential_relationships": [
+                "The 'campaign_id' field suggests a relationship with a 'campaign' table, indicating which marketing or sales campaign the account is associated with.",
+                "The 'created_by_id', 'modified_by_id', and 'assigned_user_id' fields suggest relationships with a 'user' or 'employee' table, indicating who created, modified, or is responsible for the account.",
+                "The 'id' field could be used as a foreign key in other tables to reference this account, such as in tables for transactions, orders, or communications."
+            ],
+            "business_operations": [
+                "Creating new accounts and storing their details.",
+                "Updating account information, such as contact details or account status.",
+                "Associating accounts with marketing or sales campaigns.",
+                "Tracking the creation and modification history of accounts for auditing purposes.",
+                "Assigning accounts to specific users or employees for management and follow-up."
+            ]
+        },
+        "account_contact": {
+            "business_purpose": "The 'account_contact' table represents the association between accounts and contacts, likely in a CRM or business management system. It is used to track which contacts are associated with which accounts, along with their roles and statuses.",
+            "key_fields": [
+                "id",
+                "account_id",
+                "contact_id",
+                "role",
+                "is_inactive",
+                "deleted"
+            ],
+            "potential_relationships": [
+                "One-to-many relationship with an 'accounts' table, where 'account_id' is a foreign key.",
+                "One-to-many relationship with a 'contacts' table, where 'contact_id' is a foreign key."
+            ],
+            "business_operations": [
+                "Linking contacts to accounts to manage relationships.",
+                "Assigning roles to contacts within specific accounts.",
+                "Activating or deactivating contact associations with accounts.",
+                "Handling soft deletes of contact-account associations."
+            ]
+        },
+        "action_history_record": {
+            "business_purpose": "The 'action_history_record' table appears to represent a log or history of actions performed within a system. It is likely used to track various activities or changes made by users or processes, capturing details such as the type of action, the target of the action, and metadata related to the action such as timestamps and IP addresses.",
+            "key_fields": [
+                "id",
+                "number",
+                "target_type",
+                "action",
+                "created_at",
+                "user_id"
+            ],
+            "potential_relationships": [
+                "The 'user_id' field suggests a relationship with a table that stores user information, potentially linking actions to specific users.",
+                "The 'auth_token_id' and 'auth_log_record_id' fields imply relationships with tables that manage authentication tokens and logs, respectively, indicating actions may be tied to specific authentication events.",
+                "The 'target_id' and 'target_type' fields suggest relationships with tables that store entities or objects that are the targets of actions, allowing for tracking of changes or interactions with these entities."
+            ],
+            "business_operations": [
+                "Audit logging: Tracking user actions for security and compliance purposes.",
+                "Activity monitoring: Monitoring system usage and user interactions for performance analysis or user behavior insights.",
+                "Change tracking: Recording changes made to specific entities or objects within the system for version control or rollback purposes.",
+                "Authentication tracking: Linking actions to authentication events for security analysis and troubleshooting."
+            ]
+        },
+        "attachment": {
+            "business_purpose": "The 'attachment' table represents a system for managing files or documents that are associated with various entities or processes within a business application. It is designed to store metadata about attachments, such as their name, type, size, and storage details, as well as their relationships to other entities.",
+            "key_fields": [
+                "id",
+                "name",
+                "type",
+                "size",
+                "storage_file_path",
+                "parent_id",
+                "parent_type",
+                "related_id",
+                "related_type",
+                "created_at",
+                "created_by_id"
+            ],
+            "potential_relationships": [
+                "The 'parent_id' and 'parent_type' fields suggest a hierarchical relationship where attachments are linked to a parent entity, which could be a document, project, or any other business object.",
+                "The 'related_id' and 'related_type' fields indicate a relationship to other entities that are related but not necessarily hierarchical, allowing for cross-referencing between different business objects.",
+                "The 'created_by_id' field suggests a relationship with a user or entity responsible for creating the attachment, which could be linked to a user management system."
+            ],
+            "business_operations": [
+                "Uploading and storing files or documents associated with business processes.",
+                "Retrieving and displaying attachments related to specific business entities or processes.",
+                "Managing the lifecycle of attachments, including marking them as deleted or updating their metadata.",
+                "Tracking the creation and modification of attachments for audit and compliance purposes."
+            ]
+        },
+        "auth_log_record": {
+            "business_purpose": "The 'auth_log_record' table is designed to log authentication attempts and related activities within a system. It captures details about each authentication event, including whether it was successful or denied, the method used, and other contextual information such as the IP address and request details.",
+            "key_fields": [
+                "id",
+                "username",
+                "ip_address",
+                "created_at",
+                "is_denied",
+                "denial_reason",
+                "request_url",
+                "authentication_method",
+                "portal_id",
+                "user_id",
+                "auth_token_id"
+            ],
+            "potential_relationships": [
+                "This table might relate to a 'portals' table through the 'portal_id' field, indicating which portal the authentication attempt was made on.",
+                "It could relate to a 'users' table via the 'user_id' field, linking authentication attempts to specific users.",
+                "The 'auth_token_id' field suggests a potential relationship with an 'auth_tokens' table, which would store details about authentication tokens used in the process."
+            ],
+            "business_operations": [
+                "Tracking and auditing authentication attempts for security purposes.",
+                "Analyzing failed login attempts to identify potential security threats or user issues.",
+                "Generating reports on authentication activity, such as frequency of login attempts or common denial reasons.",
+                "Supporting user support operations by providing detailed logs of user authentication activities."
+            ]
+        },
+        "auth_token": {
+            "business_purpose": "The 'auth_token' table is designed to manage authentication tokens for users accessing a system or application. It stores information related to the tokens, including their status, associated user, and portal, as well as metadata about their creation and usage.",
+            "key_fields": [
+                "id",
+                "token",
+                "hash",
+                "user_id",
+                "portal_id",
+                "is_active"
+            ],
+            "potential_relationships": [
+                "The 'user_id' field suggests a relationship with a table that stores user information, potentially linking tokens to specific users.",
+                "The 'portal_id' field indicates a relationship with a table that manages different portals or applications, associating tokens with specific portals."
+            ],
+            "business_operations": [
+                "Generating and storing authentication tokens for users when they log in or access a portal.",
+                "Validating tokens during user authentication processes to ensure secure access.",
+                "Tracking token usage and last access times for security audits and monitoring.",
+                "Managing token lifecycle, including activation, deactivation, and deletion."
+            ]
+        },
+        "call": {
+            "business_purpose": "The 'call' table represents a system for managing and tracking phone calls within a business context. It is likely used in a CRM or customer service application to log details about calls, including their status, direction, and associated entities.",
+            "key_fields": [
+                "id",
+                "status",
+                "date_start",
+                "date_end",
+                "direction",
+                "parent_id",
+                "account_id",
+                "created_by_id",
+                "modified_by_id",
+                "assigned_user_id"
+            ],
+            "potential_relationships": [
+                "The 'parent_id' and 'parent_type' fields suggest a polymorphic relationship, where a call can be associated with different types of entities (e.g., a contact, lead, or case).",
+                "The 'account_id' field indicates a potential relationship with an account entity, suggesting that calls can be linked to specific customer accounts.",
+                "The 'created_by_id', 'modified_by_id', and 'assigned_user_id' fields imply relationships with user entities, indicating who created, modified, or is responsible for the call."
+            ],
+            "business_operations": [
+                "Scheduling and tracking phone calls, including setting start and end times.",
+                "Managing call statuses, such as planned, completed, or canceled.",
+                "Associating calls with specific business entities like accounts or other parent entities.",
+                "Assigning calls to specific users for follow-up or action.",
+                "Recording details and descriptions of calls for future reference or analysis."
+            ]
+        },
+        "case": {
+            "business_purpose": "The 'case' table represents a system for managing cases, which could be related to customer service, support tickets, or project management. It tracks various attributes of a case, such as its status, priority, type, and associated entities like accounts, leads, contacts, and users.",
+            "key_fields": [
+                "id",
+                "number",
+                "status",
+                "priority",
+                "account_id",
+                "lead_id",
+                "contact_id",
+                "assigned_user_id"
+            ],
+            "potential_relationships": [
+                "The 'account_id' field suggests a relationship with an 'account' table, indicating which account the case is associated with.",
+                "The 'lead_id' field suggests a relationship with a 'lead' table, indicating potential leads related to the case.",
+                "The 'contact_id' field suggests a relationship with a 'contact' table, indicating specific contacts involved in the case.",
+                "The 'assigned_user_id', 'created_by_id', and 'modified_by_id' fields suggest relationships with a 'user' table, indicating users responsible for creating, modifying, and handling the case."
+            ],
+            "business_operations": [
+                "Creating new cases for tracking issues or tasks.",
+                "Updating case status and priority as they progress.",
+                "Assigning cases to specific users for resolution.",
+                "Linking cases to accounts, leads, and contacts for context and follow-up.",
+                "Managing case lifecycle from creation to closure."
+            ]
+        },
+        "contact": {
+            "business_purpose": "The 'contact' table represents a business entity that stores information about individuals or entities that a business interacts with. This could include customers, leads, or partners. It is designed to manage contact details, communication preferences, and associations with accounts, campaigns, and users within a business context.",
+            "key_fields": [
+                "id",
+                "first_name",
+                "last_name",
+                "do_not_call",
+                "account_id",
+                "campaign_id",
+                "created_at",
+                "modified_at",
+                "assigned_user_id"
+            ],
+            "potential_relationships": [
+                "Association with an 'account' table through 'account_id' to link contacts to specific business accounts.",
+                "Association with a 'campaign' table through 'campaign_id' to track contacts involved in marketing campaigns.",
+                "Linkage to a 'user' table through 'created_by_id', 'modified_by_id', and 'assigned_user_id' to manage user interactions and responsibilities regarding the contact."
+            ],
+            "business_operations": [
+                "Managing contact information and communication preferences.",
+                "Tracking and updating contact details and interactions over time.",
+                "Associating contacts with specific accounts and campaigns for targeted marketing and relationship management.",
+                "Assigning contacts to specific users for follow-up and customer service activities."
+            ]
+        },
+        "currency": {
+            "business_purpose": "The 'currency' table represents a system for managing currency information, specifically focusing on currency identification and exchange rates. It is likely used in financial applications to track and convert currency values.",
+            "key_fields": [
+                "id",
+                "rate"
+            ],
+            "potential_relationships": [
+                "This table might relate to a 'transactions' table where each transaction involves a currency exchange.",
+                "It could be linked to a 'products' or 'services' table to specify pricing in different currencies.",
+                "A relationship with a 'country' table might exist to associate currencies with their respective countries."
+            ],
+            "business_operations": [
+                "Currency conversion operations where the 'rate' is used to convert amounts between different currencies.",
+                "Financial reporting and analysis to display values in various currencies.",
+                "Pricing strategies for international sales where products or services are priced in multiple currencies."
+            ]
+        },
+        "email_address": {
+            "business_purpose": "The 'email_address' table is designed to manage and store information related to email addresses within a system. It likely serves as a repository for tracking the status and attributes of email addresses, such as whether they are valid, deleted, or opted out of communications.",
+            "key_fields": [
+                "id",
+                "lower",
+                "invalid",
+                "opt_out"
+            ],
+            "potential_relationships": [
+                "This table might have relationships with tables that manage user profiles, contact lists, or communication logs. It could be linked to a table that stores user information, where the 'id' field serves as a foreign key to associate email addresses with specific users or contacts."
+            ],
+            "business_operations": [
+                "Operations involving this table could include validating email addresses, managing subscription preferences, handling email communications, and maintaining a list of active and inactive email addresses. It may also be used in processes that involve sending marketing emails, newsletters, or notifications, where checking the 'opt_out' and 'invalid' fields is crucial."
+            ]
+        },
+        "email_template": {
+            "business_purpose": "The email_template table is designed to store templates for emails that can be used in various business communications. It allows for the management of email content, including subject lines and body text, and supports both HTML and plain text formats. The table also tracks metadata such as creation and modification details, and categorizes templates for organizational purposes.",
+            "key_fields": [
+                "id",
+                "name",
+                "subject",
+                "body",
+                "is_html",
+                "one_off",
+                "created_at",
+                "modified_at",
+                "category_id",
+                "assigned_user_id",
+                "created_by_id",
+                "modified_by_id"
+            ],
+            "potential_relationships": [
+                "The table might relate to a categories table through category_id to classify email templates, a users table through assigned_user_id, created_by_id, and modified_by_id to track user interactions, and possibly a versioning or history table to manage different versions of templates."
+            ],
+            "business_operations": [
+                "Creating new email templates for marketing or communication purposes",
+                "Updating existing templates to reflect changes in branding or messaging",
+                "Deleting or marking templates as inactive when they are no longer needed",
+                "Assigning templates to specific users for management or use",
+                "Categorizing templates for easier retrieval and organization",
+                "Tracking the creation and modification history of templates for auditing purposes"
+            ]
+        },
+        "entity_email_address": {
+            "business_purpose": "The 'entity_email_address' table is designed to manage and associate email addresses with various entities within a system. It allows for the storage of email addresses linked to different types of entities, which could be individuals, organizations, or other identifiable units within a business context. The table also supports the designation of primary email addresses and tracks whether an email address has been marked as deleted.",
+            "key_fields": [
+                "id",
+                "entity_id",
+                "email_address_id",
+                "entity_type",
+                "primary",
+                "deleted"
+            ],
+            "potential_relationships": [
+                "The 'entity_id' field suggests a relationship with an 'entity' table, where each entity can have multiple email addresses.",
+                "The 'email_address_id' field implies a potential link to an 'email_address' table, where email details are stored.",
+                "The 'entity_type' field indicates that this table can relate to multiple types of entities, possibly requiring a polymorphic association."
+            ],
+            "business_operations": [
+                "Associating email addresses with different entities for communication purposes.",
+                "Designating a primary email address for each entity for priority contact.",
+                "Managing the lifecycle of email addresses, including marking them as deleted when no longer in use.",
+                "Retrieving email addresses based on entity type for targeted communication or reporting."
+            ]
+        },
+        "entity_phone_number": {
+            "business_purpose": "The 'entity_phone_number' table is designed to manage phone numbers associated with various entities within a business context. It allows for the association of multiple phone numbers with different entities, which can be of various types, such as customers, suppliers, or employees. The table also supports marking a phone number as primary and handling soft deletion of records.",
+            "key_fields": [
+                "id",
+                "entity_id",
+                "phone_number_id",
+                "entity_type",
+                "primary",
+                "deleted"
+            ],
+            "potential_relationships": [
+                "One-to-Many relationship with an 'entity' table where 'entity_id' is a foreign key.",
+                "One-to-Many relationship with a 'phone_number' table where 'phone_number_id' is a foreign key."
+            ],
+            "business_operations": [
+                "Associating phone numbers with different business entities.",
+                "Retrieving primary phone numbers for specific entities.",
+                "Managing and updating phone number associations for entities.",
+                "Handling soft deletion of phone number records for data integrity and historical tracking."
+            ]
+        },
+        "import": {
+            "business_purpose": "The 'import' table appears to represent a process related to importing data or records into a system. It likely tracks the status and details of each import operation, including the type of entity being imported, the progress of the import, and any parameters or attributes associated with the import process.",
+            "key_fields": [
+                "id",
+                "entity_type",
+                "status",
+                "last_index",
+                "created_at",
+                "file_id",
+                "created_by_id"
+            ],
+            "potential_relationships": [
+                "The 'file_id' field suggests a potential relationship with a table that stores file metadata or details, possibly a 'files' table.",
+                "The 'created_by_id' field indicates a possible relationship with a table that stores user or system account information, which could track who initiated the import process."
+            ],
+            "business_operations": [
+                "Initiating a new import process, where details such as entity type and parameters are specified.",
+                "Monitoring the status and progress of ongoing import operations, using fields like 'status' and 'last_index'.",
+                "Managing import records, including marking them as deleted or completed.",
+                "Auditing and tracking import activities, leveraging 'created_at' and 'created_by_id' for historical records."
+            ]
+        },
+        "import_entity": {
+            "business_purpose": "The 'import_entity' table is designed to manage and track the status of entities being imported into a system. It likely serves as a staging or tracking table for data import processes, allowing the system to handle various states of the import lifecycle, such as whether an entity has been imported, updated, or identified as a duplicate.",
+            "key_fields": [
+                "id",
+                "is_imported",
+                "is_updated",
+                "is_duplicate",
+                "entity_id",
+                "import_id"
+            ],
+            "potential_relationships": [
+                "The 'entity_id' field suggests a potential relationship with a table that stores detailed information about the entities being imported, possibly serving as a foreign key to an 'entities' table.",
+                "The 'import_id' field indicates a possible relationship with a table that logs or manages import sessions or batches, potentially linking to an 'imports' or 'import_sessions' table."
+            ],
+            "business_operations": [
+                "Data import processes where entities are brought into the system from external sources.",
+                "Data validation and deduplication operations to ensure data integrity and prevent duplicate entries.",
+                "Monitoring and reporting on the status of import operations, such as identifying which entities have been successfully imported or updated.",
+                "Error handling and correction processes for entities marked as duplicates or failed imports."
+            ]
+        },
+        "import_error": {
+            "business_purpose": "The 'import_error' table is designed to track and store errors that occur during data import processes. It captures details about each error, including the type of error, the specific row in the import that caused the error, and any validation failures associated with the error.",
+            "key_fields": [
+                "id",
+                "row_index",
+                "type",
+                "validation_failures",
+                "import_id"
+            ],
+            "potential_relationships": [
+                "The 'import_id' field suggests a potential relationship with a table that logs import sessions or batches, where 'import_id' would be a foreign key linking errors to specific import attempts.",
+                "The 'row_index' and 'export_row_index' fields might relate to tables that store the original data being imported or exported, allowing for cross-referencing of data rows."
+            ],
+            "business_operations": [
+                "Data import operations where errors need to be logged and analyzed.",
+                "Error reporting and troubleshooting processes to identify and resolve issues in data imports.",
+                "Data validation processes to ensure data integrity during import operations."
+            ]
+        },
+        "knowledge_base_article": {
+            "business_purpose": "The 'knowledge_base_article' table represents a repository of articles that are part of a knowledge base system. This system is likely used to store, manage, and retrieve informational content, such as help articles, guides, or documentation, for users or customers.",
+            "key_fields": [
+                "id",
+                "name",
+                "deleted",
+                "status",
+                "publish_date",
+                "expiration_date",
+                "created_at",
+                "modified_at",
+                "created_by_id",
+                "modified_by_id",
+                "assigned_user_id",
+                "version_number"
+            ],
+            "potential_relationships": [
+                "User relationships: The fields 'created_by_id', 'modified_by_id', and 'assigned_user_id' suggest potential relationships with a user or employee table, indicating who created, modified, or is responsible for the article.",
+                "Version control: The 'version_number' field suggests a relationship with a versioning system or process, possibly linking to a table that tracks changes or versions of articles.",
+                "Content categorization: The 'type' and 'language' fields might relate to tables that categorize articles by type or language, although these are not explicitly defined in the schema."
+            ],
+            "business_operations": [
+                "Article creation and management: Users can create, edit, and manage articles, including setting their status, publish date, and expiration date.",
+                "Content retrieval: The table supports operations to retrieve articles based on various criteria such as status, language, or assigned user.",
+                "Version tracking: The 'version_number' field allows for tracking changes and maintaining different versions of articles.",
+                "User assignment and tracking: Operations to assign articles to specific users for management or review, and to track who created or modified articles."
+            ]
+        },
+        "lead": {
+            "business_purpose": "The 'lead' table represents potential sales opportunities or prospects in a business context. It is used to track information about individuals or entities that may become customers, including their contact details, status, and associated opportunities.",
+            "key_fields": [
+                "id",
+                "first_name",
+                "last_name",
+                "status",
+                "opportunity_amount",
+                "created_at",
+                "assigned_user_id",
+                "campaign_id"
+            ],
+            "potential_relationships": [
+                "The 'lead' table might have relationships with a 'users' table through 'created_by_id', 'modified_by_id', and 'assigned_user_id' to track who created, modified, and is responsible for the lead.",
+                "It could relate to a 'campaigns' table via 'campaign_id' to associate leads with specific marketing campaigns.",
+                "The table might connect to 'accounts', 'contacts', and 'opportunities' tables through 'created_account_id', 'created_contact_id', and 'created_opportunity_id' to track the conversion of leads into these entities."
+            ],
+            "business_operations": [
+                "Lead management, including creation, modification, and assignment of leads to sales representatives.",
+                "Tracking the status and progress of leads through the sales pipeline.",
+                "Analyzing lead sources and effectiveness of marketing campaigns.",
+                "Converting leads into accounts, contacts, or opportunities for further business development."
+            ]
+        },
+        "phone_number": {
+            "business_purpose": "The 'phone_number' table appears to represent a collection of phone numbers associated with various entities or individuals. It includes information about the status and type of each phone number, such as whether it is deleted, invalid, or opted out of communications.",
+            "key_fields": [
+                "id",
+                "name",
+                "numeric",
+                "deleted",
+                "invalid",
+                "opt_out"
+            ],
+            "potential_relationships": [
+                "The 'name' field suggests a potential relationship with a table that stores entity or individual details, where 'name' could be a foreign key linking to an entity's name.",
+                "The 'numeric' field might relate to a table that stores detailed phone number information, where 'numeric' could be a foreign key linking to a specific phone number record."
+            ],
+            "business_operations": [
+                "Managing contact lists, including adding, updating, or deleting phone numbers.",
+                "Validating phone numbers to ensure they are correct and active.",
+                "Handling communication preferences, such as opting out of marketing or notifications.",
+                "Tracking the status of phone numbers, including marking them as deleted or invalid."
+            ]
+        },
+        "scheduled_job": {
+            "business_purpose": "The 'scheduled_job' table represents a system for managing and tracking scheduled tasks or jobs within an organization. These jobs could be automated processes, scripts, or tasks that need to be executed at specific times or intervals.",
+            "key_fields": [
+                "id",
+                "name",
+                "job",
+                "status",
+                "scheduling",
+                "last_run",
+                "created_at",
+                "modified_at",
+                "created_by_id",
+                "modified_by_id"
+            ],
+            "potential_relationships": [
+                "The 'created_by_id' and 'modified_by_id' fields suggest a relationship with a table that stores user or employee information, indicating who created or modified the job.",
+                "The 'job' field might relate to a table that defines the specifics of the job or task to be executed.",
+                "The 'scheduling' field could relate to a table that defines scheduling patterns or rules."
+            ],
+            "business_operations": [
+                "Creating new scheduled jobs for automated processes.",
+                "Updating existing jobs to change their scheduling or status.",
+                "Tracking the execution history of jobs through the 'last_run' field.",
+                "Managing job lifecycle, including activation, deactivation, and deletion.",
+                "Auditing changes to jobs by tracking who created or modified them."
+            ]
+        },
+        "scheduled_job_log_record": {
+            "business_purpose": "The 'scheduled_job_log_record' table is designed to log and track the execution of scheduled jobs within a system. It records details about each job execution, including its status, execution time, and associated entities.",
+            "key_fields": [
+                "id",
+                "name",
+                "status",
+                "execution_time",
+                "scheduled_job_id",
+                "target_id"
+            ],
+            "potential_relationships": [
+                "The 'scheduled_job_id' field suggests a relationship with a table that defines scheduled jobs, potentially linking each log record to a specific job definition.",
+                "The 'target_id' and 'target_type' fields imply a relationship with entities that the job targets, which could be other tables representing different types of resources or objects within the system."
+            ],
+            "business_operations": [
+                "Monitoring and auditing the execution of scheduled jobs to ensure they run as expected.",
+                "Analyzing job performance and status over time to identify issues or optimize processes.",
+                "Associating job executions with specific targets to understand the impact or outcome of each job."
+            ]
+        },
+        "system_data": {
+            "business_purpose": "The 'system_data' table appears to represent a generic system entity that tracks the status of deletion and records the last password recovery date. It may be used to manage system-level data or configurations that require monitoring of deletion status and password recovery activities.",
+            "key_fields": [
+                "id",
+                "deleted",
+                "last_password_recovery_date"
+            ],
+            "potential_relationships": [
+                "This table might have a one-to-one or one-to-many relationship with a table that manages system users or entities, where 'id' serves as a foreign key.",
+                "It could be related to a logging or audit table that tracks changes or actions performed on system entities."
+            ],
+            "business_operations": [
+                "Monitoring and managing the deletion status of system entities.",
+                "Tracking and auditing password recovery activities for system entities.",
+                "Performing data integrity checks to ensure that entities marked as deleted are handled appropriately."
+            ]
+        },
+        "task": {
+            "business_purpose": "The 'task' table represents a system for managing tasks or activities within a business process. It is designed to track various attributes of tasks such as their status, priority, and associated dates, as well as relationships to other entities like accounts, contacts, and users.",
+            "key_fields": [
+                "id",
+                "name",
+                "status",
+                "priority",
+                "date_start",
+                "date_end",
+                "created_at",
+                "modified_at",
+                "assigned_user_id"
+            ],
+            "potential_relationships": [
+                "Hierarchical relationship with other tasks through 'parent_id' and 'parent_type'",
+                "Association with accounts via 'account_id'",
+                "Linkage to contacts through 'contact_id'",
+                "Connection to users for task assignment and tracking via 'created_by_id', 'modified_by_id', and 'assigned_user_id'",
+                "Possible integration with email systems through 'email_id'"
+            ],
+            "business_operations": [
+                "Task creation and management, including setting and updating task details",
+                "Tracking task progress and status changes",
+                "Assigning tasks to users and managing user responsibilities",
+                "Linking tasks to specific accounts or contacts for business context",
+                "Monitoring task timelines and deadlines through start and end dates",
+                "Archiving or deleting tasks using the 'deleted' field"
+            ]
+        },
+        "user": {
+            "business_purpose": "The 'user' table represents a system user entity, likely within a software application or platform. It stores information about users, including their identity, authentication details, and preferences. This table is designed to manage user accounts, track user activity, and store user-specific settings.",
+            "key_fields": [
+                "id",
+                "user_name",
+                "type",
+                "password",
+                "is_active",
+                "created_at",
+                "modified_at",
+                "default_team_id",
+                "contact_id",
+                "created_by_id"
+            ],
+            "potential_relationships": [
+                "The 'default_team_id' field suggests a relationship with a 'team' table, indicating which team the user is primarily associated with.",
+                "The 'contact_id' field implies a relationship with a 'contact' table, possibly linking user accounts to contact information.",
+                "The 'created_by_id' field suggests a self-referential relationship where one user can create another user, indicating a hierarchy or administrative control.",
+                "The 'dashboard_template_id', 'working_time_calendar_id', and 'layout_set_id' fields suggest relationships with tables that store dashboard templates, working time calendars, and layout settings, respectively, indicating user-specific configurations."
+            ],
+            "business_operations": [
+                "User account creation and management, including setting up new users and updating existing user details.",
+                "Authentication processes, such as login and password management.",
+                "User activity tracking, including monitoring when users were created and last modified.",
+                "Managing user preferences and settings, such as dashboard layouts and working time calendars.",
+                "Handling user roles and permissions, as indicated by the 'type' field, which could differentiate between regular users and other types."
+            ]
+        }
+    },
+    "relationships": [
+        {
+            "type": "inferred",
+            "from_table": "account",
+            "from_column": "id",
+            "to_table": "account_contact",
+            "to_column": "account_id",
+            "condition": "account.id = account_contact.account_id",
+            "confidence": "high",
+            "reasoning": "The 'account_id' field in the 'account_contact' table is likely intended to reference the 'id' field in the 'account' table. This is a common pattern in database design where a linking table (account_contact) associates records from a primary table (account) with another entity (contacts). The data types are compatible, and the naming convention suggests a direct relationship.",
+            "test_sql": "SELECT COUNT(*) FROM account t1 JOIN account_contact t2 ON t1.id = t2.account_id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 21,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "account",
+            "from_column": "id",
+            "to_table": "contact",
+            "to_column": "account_id",
+            "condition": "account.id = contact.account_id",
+            "confidence": "high",
+            "reasoning": "The 'account_id' field in the 'contact' table is likely intended to reference the 'id' field in the 'account' table, establishing a relationship between a contact and the account they are associated with. This is a common pattern in CRM systems where contacts are linked to their respective accounts.",
+            "test_sql": "SELECT COUNT(*) FROM account t1 JOIN contact t2 ON t1.id = t2.account_id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 21,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "account_contact",
+            "from_column": "contact_id",
+            "to_table": "contact",
+            "to_column": "id",
+            "condition": "account_contact.contact_id = contact.id",
+            "confidence": "high",
+            "reasoning": "The 'contact_id' in the 'account_contact' table is likely intended to reference the 'id' in the 'contact' table. This is a common pattern where a linking table references the primary key of an entity table to establish a relationship. The data types are compatible, and the naming convention suggests a direct relationship.",
+            "test_sql": "SELECT COUNT(*) FROM account_contact t1 JOIN contact t2 ON t1.contact_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 21,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "action_history_record",
+            "from_column": "auth_log_record_id",
+            "to_table": "auth_log_record",
+            "to_column": "id",
+            "condition": "action_history_record.auth_log_record_id = auth_log_record.id",
+            "confidence": "high",
+            "reasoning": "The 'auth_log_record_id' in the 'action_history_record' table likely references the 'id' in the 'auth_log_record' table, suggesting that actions recorded in the 'action_history_record' table are associated with specific authentication events logged in the 'auth_log_record' table. This relationship is supported by the naming convention and the business purpose of tracking actions related to authentication events.",
+            "test_sql": "SELECT COUNT(*) FROM action_history_record t1 JOIN auth_log_record t2 ON t1.auth_log_record_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 34,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "action_history_record",
+            "from_column": "auth_token_id",
+            "to_table": "auth_token",
+            "to_column": "id",
+            "condition": "action_history_record.auth_token_id = auth_token.id",
+            "confidence": "high",
+            "reasoning": "The 'auth_token_id' in the 'action_history_record' table likely references the 'id' in the 'auth_token' table. This relationship is inferred based on the naming convention and the business purpose of tracking actions related to specific authentication tokens.",
+            "test_sql": "SELECT COUNT(*) FROM action_history_record t1 JOIN auth_token t2 ON t1.auth_token_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 34,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "action_history_record",
+            "from_column": "user_id",
+            "to_table": "user",
+            "to_column": "id",
+            "condition": "action_history_record.user_id = user.id",
+            "confidence": "high",
+            "reasoning": "The 'user_id' field in the 'action_history_record' table likely corresponds to the 'id' field in the 'user' table, as it is common for action logs to reference the user who performed the action. Both fields are of the same data type (varchar(17)), which supports the relationship.",
+            "test_sql": "SELECT COUNT(*) FROM action_history_record t1 JOIN user t2 ON t1.user_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 34,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "attachment",
+            "from_column": "created_by_id",
+            "to_table": "user",
+            "to_column": "id",
+            "condition": "attachment.created_by_id = user.id",
+            "confidence": "high",
+            "reasoning": "The 'created_by_id' field in the 'attachment' table likely refers to the user who created the attachment. This is a common pattern where records in one table reference the user responsible for their creation, aligning with the business purpose of tracking user activity and responsibility.",
+            "test_sql": "SELECT COUNT(*) FROM attachment t1 JOIN user t2 ON t1.created_by_id = t2.id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 8,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "auth_log_record",
+            "from_column": "auth_token_id",
+            "to_table": "auth_token",
+            "to_column": "id",
+            "condition": "auth_log_record.auth_token_id = auth_token.id",
+            "confidence": "high",
+            "reasoning": "The 'auth_token_id' in the 'auth_log_record' table likely corresponds to the 'id' in the 'auth_token' table, suggesting that each authentication log record is associated with a specific authentication token. This is a common pattern where log records reference tokens used during authentication.",
+            "test_sql": "SELECT COUNT(*) FROM auth_log_record t1 JOIN auth_token t2 ON t1.auth_token_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 5,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "auth_log_record",
+            "from_column": "user_id",
+            "to_table": "user",
+            "to_column": "id",
+            "condition": "auth_log_record.user_id = user.id",
+            "confidence": "high",
+            "reasoning": "The 'user_id' field in the 'auth_log_record' table likely corresponds to the 'id' field in the 'user' table, as both fields are of the same data type and represent user identifiers. This relationship is common in database design where logs or records reference user entities.",
+            "test_sql": "SELECT COUNT(*) FROM auth_log_record t1 JOIN user t2 ON t1.user_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 5,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "auth_token",
+            "from_column": "user_id",
+            "to_table": "user",
+            "to_column": "id",
+            "condition": "auth_token.user_id = user.id",
+            "confidence": "high",
+            "reasoning": "The 'user_id' field in the 'auth_token' table is likely intended to reference the 'id' field in the 'user' table, as both fields are of the same data type and the 'user_id' field is used to associate tokens with specific users. This is a common pattern in database design where a foreign key relationship is established between a token management table and a user table.",
+            "test_sql": "SELECT COUNT(*) FROM auth_token t1 JOIN user t2 ON t1.user_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 5,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "email_address",
+            "from_column": "id",
+            "to_table": "entity_email_address",
+            "to_column": "email_address_id",
+            "condition": "email_address.id = entity_email_address.email_address_id",
+            "confidence": "high",
+            "reasoning": "The 'email_address_id' field in the 'entity_email_address' table is likely intended to reference the 'id' field in the 'email_address' table. Both fields have the same data type (varchar(17)), and the naming convention suggests a direct relationship where 'email_address_id' serves as a foreign key to 'email_address'. This relationship aligns with the business purpose of associating email addresses with various entities.",
+            "test_sql": "SELECT COUNT(*) FROM email_address t1 JOIN entity_email_address t2 ON t1.id = t2.email_address_id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 52,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "entity_email_address",
+            "from_column": "entity_id",
+            "to_table": "entity_phone_number",
+            "to_column": "entity_id",
+            "condition": "entity_email_address.entity_id = entity_phone_number.entity_id",
+            "confidence": "high",
+            "reasoning": "Both tables have an 'entity_id' field, which suggests that they are associating email addresses and phone numbers with the same entities. This is a common pattern in database design where different types of contact information are linked to a single entity.",
+            "test_sql": "SELECT COUNT(*) FROM entity_email_address t1 JOIN entity_phone_number t2 ON t1.entity_id = t2.entity_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 52,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "email_template",
+            "from_column": "created_by_id",
+            "to_table": "user",
+            "to_column": "id",
+            "condition": "email_template.created_by_id = user.id",
+            "confidence": "high",
+            "reasoning": "The 'created_by_id' field in the email_template table likely refers to the user who created the template. This matches the 'id' field in the user table, which identifies users. This relationship is common in database design where records are linked to the users who created them.",
+            "test_sql": "SELECT COUNT(*) FROM email_template t1 JOIN user t2 ON t1.created_by_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 1,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "entity_phone_number",
+            "from_column": "phone_number_id",
+            "to_table": "phone_number",
+            "to_column": "id",
+            "condition": "entity_phone_number.phone_number_id = phone_number.id",
+            "confidence": "high",
+            "reasoning": "The 'phone_number_id' in the 'entity_phone_number' table likely corresponds to the 'id' in the 'phone_number' table, as both fields are of the same type (varchar(17)) and the 'entity_phone_number' table is designed to associate phone numbers with entities. This suggests a foreign key relationship where 'phone_number_id' references 'id' in the 'phone_number' table.",
+            "test_sql": "SELECT COUNT(*) FROM entity_phone_number t1 JOIN phone_number t2 ON t1.phone_number_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 52,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "import",
+            "from_column": "id",
+            "to_table": "import_error",
+            "to_column": "import_id",
+            "condition": "import.id = import_error.import_id",
+            "confidence": "high",
+            "reasoning": "The 'import_id' field in the 'import_error' table likely serves as a reference to the 'id' field in the 'import' table, linking errors to specific import operations. This is a common pattern where errors are associated with their respective processes.",
+            "test_sql": "SELECT COUNT(*) FROM import t1 JOIN import_error t2 ON t1.id = t2.import_id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 30,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "import",
+            "from_column": "id",
+            "to_table": "import_entity",
+            "to_column": "import_id",
+            "condition": "import.id = import_entity.import_id",
+            "confidence": "high",
+            "reasoning": "The 'import_id' field in the 'import_entity' table likely serves as a reference to the 'id' field in the 'import' table, indicating which import session or batch the entity belongs to. This is a common pattern where entities are linked to their respective import processes.",
+            "test_sql": "SELECT COUNT(*) FROM import t1 JOIN import_entity t2 ON t1.id = t2.import_id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 120,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "import",
+            "from_column": "created_by_id",
+            "to_table": "user",
+            "to_column": "id",
+            "condition": "import.created_by_id = user.id",
+            "confidence": "high",
+            "reasoning": "The 'created_by_id' field in the 'import' table likely references the 'id' field in the 'user' table, indicating which user initiated the import process. This is a common pattern where actions or records are associated with the user who created them.",
+            "test_sql": "SELECT COUNT(*) FROM import t1 JOIN user t2 ON t1.created_by_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 8,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "import_entity",
+            "from_column": "import_id",
+            "to_table": "import_error",
+            "to_column": "import_id",
+            "condition": "import_entity.import_id = import_error.import_id",
+            "confidence": "high",
+            "reasoning": "Both tables have an 'import_id' field, which suggests a logical connection between the entities being imported and any errors that occur during those import processes. This relationship allows tracking of errors specific to each import session or batch.",
+            "test_sql": "SELECT COUNT(*) FROM import_entity t1 JOIN import_error t2 ON t1.import_id = t2.import_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 48,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "scheduled_job",
+            "from_column": "id",
+            "to_table": "scheduled_job_log_record",
+            "to_column": "scheduled_job_id",
+            "condition": "scheduled_job.id = scheduled_job_log_record.scheduled_job_id",
+            "confidence": "high",
+            "reasoning": "The 'scheduled_job_id' field in the 'scheduled_job_log_record' table suggests a direct relationship to the 'id' field in the 'scheduled_job' table. This is a common pattern where log records reference the primary key of the entity they are logging, indicating that each log record is associated with a specific scheduled job.",
+            "test_sql": "SELECT COUNT(*) FROM scheduled_job t1 JOIN scheduled_job_log_record t2 ON t1.id = t2.scheduled_job_id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 477335,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "scheduled_job",
+            "from_column": "created_by_id",
+            "to_table": "user",
+            "to_column": "id",
+            "condition": "scheduled_job.created_by_id = user.id",
+            "confidence": "high",
+            "reasoning": "The 'created_by_id' field in the 'scheduled_job' table likely references the 'id' field in the 'user' table to indicate which user created the scheduled job. This is a common pattern where actions or records are associated with the user who performed them.",
+            "test_sql": "SELECT COUNT(*) FROM scheduled_job t1 JOIN user t2 ON t1.created_by_id = t2.id LIMIT 1",
+            "relationship_type": "foreign_key",
+            "verified": true,
+            "test_result": 10,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "account",
+            "from_column": "id",
+            "to_table": "action_history_record",
+            "to_column": "target_id",
+            "condition": "account.id = action_history_record.target_id",
+            "confidence": "high",
+            "reasoning": "The 'target_id' in the 'action_history_record' table could potentially reference the 'id' of the 'account' table, especially if actions are being logged against specific accounts. The 'target_type' field in 'action_history_record' could further specify that the target is an account, but this is not explicitly defined in the schema.",
+            "test_sql": "SELECT COUNT(*) FROM account t1 JOIN action_history_record t2 ON t1.id = t2.target_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 13,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "account",
+            "from_column": "id",
+            "to_table": "entity_email_address",
+            "to_column": "entity_id",
+            "condition": "account.id = entity_email_address.entity_id",
+            "confidence": "high",
+            "reasoning": "The 'entity_id' field in the 'entity_email_address' table is likely used to associate email addresses with various entities. Given the business purpose of the 'account' table as representing business entities, it is plausible that 'entity_id' could correspond to 'account.id'. This would allow email addresses to be linked to specific accounts.",
+            "test_sql": "SELECT COUNT(*) FROM account t1 JOIN entity_email_address t2 ON t1.id = t2.entity_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 12,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "account",
+            "from_column": "id",
+            "to_table": "import_entity",
+            "to_column": "entity_id",
+            "condition": "account.id = import_entity.entity_id",
+            "confidence": "high",
+            "reasoning": "The 'entity_id' field in the 'import_entity' table is likely used to reference the primary key of the entity being imported. Given that 'account.id' is a primary key and 'import_entity.entity_id' is a varchar(17), which matches the data type and length of 'account.id', it is plausible that 'entity_id' could reference 'account.id' when the entity type is an account.",
+            "test_sql": "SELECT COUNT(*) FROM account t1 JOIN import_entity t2 ON t1.id = t2.entity_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 12,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "account",
+            "from_column": "id",
+            "to_table": "entity_phone_number",
+            "to_column": "entity_id",
+            "condition": "account.id = entity_phone_number.entity_id",
+            "confidence": "high",
+            "reasoning": "The 'entity_id' field in the 'entity_phone_number' table is likely intended to reference an entity in another table. Given the business context of the 'account' table representing business entities, it is plausible that 'entity_id' could correspond to the 'id' field in the 'account' table. This would allow for associating phone numbers with specific accounts.",
+            "test_sql": "SELECT COUNT(*) FROM account t1 JOIN entity_phone_number t2 ON t1.id = t2.entity_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 12,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "account_contact",
+            "from_column": "contact_id",
+            "to_table": "action_history_record",
+            "to_column": "target_id",
+            "condition": "account_contact.contact_id = action_history_record.target_id",
+            "confidence": "high",
+            "reasoning": "The 'contact_id' in 'account_contact' and 'target_id' in 'action_history_record' both use the same data type (varchar(17)) and could potentially represent the same entity, especially if actions are being logged against contacts. This relationship is inferred based on the potential for actions to be associated with specific contacts.",
+            "test_sql": "SELECT COUNT(*) FROM account_contact t1 JOIN action_history_record t2 ON t1.contact_id = t2.target_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 7,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "action_history_record",
+            "from_column": "user_id",
+            "to_table": "attachment",
+            "to_column": "created_by_id",
+            "condition": "action_history_record.user_id = attachment.created_by_id",
+            "confidence": "high",
+            "reasoning": "The 'user_id' in the 'action_history_record' table and 'created_by_id' in the 'attachment' table suggest a relationship where actions performed by users could be linked to attachments created by those users.",
+            "test_sql": "SELECT COUNT(*) FROM action_history_record t1 JOIN attachment t2 ON t1.user_id = t2.created_by_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 272,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "action_history_record",
+            "from_column": "user_id",
+            "to_table": "auth_log_record",
+            "to_column": "user_id",
+            "condition": "action_history_record.user_id = auth_log_record.user_id",
+            "confidence": "high",
+            "reasoning": "Both tables contain a 'user_id' field, which suggests a potential relationship where actions in the 'action_history_record' table can be linked to authentication events in the 'auth_log_record' table based on the user performing the action. This relationship is logical given the business purpose of tracking user actions and authentication attempts.",
+            "test_sql": "SELECT COUNT(*) FROM action_history_record t1 JOIN auth_log_record t2 ON t1.user_id = t2.user_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 170,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "action_history_record",
+            "from_column": "auth_token_id",
+            "to_table": "auth_log_record",
+            "to_column": "auth_token_id",
+            "condition": "action_history_record.auth_token_id = auth_log_record.auth_token_id",
+            "confidence": "high",
+            "reasoning": "The presence of 'auth_token_id' in both tables suggests a relationship where actions in the 'action_history_record' table are associated with specific authentication tokens logged in the 'auth_log_record' table. This relationship is plausible given the business purpose of tracking actions related to authentication events.",
+            "test_sql": "SELECT COUNT(*) FROM action_history_record t1 JOIN auth_log_record t2 ON t1.auth_token_id = t2.auth_token_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 34,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "action_history_record",
+            "from_column": "user_id",
+            "to_table": "auth_token",
+            "to_column": "user_id",
+            "condition": "action_history_record.user_id = auth_token.user_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_id' field, suggesting a potential relationship where actions are linked to the user associated with the authentication token. This relationship is based on business logic where user actions are tracked in conjunction with their authentication details.",
+            "test_sql": "SELECT COUNT(*) FROM action_history_record t1 JOIN auth_token t2 ON t1.user_id = t2.user_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 170,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "action_history_record",
+            "from_column": "target_id",
+            "to_table": "entity_email_address",
+            "to_column": "entity_id",
+            "condition": "action_history_record.target_id = entity_email_address.entity_id",
+            "confidence": "high",
+            "reasoning": "The 'target_id' in the 'action_history_record' table could represent an entity that is associated with an email address in the 'entity_email_address' table. Both fields are of the same data type (varchar(17)), suggesting a potential link between actions performed on entities and their associated email addresses.",
+            "test_sql": "SELECT COUNT(*) FROM action_history_record t1 JOIN entity_email_address t2 ON t1.target_id = t2.entity_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 22,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "action_history_record",
+            "from_column": "target_id",
+            "to_table": "entity_phone_number",
+            "to_column": "entity_id",
+            "condition": "action_history_record.target_id = entity_phone_number.entity_id",
+            "confidence": "high",
+            "reasoning": "The 'target_id' in the 'action_history_record' table could potentially refer to an entity that has associated phone numbers in the 'entity_phone_number' table. The 'entity_id' in 'entity_phone_number' is likely used to identify the entity to which the phone number belongs. This relationship is inferred based on the naming convention and the potential business logic of tracking actions related to entities that have phone numbers.",
+            "test_sql": "SELECT COUNT(*) FROM action_history_record t1 JOIN entity_phone_number t2 ON t1.target_id = t2.entity_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 22,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "action_history_record",
+            "from_column": "user_id",
+            "to_table": "import",
+            "to_column": "created_by_id",
+            "condition": "action_history_record.user_id = import.created_by_id",
+            "confidence": "high",
+            "reasoning": "Both fields represent identifiers for users or entities responsible for actions or processes. The 'user_id' in 'action_history_record' could correspond to the 'created_by_id' in 'import', indicating that the same user who performed an action might have initiated an import process.",
+            "test_sql": "SELECT COUNT(*) FROM action_history_record t1 JOIN import t2 ON t1.user_id = t2.created_by_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 272,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "action_history_record",
+            "from_column": "target_id",
+            "to_table": "import_entity",
+            "to_column": "entity_id",
+            "condition": "action_history_record.target_id = import_entity.entity_id",
+            "confidence": "high",
+            "reasoning": "The 'target_id' in the 'action_history_record' table and 'entity_id' in the 'import_entity' table both appear to represent identifiers for entities within the system. This suggests a potential relationship where actions are performed on entities that are being imported, allowing for tracking of actions related to specific imported entities.",
+            "test_sql": "SELECT COUNT(*) FROM action_history_record t1 JOIN import_entity t2 ON t1.target_id = t2.entity_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 32,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "action_history_record",
+            "from_column": "target_id",
+            "to_table": "knowledge_base_article",
+            "to_column": "id",
+            "condition": "action_history_record.target_id = knowledge_base_article.id",
+            "confidence": "high",
+            "reasoning": "The 'target_id' field in the 'action_history_record' table could potentially reference the 'id' of a 'knowledge_base_article', indicating that actions recorded in the history might be related to specific articles. This relationship is plausible if actions are performed on knowledge base articles, such as edits or views.",
+            "test_sql": "SELECT COUNT(*) FROM action_history_record t1 JOIN knowledge_base_article t2 ON t1.target_id = t2.id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 1,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "action_history_record",
+            "from_column": "target_id",
+            "to_table": "task",
+            "to_column": "id",
+            "condition": "action_history_record.target_id = task.id",
+            "confidence": "high",
+            "reasoning": "The 'target_id' in 'action_history_record' could represent the ID of a task in the 'task' table, especially if actions are being logged against specific tasks.",
+            "test_sql": "SELECT COUNT(*) FROM action_history_record t1 JOIN task t2 ON t1.target_id = t2.id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 2,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "attachment",
+            "from_column": "id",
+            "to_table": "import",
+            "to_column": "file_id",
+            "condition": "attachment.id = import.file_id",
+            "confidence": "high",
+            "reasoning": "The 'file_id' field in the 'import' table suggests a link to a table that stores file metadata. The 'attachment' table, which manages files and documents, is a logical candidate for this relationship. The 'id' field in 'attachment' matches the data type and purpose of 'file_id' in 'import'.",
+            "test_sql": "SELECT COUNT(*) FROM attachment t1 JOIN import t2 ON t1.id = t2.file_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 8,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "attachment",
+            "from_column": "created_by_id",
+            "to_table": "import",
+            "to_column": "created_by_id",
+            "condition": "attachment.created_by_id = import.created_by_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'created_by_id' field, suggesting a common entity responsible for creating records in both tables. This relationship is based on the assumption that the same user or system account could be involved in creating attachments and initiating import processes.",
+            "test_sql": "SELECT COUNT(*) FROM attachment t1 JOIN import t2 ON t1.created_by_id = t2.created_by_id LIMIT 1",
+            "relationship_type": "logical",
+            "verified": true,
+            "test_result": 64,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "auth_log_record",
+            "from_column": "user_id",
+            "to_table": "auth_token",
+            "to_column": "user_id",
+            "condition": "auth_log_record.user_id = auth_token.user_id",
+            "confidence": "high",
+            "reasoning": "Both tables have a 'user_id' field, suggesting a relationship where authentication logs and tokens are associated with specific users. This relationship is logical as both tables track user-related authentication data.",
+            "test_sql": "SELECT COUNT(*) FROM auth_log_record t1 JOIN auth_token t2 ON t1.user_id = t2.user_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 25,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "auth_log_record",
+            "from_column": "user_id",
+            "to_table": "import",
+            "to_column": "created_by_id",
+            "condition": "auth_log_record.user_id = import.created_by_id",
+            "confidence": "high",
+            "reasoning": "Both fields 'user_id' in 'auth_log_record' and 'created_by_id' in 'import' are likely to represent user identifiers. This suggests a potential relationship where authentication attempts are linked to import operations initiated by the same user.",
+            "test_sql": "SELECT COUNT(*) FROM auth_log_record t1 JOIN import t2 ON t1.user_id = t2.created_by_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 40,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "auth_token",
+            "from_column": "user_id",
+            "to_table": "import",
+            "to_column": "created_by_id",
+            "condition": "auth_token.user_id = import.created_by_id",
+            "confidence": "high",
+            "reasoning": "Both fields 'user_id' in 'auth_token' and 'created_by_id' in 'import' suggest a relationship with user information. The 'created_by_id' field in 'import' could represent the user who initiated the import process, which might correspond to the 'user_id' in 'auth_token' that manages authentication tokens for users.",
+            "test_sql": "SELECT COUNT(*) FROM auth_token t1 JOIN import t2 ON t1.user_id = t2.created_by_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 40,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "contact",
+            "from_column": "id",
+            "to_table": "entity_email_address",
+            "to_column": "entity_id",
+            "condition": "contact.id = entity_email_address.entity_id",
+            "confidence": "high",
+            "reasoning": "The 'entity_id' in the 'entity_email_address' table is likely used to associate email addresses with various entities. Given the business purpose of the 'contact' table, it is reasonable to infer that contacts could be one of these entities, with 'id' serving as a unique identifier for contacts. This relationship would allow for the association of email addresses with specific contacts.",
+            "test_sql": "SELECT COUNT(*) FROM contact t1 JOIN entity_email_address t2 ON t1.id = t2.entity_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 20,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "contact",
+            "from_column": "id",
+            "to_table": "entity_phone_number",
+            "to_column": "entity_id",
+            "condition": "contact.id = entity_phone_number.entity_id",
+            "confidence": "high",
+            "reasoning": "The 'entity_id' in the 'entity_phone_number' table is likely used to associate phone numbers with various entities. Given the business purpose of the 'contact' table, it is reasonable to infer that contacts could be one of these entities, and their 'id' could be used as the 'entity_id'. This relationship would allow for associating phone numbers with contacts.",
+            "test_sql": "SELECT COUNT(*) FROM contact t1 JOIN entity_phone_number t2 ON t1.id = t2.entity_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 20,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "contact",
+            "from_column": "id",
+            "to_table": "import_entity",
+            "to_column": "entity_id",
+            "condition": "contact.id = import_entity.entity_id",
+            "confidence": "high",
+            "reasoning": "The 'entity_id' in the 'import_entity' table is likely used to reference entities being imported, and the 'id' in the 'contact' table is a primary key that uniquely identifies contacts. Given the business purpose of tracking imported entities, it is plausible that 'entity_id' could refer to a contact being imported.",
+            "test_sql": "SELECT COUNT(*) FROM contact t1 JOIN import_entity t2 ON t1.id = t2.entity_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 21,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "contact",
+            "from_column": "assigned_user_id",
+            "to_table": "task",
+            "to_column": "assigned_user_id",
+            "condition": "contact.assigned_user_id = task.assigned_user_id",
+            "confidence": "high",
+            "reasoning": "The 'assigned_user_id' field in both tables suggests a relationship where both contacts and tasks can be assigned to the same user. This is a logical relationship for managing user responsibilities and ensuring that tasks and contacts are handled by the same user.",
+            "test_sql": "SELECT COUNT(*) FROM contact t1 JOIN task t2 ON t1.assigned_user_id = t2.assigned_user_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 320,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "entity_email_address",
+            "from_column": "entity_type",
+            "to_table": "import",
+            "to_column": "entity_type",
+            "condition": "entity_email_address.entity_type = import.entity_type",
+            "confidence": "high",
+            "reasoning": "Both tables have an 'entity_type' field, which suggests a logical relationship based on the type of entity being referenced. This could be used to join records that pertain to the same type of entity, facilitating operations that require entity-specific data from both tables.",
+            "test_sql": "SELECT COUNT(*) FROM entity_email_address t1 JOIN import t2 ON t1.entity_type = t2.entity_type LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 52,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "entity_email_address",
+            "from_column": "entity_type",
+            "to_table": "entity_phone_number",
+            "to_column": "entity_type",
+            "condition": "entity_email_address.entity_type = entity_phone_number.entity_type",
+            "confidence": "high",
+            "reasoning": "The 'entity_type' field in both tables indicates that they may be categorizing entities similarly, which could be useful for filtering or reporting purposes. However, without explicit foreign key constraints, the relationship is less certain.",
+            "test_sql": "SELECT COUNT(*) FROM entity_email_address t1 JOIN entity_phone_number t2 ON t1.entity_type = t2.entity_type LIMIT 1",
+            "relationship_type": "logical",
+            "verified": true,
+            "test_result": 944,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "entity_email_address",
+            "from_column": "entity_id",
+            "to_table": "import_entity",
+            "to_column": "entity_id",
+            "condition": "entity_email_address.entity_id = import_entity.entity_id",
+            "confidence": "high",
+            "reasoning": "Both tables have an 'entity_id' field, suggesting a potential relationship where email addresses are associated with entities that are being imported. This relationship is inferred based on the common field name and the business purpose of managing entities and their email addresses.",
+            "test_sql": "SELECT COUNT(*) FROM entity_email_address t1 JOIN import_entity t2 ON t1.entity_id = t2.entity_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 52,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "entity_phone_number",
+            "from_column": "entity_type",
+            "to_table": "import",
+            "to_column": "entity_type",
+            "condition": "entity_phone_number.entity_type = import.entity_type",
+            "confidence": "high",
+            "reasoning": "Both tables have a column named 'entity_type', which suggests a potential relationship based on the type of entity involved. This could be used to correlate phone numbers with import operations related to the same type of entity.",
+            "test_sql": "SELECT COUNT(*) FROM entity_phone_number t1 JOIN import t2 ON t1.entity_type = t2.entity_type LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 52,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "entity_phone_number",
+            "from_column": "entity_id",
+            "to_table": "import_entity",
+            "to_column": "entity_id",
+            "condition": "entity_phone_number.entity_id = import_entity.entity_id",
+            "confidence": "high",
+            "reasoning": "Both tables have an 'entity_id' field, which suggests a potential relationship based on the entity being referenced. The 'entity_phone_number' table associates phone numbers with entities, while the 'import_entity' table tracks the import status of entities. This relationship could be used to join data about phone numbers with their import status.",
+            "test_sql": "SELECT COUNT(*) FROM entity_phone_number t1 JOIN import_entity t2 ON t1.entity_id = t2.entity_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 52,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "import",
+            "from_column": "entity_type",
+            "to_table": "import_entity",
+            "to_column": "entity_type",
+            "condition": "import.entity_type = import_entity.entity_type",
+            "confidence": "high",
+            "reasoning": "Both tables have an 'entity_type' field, which suggests a logical relationship based on the type of entity being imported. This could be used to filter or categorize import operations and entities, although it may not be a direct foreign key relationship.",
+            "test_sql": "SELECT COUNT(*) FROM import t1 JOIN import_entity t2 ON t1.entity_type = t2.entity_type LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 120,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "import_entity",
+            "from_column": "entity_id",
+            "to_table": "task",
+            "to_column": "id",
+            "condition": "import_entity.entity_id = task.id",
+            "confidence": "high",
+            "reasoning": "The 'entity_id' in 'import_entity' could represent a task being imported, and 'task.id' is the primary identifier for tasks. This relationship might be used to track the import status of tasks.",
+            "test_sql": "SELECT COUNT(*) FROM import_entity t1 JOIN task t2 ON t1.entity_id = t2.id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 16,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "knowledge_base_article",
+            "from_column": "created_by_id",
+            "to_table": "task",
+            "to_column": "created_by_id",
+            "condition": "knowledge_base_article.created_by_id = task.created_by_id",
+            "confidence": "high",
+            "reasoning": "The 'created_by_id' field in both tables indicates the user who created the record. This relationship could be used to analyze the productivity or contributions of users in terms of both tasks and knowledge base articles they have created.",
+            "test_sql": "SELECT COUNT(*) FROM knowledge_base_article t1 JOIN task t2 ON t1.created_by_id = t2.created_by_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 64,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "account_contact",
+            "from_column": "account_id",
+            "to_table": "action_history_record",
+            "to_column": "target_id",
+            "condition": "account_contact.account_id = action_history_record.target_id",
+            "confidence": "high",
+            "reasoning": "The 'account_id' in 'account_contact' and 'target_id' in 'action_history_record' share the same data type (varchar(17)). This relationship is less likely but possible if actions are being logged against accounts rather than contacts. The confidence is low due to the lack of explicit context linking accounts directly to actions.",
+            "test_sql": "SELECT COUNT(*) FROM account_contact t1 JOIN action_history_record t2 ON t1.account_id = t2.target_id LIMIT 1",
+            "relationship_type": "business_logic",
+            "verified": true,
+            "test_result": 22,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "action_history_record",
+            "from_column": "target_type",
+            "to_table": "import_entity",
+            "to_column": "entity_type",
+            "condition": "action_history_record.target_type = import_entity.entity_type",
+            "confidence": "high",
+            "reasoning": "Both 'target_type' and 'entity_type' fields describe the type of entity or target involved in actions or imports. While this relationship is less direct, it could be used to categorize or filter actions and imports by type, providing insights into the types of entities being interacted with.",
+            "test_sql": "SELECT COUNT(*) FROM action_history_record t1 JOIN import_entity t2 ON t1.target_type = t2.entity_type LIMIT 1",
+            "relationship_type": "statistical",
+            "verified": true,
+            "test_result": 540,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "entity_email_address",
+            "from_column": "entity_type",
+            "to_table": "import_entity",
+            "to_column": "entity_type",
+            "condition": "entity_email_address.entity_type = import_entity.entity_type",
+            "confidence": "high",
+            "reasoning": "Both tables have an 'entity_type' field, which could imply a relationship based on the type of entity. However, without additional context, this relationship is less certain and may be more relevant for filtering or categorization purposes rather than direct association.",
+            "test_sql": "SELECT COUNT(*) FROM entity_email_address t1 JOIN import_entity t2 ON t1.entity_type = t2.entity_type LIMIT 1",
+            "relationship_type": "statistical",
+            "verified": true,
+            "test_result": 964,
+            "verification_method": "sql_test"
+        },
+        {
+            "type": "inferred",
+            "from_table": "entity_phone_number",
+            "from_column": "entity_type",
+            "to_table": "import_entity",
+            "to_column": "entity_type",
+            "condition": "entity_phone_number.entity_type = import_entity.entity_type",
+            "confidence": "high",
+            "reasoning": "Both tables have an 'entity_type' field, which could be used to categorize entities. However, without additional context, the relationship is speculative and may not provide meaningful insights without further business logic or domain knowledge.",
+            "test_sql": "SELECT COUNT(*) FROM entity_phone_number t1 JOIN import_entity t2 ON t1.entity_type = t2.entity_type LIMIT 1",
+            "relationship_type": "statistical",
+            "verified": true,
+            "test_result": 964,
+            "verification_method": "sql_test"
+        }
+    ]
+}

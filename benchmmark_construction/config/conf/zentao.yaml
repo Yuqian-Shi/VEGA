@@ -1,0 +1,34 @@
+database:
+  type: "mysql"
+  host: "127.0.0.1"
+  port: 3901
+  user: "zentao"
+  password: "zentao"
+  database: "zentao"
+  charset: "utf8mb4"
+  autocommit: true
+  connect_timeout: 10
+  read_timeout: 30
+  write_timeout: 30
+
+platform_info:
+  name: "ZenTao"
+  type: "Project Management Platform"
+  description: "Agile project management and collaboration platform for software development teams"
+  industry: "Technology"
+  target_users: "Development teams, project managers, business analysts"
+  business_model: "On-premise & Cloud SaaS"
+
+workflow_guidelines:
+  - "User registration and team management"
+  - "Project creation and requirement management"
+  - "Task assignment and development workflow"
+  - "Bug tracking and quality assurance"
+  - "Team collaboration and communication"
+  - "Project reporting and analytics"
+
+task_metadata:
+  "sites":
+    - "zentao"
+  "storage_state": "./.auth/zentao_state.json"
+  "start_url": "http://127.0.0.1:9901"

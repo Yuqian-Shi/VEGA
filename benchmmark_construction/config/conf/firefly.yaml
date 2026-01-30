@@ -1,0 +1,42 @@
+database:
+  type: "mysql"
+  host: "127.0.0.1"
+  port: 3908
+  user: "firefly"
+  password: "secret_firefly_password"
+  database: "firefly"
+  charset: "utf8mb4"
+  autocommit: true
+  connect_timeout: 10
+  read_timeout: 30
+  write_timeout: 30
+
+platform_info:
+  name: "Firefly"
+  type: "Personal Finance Management Platform"
+  description: "Open-source financial management tool for personal and small business budgeting, expense tracking, and reporting"
+  industry: "Finance / Accounting"
+  target_users: "Individuals, families, small business owners"
+  business_model: "Self-hosted / On-premise"
+
+workflow_guidelines:
+  - "Budget creation and expense tracking"
+  - "Income and recurring transaction management"
+  - "Category-based spending analysis"
+  - "Account reconciliation and transfers"
+  - "Multi-currency support and reporting"
+  - "Shared account and joint household expense tracking"
+  - "Savings goals creation and progress monitoring"
+  - "Bill management with due date reminders"
+  - "Tagging and note-taking for transactions"
+  - "Financial dashboards with charts and visual analytics"
+  - "Audit trail and transaction history review"
+  - "Account creation, archiving, and reactivation"
+  - "Managing asset and liability records (loans, mortgages, investments)"
+  - "Custom category and budget structure configuration"
+
+task_metadata:
+  "sites":
+    - "firefly"
+  "storage_state": "./.auth/firefly_state.json"
+  "start_url": "http://127.0.0.1:9908"
