@@ -46,7 +46,7 @@ export ZENTAO='http://${SERVER}:9901'
 export OPENPROJECT='http://${SERVER}:9902'
 export VEOPS_CMDB='http://${SERVER}:9903'
 export ITOP='http://${SERVER}:9904'
-export SNIPEIT='http://${SERVER}:9907'
+export SNIPE_IT='http://${SERVER}:9907'
 ```
 
 3. Generate config files for each website test example:
@@ -93,12 +93,13 @@ We analyzed the data results and provided examples of both successes and failure
 ## Citation
 If you find our environment or our models useful, please consider citing our work Entworld:
 ```
-@article{ying2026entworld,
-  title={EntWorld: A Holistic Environment and Benchmark for Verifiable Enterprise GUI Agents},
-  author={xx},
-  journal={x},
-  year={2026}
+@misc{mo2026entworld,
+      title={EntWorld: A Holistic Environment and Benchmark for Verifiable Enterprise GUI Agents}, 
+      author={Ying Mo and Yu Bai and Dapeng Sun and Yuqian Shi and Yukai Miao and Li Chen and Dan Li},
+      year={2026},
+      eprint={2601.17722},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2601.17722}, 
 }
 ```
-
-# VEGA
