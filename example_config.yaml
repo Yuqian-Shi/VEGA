@@ -1,0 +1,160 @@
+# Example Configuration File for VEGA
+
+# ============================================================================
+# GLOBAL CONFIGURATION
+# ============================================================================
+sample_rate: 1
+
+cli:
+  max_workers: 1
+
+# ============================================================================
+# BROWSER CONFIGURATION
+# ============================================================================
+browser:
+  render_screenshot: true         # Show/hide browser window and capture screenshots
+  slow_mo: 100                    # Delay in ms for actions (debugging)
+  
+  viewport:
+    width: 1920
+    height: 1080
+  
+  # Observation settings
+  current_viewport_only: true     # Only observe current viewport
+  
+  # Tracing
+  save_trace_enabled: false
+  sleep_after_execution: 1.0      # Sleep between actions (seconds)
+
+agent:
+  # External planner (optional)
+  planner_ip: ""                  # Leave empty to use local agent
+
+# ============================================================================
+# LANGUAGE MODEL (LLM) CONFIGURATION
+# ============================================================================
+llm:
+  # List of models to use from model_with_config below
+  active_models:
+    - Example-Multimodal-Model
+    # - Example-Text-Model
+
+  model_with_config:
+    Example-Multimodal-Model:
+      provider: "openai"          # Provider type (api, openai, etc.)
+      instruction_path: "agent/prompts/jsons/multimodal_3shot.json"
+      mode: "chat"
+      multimodal_inputs: true
+      agent_type: "prompt"        # Options: "prompt", "teacher_forcing"
+      output_response: true
+      max_steps: 50
+      
+      # Model specific settings
+      observation_type: "image_som"
+      action_type: "som"
+      prompt_constructor: "MultimodalCoTPromptConstructor"
+
+      early_stopping:
+        parsing_failure_threshold: 3
+        repeating_action_threshold: 5
+      
+      generation:
+        temperature: 1.0
+        top_p: 0.9
+        max_tokens: 4096
+        stop_token: null
+        max_retries: 3
+        # context_length: 0
+        max_obs_length: 8092
+        base_url: "http://localhost:8000/v1"
+      
+      # Optional command to start the model server if running locally
+      start_cmd: "echo 'Starting model server...'"
+
+    Example-Text-Model:
+      provider: "openai"
+      instruction_path: "agent/prompts/jsons/text_3shot.json"
+      
+      observation_type: "accessibility_tree"
+      action_type: "id_accessibility_tree"
+      prompt_constructor: "CoTPromptConstructor"
+      
+      mode: "chat"
+      multimodal_inputs: false
+      agent_type: "prompt"
+      output_response: true
+      max_steps: 30
+      
+      early_stopping:
+        parsing_failure_threshold: 3
+        repeating_action_threshold: 5
+        
+      generation:
+        temperature: 0.7
+        top_p: 0.9
+        max_tokens: 1024
+        base_url: "http://localhost:8000/v1"
+      
+      captioning_model: "salesforce/blip2-flan-t5-xl"
+
+# ============================================================================
+# CORRECTNESS CHECKING CONFIGURATION
+# ============================================================================
+correctness_check:
+  base_url: "http://localhost:8000/v1"
+  model: "Qwen-Check-Model"
+  temperature: 0
+  top_p: 0.9
+  max_tokens: 50
+
+# ============================================================================
+# SITE CONFIGURATION
+# ============================================================================
+sites:
+  active_sites:
+    - example_shop
+  
+  sites_with_config:
+    example_shop:
+      url: "http://localhost:3000"
+      login_path: "/login"
+      web_username: "user1"
+      web_password: "password123"
+      admin_username: "admin"
+      admin_password: "adminpassword"
+      
+      # Optional overrides for this specific site
+      browser_overrides:
+        sleep_after_execution: 1.5
+        block_resources: ["image", "media"]
+        
+      # Task and Result paths
+      task_dir: "task_configs/example_shop"
+      start_idx: 0
+      end_idx: null               # null means all tasks
+      result_dir: "results/example_shop"
+      
+      # File names
+      log_files_dir: "log_files"
+      traces_dir: "traces"
+      error_file: "error.txt"
+      config_file: "config.json"
+
+# ============================================================================
+# OUTPUT & LOGGING CONFIGURATION
+# ============================================================================
+output:
+  result_dir: ""                  # If empty, auto-generate with timestamp
+  log_files_dir: "log_files"
+  log_file_prefix: "log_"
+  traces_dir: "traces"
+  error_file: "error.txt"
+  config_file: "config.json"
+  results_format: "{task_id}.html"
+
+# ============================================================================
+# SSH PROFILE (Optional)
+# ============================================================================
+ssh_profile:
+  llm_server: "localhost"
+  verify_server: "localhost"
