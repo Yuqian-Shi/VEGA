@@ -254,7 +254,7 @@ Used to analyze the difficulty of SQL questions through scoring across multiple 
 - **Fairly Difficult**: 3.5-4.5 points
 - **Difficult**: >4.5 points
 
-See [analysis/README_en.md](benchmmark_construction/src/analysis/README_en.md) for Details.
+See [analysis/README_en.md](src/analysis/README_en.md) for Details.
 
 ## Database Support
 
