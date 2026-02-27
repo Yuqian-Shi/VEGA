@@ -214,7 +214,7 @@ python3 cli.py \
    ```bash 
    # Using explicitly defined CLI parameters
    python3 cli.py --conf=zentao generate \
-     --workflow-config="/Users/sundapeng/Project/nlp/webrlvr/table2task/workflow_output/ZenTao.json" \
+     --workflow-config="./workflow_output/ZenTao.json" \
      --target-count=1 \
      --template-count=1 \
      --task-type=query
@@ -224,21 +224,21 @@ python3 cli.py \
 
    ```bash
    # Using Hydra to override configuration keys
-   python3 cli.py --conf=zentao --config="task_generation.workflow_config=/Users/sundapeng/Project/nlp/webrlvr/table2task/workflow_output/ZenTao.json task_generation.target_count=1 task_generation.template_count=1 task_generation.task_type=query" generate
+   python3 cli.py --conf=zentao --config="task_generation.workflow_config=./workflow_output/ZenTao.json task_generation.target_count=1 task_generation.template_count=1 task_generation.task_type=query" generate
    ```
 
 3. **Task Construction**
    ```bash
    # Using explicitly defined CLI parameters
    python3 cli.py --conf=zentao factory \
-     --raw-question-file="/Users/sundapeng/Project/nlp/webrlvr/table2task/questions_bank/ZenTao/20250908145252-generated_tasks_enhanced.jsonl" \
+     --raw-question-file="table2task/questions_bank/ZenTao/20250908145252-generated_tasks_enhanced.jsonl" \
    ```
 
    Or
 
    ```bash
    # Using Hydra to override configuration keys
-   python3 cli.py --conf=zentao --config="task_factory.raw_question_file=/Users/sundapeng/Project/nlp/webrlvr/table2task/questions_bank/ZenTao/20250908145252-generated_tasks_enhanced.jsonl" factory
+   python3 cli.py --conf=zentao --config="task_factory.raw_question_file=table2task/questions_bank/ZenTao/20250908145252-generated_tasks_enhanced.jsonl" factory
    ```
     - If a directory `--raw-question-dir` is provided, all question files in that directory will be processed in batches.
 
