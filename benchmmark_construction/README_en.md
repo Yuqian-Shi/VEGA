@@ -40,7 +40,7 @@ A framework specifically designed for generating verifiable questions and GUI Ag
 
 Before using the framework for evaluation task generation, you need to deploy and initialize the target websites. We provide a detailed deployment guide containing Docker Compose deployment steps and data initialization procedures for all supported websites.
 
-**Detailed Documentation**: Please refer to the [Website Deployment and Initialization Guide](sites/bootstrap.md)
+**Detailed Documentation**: Please refer to the [Website Deployment and Initialization Guide](sites/bootstrap_en.md)
 
 This document includes：
 
