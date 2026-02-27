@@ -89,7 +89,8 @@ You can configure the evaluation by modifying the `local_config.yaml` file. The 
 ### Agent Trajectories
 
 We analyzed the data results and provided examples of both successes and failures. The following is a trajectory of an enterprise system web task, which displays the evaluation process. The agent's observations and output at each step are shown.
-![Demo](asserts/snipit_83_rl.pdf)
+![Demo](asserts/snipit_83_rl.png)
+<!-- [View Demo PDF](asserts/snipit_83_rl.pdf) -->
 
 
 ## Citation
