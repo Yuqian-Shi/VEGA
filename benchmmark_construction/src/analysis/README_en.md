@@ -14,7 +14,7 @@ Used to analyze the difficulty of SQL questions through scoring across multiple 
    - 1-2 relationships: 2 points
    - 3-4 relationships: 3 points
    - 5-6 relationships: 4 points
-   - More than 6: 5分
+   - More than 6: 5 points
 
 3. **Operation Type Complexity** (Weight: 20%)
    - SELECT: 1 point (Easy)
