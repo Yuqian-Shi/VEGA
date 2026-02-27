@@ -1,6 +1,5 @@
 # EntWorld: A Holistic Environment and Benchmark for Verifiable Enterprise GUI Agents
 
-<!-- [<a href=" ">Website</a >]  -->
 [<a href="https://arxiv.org/abs/2601.17722">Paper</a >]
 
 <i>EntWorld</i> is a realistic and diverse benchmark for enterprise systems, designed for evaluating multimodal autonomous language agents. It comprises a set of diverse tasks across 6 core business applications. It ensures reproducibility and executable evaluation. We propose a rigorous evaluation metric based on SQL state verification during dataset construction. By directly querying the underlying databases of the applications, EntWorld enables precise validation of task completion (e.g., verifying exact database record insertions or updates), ensuring deterministic and noise-free evaluation. This eliminates ambiguities in visual matching and enables high-precision correctness assessment.
@@ -9,11 +8,7 @@
 
 Here are the scores on the test set results of EntWorld. All metrics are task Success Rate (SR). 
 ![Mainresults](asserts/main_results.png)
-<!-- ## TODOs -->
-<!-- - [x] Add human trajectories.
-- [x] Add GPT-4V + SoM trajectories from our paper. -->
-<!-- - [x] Add scripts for end-to-end training and reset of environments. -->
-<!-- - [x] Add demo to run multimodal agents on any arbitrary webpage. -->
+
 ## Key Features
 - **Multi-modal Support**: Integrated support for vision-based (SoM) and text-based (Accessibility Tree) observations.
 - **Enterprise Ready**: Specialized for enterprise software interaction (CRM, ERP, Project Management).
