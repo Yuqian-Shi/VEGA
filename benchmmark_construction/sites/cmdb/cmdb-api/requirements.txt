@@ -18,7 +18,7 @@ Flask-Migrate==2.5.2
 Flask-RESTful==0.3.10
 Flask-SQLAlchemy==3.0.5
 future==0.18.3
-gunicorn==21.0.1
+gunicorn==22.0.0
 hvac==2.0.0
 itsdangerous==2.1.2
 Jinja2==3.1.2
@@ -31,7 +31,7 @@ marshmallow==2.20.2
 more-itertools==5.0.0
 msgpack-python==0.5.6
 Pillow>=10.0.1
-pycryptodome==3.12.0
+pycryptodome==3.19.1
 cryptography>=41.0.2
 PyJWT==2.4.0
 PyMySQL==1.1.0
@@ -41,7 +41,7 @@ redis==4.6.0
 python-redis-lock==4.0.0
 requests==2.33.0
 requests_oauthlib==1.3.1
-markdownify==0.11.6
+markdownify==0.14.1
 six==1.16.0
 SQLAlchemy==1.4.49
 supervisor==4.0.3
